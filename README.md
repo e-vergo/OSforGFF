@@ -1,7 +1,8 @@
 # Osterwalder-Schrader Axioms for the Gaussian Free Field
 
-We construct the massive Gaussian Free Field (GFF) as a probability measure on
-the space of tempered distributions S'(ℝ⁴), and prove that it satisfies all five
+We construct the massive Gaussian Free Field (GFF) in four spacetime dimensions
+as a probability measure on the space of tempered distributions S'(ℝ⁴), and
+prove that it satisfies all five
 Osterwalder-Schrader axioms for a Euclidean quantum field theory. The construction
 and proofs are formalized in Lean 4 / Mathlib, following the conventions and
 methods of proof in Glimm and Jaffe, *Quantum Physics: A Functional Integral
