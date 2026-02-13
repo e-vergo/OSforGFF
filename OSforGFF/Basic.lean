@@ -106,6 +106,9 @@ Design notes (possible future changes):
   Minlos/characteristic functionals are formulated.
 -/
 
+/-- Spacetime dimension. Currently set to 4 (Euclidean ℝ⁴).
+    Changing this value requires corresponding changes throughout the project;
+    see `docs/dimension_dependence.md` for a detailed inventory. -/
 @[blueprint "def:spacetime-dim"
   (title := "Spacetime Dimension and Space")
   (statement := /-- The spacetime dimension $d = 4$ (Euclidean $\mathbb{R}^4$) and the spacetime type $\mathcal{X} = \mathbb{R}^4$. -/)
@@ -113,9 +116,6 @@ Design notes (possible future changes):
   (latexEnv := "definition")
   (latexLabel := "def:spacetime-dim")
   (misc := "Glimm-Jaffe, Quantum Physics, Ch. 6")]
-/-- Spacetime dimension. Currently set to 4 (Euclidean ℝ⁴).
-    Changing this value requires corresponding changes throughout the project;
-    see `docs/dimension_dependence.md` for a detailed inventory. -/
 abbrev STDimension := 4
 abbrev SpaceTime := EuclideanSpace ℝ (Fin STDimension)
 
@@ -171,6 +171,11 @@ This section adds the distribution-theoretic definitions alongside
 the existing L2 framework for comparison and gradual transition.
 -/
 
+/-- Field configurations as tempered distributions (dual to Schwartz space).
+    This follows the Glimm-Jaffe approach where the field measure is supported
+    on the space of distributions, not L2 functions.
+
+    Using WeakDual gives the correct weak-* topology on the dual space. -/
 @[blueprint "def:field-config"
   (title := "Field Configuration Space")
   (statement := /-- The space of field configurations $\Phi = \mathcal{S}'(\mathbb{R}^4)$, the topological dual of Schwartz space equipped with the weak-* topology. -/)
@@ -178,28 +183,23 @@ the existing L2 framework for comparison and gradual transition.
   (latexEnv := "definition")
   (latexLabel := "def:field-config")
   (misc := "Glimm-Jaffe, Quantum Physics, p.89")]
-/-- Field configurations as tempered distributions (dual to Schwartz space).
-    This follows the Glimm-Jaffe approach where the field measure is supported
-    on the space of distributions, not L2 functions.
-
-    Using WeakDual gives the correct weak-* topology on the dual space. -/
 abbrev FieldConfiguration := WeakDual ℝ (SchwartzMap SpaceTime ℝ)
 
 -- Measurable space instance for distribution spaces
 -- WeakDual already has the correct weak-* topology, we use the Borel σ-algebra
 instance : MeasurableSpace FieldConfiguration := borel _
 
+/-- The fundamental pairing between a field configuration (distribution) and a test function.
+    This is ⟨ω, f⟩ in the Glimm-Jaffe notation.
+
+    Note: FieldConfiguration = WeakDual ℝ (SchwartzMap SpaceTime ℝ) has the correct
+    weak-* topology, making evaluation maps x ↦ ω(x) continuous for each test function x. -/
 @[blueprint "def:dist-pairing"
   (title := "Distribution Pairing")
   (statement := /-- The fundamental pairing $\langle \omega, f \rangle$ between a field configuration $\omega \in \mathcal{S}'$ and a test function $f \in \mathcal{S}$. -/)
   (uses := [FieldConfiguration, TestFunction])
   (latexEnv := "definition")
   (latexLabel := "def:dist-pairing")]
-/-- The fundamental pairing between a field configuration (distribution) and a test function.
-    This is ⟨ω, f⟩ in the Glimm-Jaffe notation.
-
-    Note: FieldConfiguration = WeakDual ℝ (SchwartzMap SpaceTime ℝ) has the correct
-    weak-* topology, making evaluation maps x ↦ ω(x) continuous for each test function x. -/
 def distributionPairing (ω : FieldConfiguration) (f : TestFunction) : ℝ := ω f
 
 @[simp] lemma distributionPairing_add (ω₁ ω₂ : FieldConfiguration) (a : TestFunction) :
@@ -239,6 +239,8 @@ Z[J] = ∫ exp(i⟨ω, J⟩) dμ(ω)
 where the integral is over field configurations ω (distributions).
 -/
 
+/-- The Glimm-Jaffe generating functional: Z[J] = ∫ exp(i⟨ω, J⟩) dμ(ω)
+    This is the fundamental object in constructive QFT. -/
 @[blueprint "def:gj-generating"
   (title := "Glimm-Jaffe Generating Functional")
   (keyDeclaration := true)
@@ -247,8 +249,6 @@ where the integral is over field configurations ω (distributions).
   (latexEnv := "definition")
   (latexLabel := "def:gj-generating")
   (misc := "Glimm-Jaffe, Quantum Physics, p.89-90")]
-/-- The Glimm-Jaffe generating functional: Z[J] = ∫ exp(i⟨ω, J⟩) dμ(ω)
-    This is the fundamental object in constructive QFT. -/
 def GJGeneratingFunctional (dμ_config : ProbabilityMeasure FieldConfiguration)
   (J : TestFunction) : ℂ :=
   ∫ ω, Complex.exp (Complex.I * (distributionPairing ω J : ℂ)) ∂dμ_config.toMeasure
@@ -341,24 +341,24 @@ def distributionPairingℂ_real (ω : FieldConfiguration) (f : TestFunctionℂ) 
   -- Pair with the real field configuration and combine
   (ω f_re : ℂ) + Complex.I * (ω f_im : ℂ)
 
+/-- Complex version of the generating functional -/
 @[blueprint "def:gj-generating-complex"
   (title := "Complex Generating Functional")
   (statement := /-- The complex generating functional $Z[\mathbf{J}] = \int_{\mathcal{S}'} e^{i\langle \omega, \mathbf{J} \rangle} \, d\mu(\omega)$ for complex-valued test functions $\mathbf{J} \in \mathcal{S}(\mathbb{R}^4, \mathbb{C})$. -/)
   (uses := [distributionPairingℂ_real, FieldConfiguration, GJGeneratingFunctional])
   (latexEnv := "definition")
   (latexLabel := "def:gj-generating-complex")]
-/-- Complex version of the generating functional -/
 def GJGeneratingFunctionalℂ (dμ_config : ProbabilityMeasure FieldConfiguration)
   (J : TestFunctionℂ) : ℂ :=
   ∫ ω, Complex.exp (Complex.I * (distributionPairingℂ_real ω J)) ∂dμ_config.toMeasure
 
+/-- The mean field in the Glimm-Jaffe framework -/
 @[blueprint "def:gj-mean"
   (title := "Mean Field")
   (statement := /-- The mean field $\langle \phi \rangle = \int_{\mathcal{S}'} \langle \omega, \phi \rangle \, d\mu(\omega)$. -/)
   (uses := [distributionPairing, FieldConfiguration])
   (latexEnv := "definition")
   (latexLabel := "def:gj-mean")]
-/-- The mean field in the Glimm-Jaffe framework -/
 def GJMean (dμ_config : ProbabilityMeasure FieldConfiguration)
   (φ : TestFunction) : ℝ :=
   ∫ ω, distributionPairing ω φ ∂dμ_config.toMeasure
@@ -376,12 +376,12 @@ def spatialPart (x : SpaceTime) : SpatialCoords :=
   (EuclideanSpace.equiv (Fin (STDimension - 1)) ℝ).symm
     (fun i => x ⟨i.val + 1, by simp [STDimension]; omega⟩)
 
+/-- The energy function E(k) = √(‖k‖² + m²) on spatial momentum space -/
 @[blueprint "def:energy-function"
   (title := "Energy Function")
   (statement := /-- The relativistic energy function $E(\mathbf{k}) = \sqrt{|\mathbf{k}|^2 + m^2}$ on spatial momentum space. -/)
   (latexEnv := "definition")
   (latexLabel := "def:energy-function")]
-/-- The energy function E(k) = √(‖k‖² + m²) on spatial momentum space -/
 def E (m : ℝ) (k : SpatialCoords) : ℝ :=
   Real.sqrt (‖k‖^2 + m^2)
 

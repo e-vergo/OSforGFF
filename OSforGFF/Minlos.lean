@@ -63,6 +63,18 @@ variable {E : Type*} [AddCommGroup E] [Module ℝ E] [TopologicalSpace E]
 -- We need a measurable space structure on the weak dual
 instance : MeasurableSpace (WeakDual ℝ E) := borel _
 
+/-- **Minlos Theorem** (existence and uniqueness): On a nuclear locally convex space E,
+    a continuous, positive definite, normalized functional Φ : E → ℂ is the characteristic
+    functional of a unique probability measure μ on the topological dual E':
+
+    Φ(f) = ∫_{E'} exp(i⟨f,ω⟩) dμ(ω)
+
+    **Applications**:
+    - For E = S(ℝᵈ) (Schwartz space), E' = S'(ℝᵈ) (tempered distributions)
+    - Gaussian measures: Φ(f) = exp(-½⟨f, Cf⟩) with nuclear covariance C
+    - Construction of the Gaussian Free Field
+
+    **References**: Minlos (1959), Gel'fand-Vilenkin Vol. 4, Billingsley. -/
 @[blueprint "axiom:minlos"
   (title := "Minlos Theorem")
   (keyDeclaration := true)
@@ -76,18 +88,6 @@ instance : MeasurableSpace (WeakDual ℝ E) := borel _
   (potentialIssue := "This is an axiom, not a theorem. Full formalization would require nuclear space characterization theorems.")
   (discussion := "Gel'fand-Vilenkin Vol. 4; Billingsley. The nuclear hypothesis is essential -- the theorem fails for general locally convex spaces. See schwartz_nuclear in NuclearSpace.lean for the other axiom.")
   (misc := "Minlos (1959), Gel'fand & Vilenkin Vol. 4 Ch. IV, Billingsley §19")]
-/-- **Minlos Theorem** (existence and uniqueness): On a nuclear locally convex space E,
-    a continuous, positive definite, normalized functional Φ : E → ℂ is the characteristic
-    functional of a unique probability measure μ on the topological dual E':
-
-    Φ(f) = ∫_{E'} exp(i⟨f,ω⟩) dμ(ω)
-
-    **Applications**:
-    - For E = S(ℝᵈ) (Schwartz space), E' = S'(ℝᵈ) (tempered distributions)
-    - Gaussian measures: Φ(f) = exp(-½⟨f, Cf⟩) with nuclear covariance C
-    - Construction of the Gaussian Free Field
-
-    **References**: Minlos (1959), Gel'fand-Vilenkin Vol. 4, Billingsley. -/
 axiom minlos_theorem
   [NuclearSpace E]
   (Φ : E → ℂ)
@@ -190,13 +190,6 @@ lemma gaussian_positive_definite_via_embedding
     simpa [repl] using hPD_comp1
   exact this
 
-@[blueprint "thm:minlos-gaussian"
-  (title := "Minlos Gaussian Construction")
-  (keyDeclaration := true)
-  (statement := /-- If the covariance $C(f,f) = \|Tf\|^2$ for a linear embedding $T : E \to H$ into a Hilbert space, then Minlos yields a Gaussian probability measure $\mu$ on $E'$ with CF $\Phi(f) = e^{-\frac{1}{2}C(f,f)}$. -/)
-  (uses := [minlos_theorem, gaussian_positive_definite_via_embedding, gaussian_characteristic_functional])
-  (latexEnv := "theorem")
-  (latexLabel := "thm:minlos-gaussian")]
 /-- Application of Minlos theorem to Gaussian measures.
     If the covariance form can be realized as a squared norm via a linear embedding T into
     a real inner product space H, then the Gaussian characteristic functional Φ(f) = exp(-½⟨f, Cf⟩)
@@ -204,6 +197,13 @@ lemma gaussian_positive_definite_via_embedding
 
     **Note**: We require H to be an inner product space (not just normed) because the
     Gaussian RBF kernel is only positive definite for Hilbert spaces. -/
+@[blueprint "thm:minlos-gaussian"
+  (title := "Minlos Gaussian Construction")
+  (keyDeclaration := true)
+  (statement := /-- If the covariance $C(f,f) = \|Tf\|^2$ for a linear embedding $T : E \to H$ into a Hilbert space, then Minlos yields a Gaussian probability measure $\mu$ on $E'$ with CF $\Phi(f) = e^{-\frac{1}{2}C(f,f)}$. -/)
+  (uses := [minlos_theorem, gaussian_positive_definite_via_embedding, gaussian_characteristic_functional])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:minlos-gaussian")]
 theorem minlos_gaussian_construction
   [NuclearSpace E]
   {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
@@ -264,13 +264,6 @@ This is crucial for establishing Euclidean invariance (OS2) of the GFF:
 if the covariance is Euclidean-invariant, then exp(-½⟨gf, C(gf)⟩) = exp(-½⟨f, Cf⟩),
 and by uniqueness the measure is Euclidean-invariant. -/
 
-@[blueprint "thm:gaussian-symmetry"
-  (title := "Gaussian Measure Symmetry Transfer")
-  (statement := /-- If the covariance form is invariant under a linear map $g$, i.e.\ $C(gf, gf) = C(f, f)$, then the Gaussian measure $\mu$ is invariant under the dual action of $g$. -/)
-  (uses := [minlos_uniqueness, gaussian_characteristic_functional])
-  (latexEnv := "theorem")
-  (latexLabel := "thm:gaussian-symmetry")
-  (message := "Alternative approach to OS2; not used in master theorem which uses direct change of variables")]
 /-- Corollary for Gaussian measures: if the covariance form is invariant under g,
     then the Gaussian measure is invariant under the dual action of g.
 
@@ -279,6 +272,13 @@ and by uniqueness the measure is Euclidean-invariant. -/
 
     Note: Not used in the master theorem (OS2 is proved by direct change of variables).
     Kept as documentation of the alternative uniqueness-based approach. -/
+@[blueprint "thm:gaussian-symmetry"
+  (title := "Gaussian Measure Symmetry Transfer")
+  (statement := /-- If the covariance form is invariant under a linear map $g$, i.e.\ $C(gf, gf) = C(f, f)$, then the Gaussian measure $\mu$ is invariant under the dual action of $g$. -/)
+  (uses := [minlos_uniqueness, gaussian_characteristic_functional])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gaussian-symmetry")
+  (message := "Alternative approach to OS2; not used in master theorem which uses direct change of variables")]
 theorem gaussian_measure_symmetry
   [NuclearSpace E]
   (covariance_form : E → E → ℝ)

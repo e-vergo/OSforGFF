@@ -42,16 +42,16 @@ def piLpMeasurableEquiv (n : ℕ) : PiLp 2 (fun _ : Fin n => ℝ) ≃ᵐ (Fin n 
   measurable_toFun := WithLp.measurable_ofLp 2 _
   measurable_invFun := WithLp.measurable_toLp 2 _
 
-@[blueprint "def:spacetime-decomp"
-  (title := "Spacetime Decomposition")
-  (statement := /-- The measure-preserving decomposition $\mathbb{R}^4 \cong \mathbb{R} \times \mathbb{R}^3$ splitting time and spatial components. -/)
-  (latexEnv := "definition")
-  (latexLabel := "def:spacetime-decomp")]
 /-- The measurable equivalence from SpaceTime to ℝ × SpatialCoords.
     Composes three measure-preserving maps:
     1. piLpMeasurableEquiv : EuclideanSpace ℝ (Fin 4) → (Fin 4 → ℝ)
     2. piFinSuccAbove 0 : (Fin 4 → ℝ) → ℝ × (Fin 3 → ℝ)
     3. id × piLpMeasurableEquiv.symm : ℝ × (Fin 3 → ℝ) → ℝ × SpatialCoords -/
+@[blueprint "def:spacetime-decomp"
+  (title := "Spacetime Decomposition")
+  (statement := /-- The measure-preserving decomposition $\mathbb{R}^4 \cong \mathbb{R} \times \mathbb{R}^3$ splitting time and spatial components. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:spacetime-decomp")]
 def spacetimeDecomp : SpaceTime ≃ᵐ ℝ × SpatialCoords :=
   (piLpMeasurableEquiv STDimension).trans
   ((MeasurableEquiv.piFinSuccAbove (fun _ => ℝ) 0).trans

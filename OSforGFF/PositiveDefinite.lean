@@ -29,28 +29,28 @@ open BigOperators
 
 /-! ## Positive Definiteness -/
 
-@[blueprint "def:positive-definite"
-  (title := "Positive Definite Function")
-  (statement := /-- A function $\varphi : \alpha \to \mathbb{C}$ is positive definite if $\sum_{i,j} \overline{c_i} c_j \varphi(x_i - x_j) \geq 0$ for all finite collections and coefficients. -/)
-  (latexEnv := "definition")
-  (latexLabel := "def:positive-definite")]
 /-- A function φ : α → ℂ is positive definite if for any finite collection
     of points x₁, ..., xₘ and complex coefficients c₁, ..., cₘ, we have
     ∑ᵢⱼ c̄ᵢ cⱼ φ(xᵢ - xⱼ) ≥ 0
 
     This is the standard definition in harmonic analysis and probability theory. -/
+@[blueprint "def:positive-definite"
+  (title := "Positive Definite Function")
+  (statement := /-- A function $\varphi : \alpha \to \mathbb{C}$ is positive definite if $\sum_{i,j} \overline{c_i} c_j \varphi(x_i - x_j) \geq 0$ for all finite collections and coefficients. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:positive-definite")]
 def IsPositiveDefinite {α : Type*} [AddGroup α] (φ : α → ℂ) : Prop :=
   ∀ (m : ℕ) (x : Fin m → α) (c : Fin m → ℂ),
     0 ≤ (∑ i, ∑ j, (starRingEnd ℂ) (c i) * c j * φ (x i - x j)).re
 
+/-- Composition preserves positive definiteness: if ψ is positive definite on H and
+    T : E →ₗ[ℝ] H is linear, then ψ ∘ T is positive definite on E. -/
 @[blueprint "lem:pd-precomp-linear"
   (title := "Linear Precomposition Preserves Positive Definiteness")
   (statement := /-- If $\psi$ is positive definite on $H$ and $T : E \to_{\mathbb{R}} H$ is linear, then $\psi \circ T$ is positive definite on $E$. -/)
   (uses := [IsPositiveDefinite])
   (latexEnv := "lemma")
   (latexLabel := "lem:pd-precomp-linear")]
-/-- Composition preserves positive definiteness: if ψ is positive definite on H and
-    T : E →ₗ[ℝ] H is linear, then ψ ∘ T is positive definite on E. -/
 lemma isPositiveDefinite_precomp_linear
   {E H : Type*} [AddCommGroup E] [AddCommGroup H]
   [Module ℝ E] [Module ℝ H]

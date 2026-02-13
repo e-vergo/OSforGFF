@@ -1333,6 +1333,10 @@ theorem OS4''_implies_OS4_Ergodicity (m : ℝ) [Fact (0 < m)] :
   intro h_cluster
   exact OS4'_implies_OS4 m (OS4''_implies_OS4' m h_cluster)
 
+/-- **Main Theorem**: OS4_PolynomialClustering with α=6 implies OS4_Ergodicity for the GFF.
+
+    This is the main result connecting the clustering axiom to ergodicity.
+-/
 @[blueprint "thm:gff-os4-ergodicity"
   (title := "Polynomial Clustering Implies OS4 Ergodicity")
   (keyDeclaration := true)
@@ -1340,10 +1344,6 @@ theorem OS4''_implies_OS4_Ergodicity (m : ℝ) [Fact (0 < m)] :
   (uses := [OS4_PolynomialClustering, OS4_Ergodicity, gaussianFreeField_free])
   (latexEnv := "theorem")
   (latexLabel := "thm:gff-os4-ergodicity")]
-/-- **Main Theorem**: OS4_PolynomialClustering with α=6 implies OS4_Ergodicity for the GFF.
-
-    This is the main result connecting the clustering axiom to ergodicity.
--/
 theorem OS4_PolynomialClustering_implies_OS4_Ergodicity (m : ℝ) [Fact (0 < m)] :
     OS4_PolynomialClustering (gaussianFreeField_free m) 6 (by norm_num) →
     OS4_Ergodicity (gaussianFreeField_free m) :=

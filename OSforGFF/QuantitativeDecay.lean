@@ -54,13 +54,13 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-! ## Phase 1: Polynomial Decay Structure and Schwartz Bridge -/
 
+/-- A function f has polynomial decay of order N with constant C if
+    ‖f(x)‖ ≤ C / (1 + ‖x‖)^N for all x. -/
 @[blueprint "def:polynomial-decay-bound"
   (title := "Polynomial Decay Bound")
   (statement := /-- A function $f$ has polynomial decay of order $N$ with constant $C$ if $\|f(x)\| \leq C / (1 + \|x\|)^N$ for all $x$. -/)
   (latexEnv := "definition")
   (latexLabel := "def:polynomial-decay-bound")]
-/-- A function f has polynomial decay of order N with constant C if
-    ‖f(x)‖ ≤ C / (1 + ‖x‖)^N for all x. -/
 structure PolynomialDecayBound {E F : Type*} [NormedAddCommGroup E]
     [NormedAddCommGroup F] (f : E → F) (N : ℝ) where
   C : ℝ

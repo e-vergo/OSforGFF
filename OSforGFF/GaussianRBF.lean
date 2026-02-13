@@ -145,14 +145,14 @@ lemma real_valued_PD_kernel_gives_PSD_matrix {α : Type*} (K : α → α → ℂ
     rw [h_eq]
     exact h
 
+/-- Step 3b: Exponential of a symmetric real-valued PD kernel is PD.
+    Uses the Hadamard series machinery from HadamardExp.lean (same as OS3 proof). -/
 @[blueprint "lem:exp-pd-kernel"
   (title := "Exponential of PD Kernel is PD")
   (statement := /-- If $K$ is a symmetric real-valued positive definite kernel, then $e^K$ is also a positive definite kernel. Uses Hadamard series machinery. -/)
   (uses := [posSemidef_entrywiseExp_hadamardSeries_of_posSemidef, real_valued_PD_kernel_gives_PSD_matrix])
   (latexEnv := "lemma")
   (latexLabel := "lem:exp-pd-kernel")]
-/-- Step 3b: Exponential of a symmetric real-valued PD kernel is PD.
-    Uses the Hadamard series machinery from HadamardExp.lean (same as OS3 proof). -/
 lemma exp_is_pd_kernel {α : Type*} (K : α → α → ℂ) (hK : IsPositiveDefiniteKernel K)
     (h_real : ∀ x y, (K x y).im = 0)
     (h_symm : ∀ x y, K x y = K y x) :
@@ -226,6 +226,7 @@ lemma exp_is_pd_kernel {α : Type*} (K : α → α → ℂ) (hK : IsPositiveDefi
 
 
 
+/-- The Gaussian RBF kernel is positive definite on any inner product space. -/
 @[blueprint "thm:gaussian-rbf-pd"
   (title := "Gaussian RBF Kernel is Positive Definite")
   (keyDeclaration := true)
@@ -234,7 +235,6 @@ lemma exp_is_pd_kernel {α : Type*} (K : α → α → ℂ) (hK : IsPositiveDefi
   (latexEnv := "theorem")
   (latexLabel := "thm:gaussian-rbf-pd")
   (misc := "Glimm-Jaffe, Quantum Physics, Ch. 6; used in Minlos/GFF construction")]
-/-- The Gaussian RBF kernel is positive definite on any inner product space. -/
 theorem gaussian_rbf_pd_innerProduct_proof :
     IsPositiveDefinite (fun h : H => cexp (-(1/2 : ℂ) * (‖h‖^2 : ℝ))) := by
   -- Strategy:

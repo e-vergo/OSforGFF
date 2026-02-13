@@ -42,6 +42,9 @@ For the massive scalar field in 4D Euclidean space, the exact formula is:
 
 open MeasureTheory Set Filter Asymptotics Real
 
+/-- The modified Bessel function K₁(z) via cosh integral representation.
+    K₁(z) = ∫₀^∞ exp(-z cosh(t)) cosh(t) dt
+    This is well-defined and positive for z > 0. -/
 @[blueprint "def:bessel-K1"
   (title := "Modified Bessel Function K1")
   (statement := /-- The modified Bessel function $K_1(z) = \int_0^\infty e^{-z \cosh t} \cosh t \, dt$, well-defined and positive for $z > 0$. -/)
@@ -49,9 +52,6 @@ open MeasureTheory Set Filter Asymptotics Real
   (message := "Standard special function; candidate for Mathlib.Analysis.SpecialFunctions")
   (latexEnv := "definition")
   (latexLabel := "def:bessel-K1")]
-/-- The modified Bessel function K₁(z) via cosh integral representation.
-    K₁(z) = ∫₀^∞ exp(-z cosh(t)) cosh(t) dt
-    This is well-defined and positive for z > 0. -/
 noncomputable def besselK1 (z : ℝ) : ℝ :=
   ∫ t : ℝ in Ici 0, exp (-z * cosh t) * cosh t
 

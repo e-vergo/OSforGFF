@@ -124,6 +124,8 @@ Key point: In Lean, we can use ⟨x, y⟩ for the inner product and ‖x‖ for 
 
 variable {m : ℝ} [Fact (0 < m)]
 
+/-- The free propagator in momentum space: 1/(k² + m²)
+    This is the Fourier transform of the free covariance -/
 @[blueprint "def:free-propagator"
   (title := "Free Propagator (Momentum Space)")
   (keyDeclaration := true)
@@ -131,8 +133,6 @@ variable {m : ℝ} [Fact (0 < m)]
   (latexEnv := "definition")
   (latexLabel := "def:free-propagator")
   (misc := "Glimm-Jaffe, Quantum Physics, §6.1")]
-/-- The free propagator in momentum space: 1/(k² + m²)
-    This is the Fourier transform of the free covariance -/
 def freePropagatorMomentum (m : ℝ) (k : SpaceTime) : ℝ :=
   1 / (‖k‖^2 + m^2)
 
@@ -223,14 +223,14 @@ lemma integral_exp_neg_mul_Ioi_eq_inv (a : ℝ) (ha : 0 < a) :
   rw [h]
   field_simp
 
+/-- The Schwinger representation: ∫₀^∞ exp(-t(k² + m²)) dt = 1/(k² + m²).
+    This is valid when k² + m² > 0. -/
 @[blueprint "thm:schwinger-rep"
   (title := "Schwinger Representation")
   (statement := /-- $\int_0^\infty e^{-t(\|k\|^2 + m^2)} \, dt = 1/(\|k\|^2 + m^2)$. Valid when $\|k\|^2 + m^2 > 0$. -/)
   (uses := [schwingerIntegrand, freePropagatorMomentum])
   (latexEnv := "theorem")
   (latexLabel := "thm:schwinger-rep")]
-/-- The Schwinger representation: ∫₀^∞ exp(-t(k² + m²)) dt = 1/(k² + m²).
-    This is valid when k² + m² > 0. -/
 theorem schwinger_representation (m : ℝ) (hm : 0 < m) (k : SpaceTime) :
     ∫ t in Set.Ioi 0, schwingerIntegrand t m k = 1 / (‖k‖^2 + m^2) := by
   unfold schwingerIntegrand
@@ -468,6 +468,11 @@ theorem covarianceSchwingerRep_eq_besselFormula (m r : ℝ) (hm : 0 < m) (hr : 0
   rw [h_eq, h_integral]
   ring
 
+/-- The free covariance in position space via Bessel function representation.
+    C(x,y) = (m / (4π² |x-y|)) · K₁(m |x-y|)
+
+    This is the explicit formula for the massive scalar field propagator in 4D.
+    The formula is valid for x ≠ y and m > 0. -/
 @[blueprint "def:free-covariance-bessel"
   (title := "Free Covariance (Bessel Representation)")
   (keyDeclaration := true)
@@ -476,11 +481,6 @@ theorem covarianceSchwingerRep_eq_besselFormula (m r : ℝ) (hm : 0 < m) (hr : 0
   (latexEnv := "definition")
   (latexLabel := "def:free-covariance-bessel")
   (misc := "Glimm-Jaffe Eq. 6.1.14")]
-/-- The free covariance in position space via Bessel function representation.
-    C(x,y) = (m / (4π² |x-y|)) · K₁(m |x-y|)
-
-    This is the explicit formula for the massive scalar field propagator in 4D.
-    The formula is valid for x ≠ y and m > 0. -/
 noncomputable def freeCovarianceBessel (m : ℝ) (x y : SpaceTime) : ℝ :=
   let r := ‖x - y‖
   if r = 0 then 0  -- Undefined at coincident points; regularize to 0

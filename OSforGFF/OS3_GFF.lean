@@ -505,6 +505,8 @@ lemma gaussianFreeField_OS3_matrix_real
 
   exact h_goal
 
+/-- Main theorem: the Gaussian free field satisfies the real reflection
+  positivity axiom. -/
 @[blueprint "thm:gff-os3"
   (title := "GFF Satisfies OS3")
   (keyDeclaration := true)
@@ -512,8 +514,6 @@ lemma gaussianFreeField_OS3_matrix_real
   (uses := [OS3_ReflectionPositivity, gaussianFreeField_free, gaussianFreeField_OS3_matrix_real])
   (latexEnv := "theorem")
   (latexLabel := "thm:gff-os3")]
-/-- Main theorem: the Gaussian free field satisfies the real reflection
-  positivity axiom. -/
 theorem gaussianFreeField_OS3_real :
     OS3_ReflectionPositivity (gaussianFreeField_free m) := by
   intro n f c

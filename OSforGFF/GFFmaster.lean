@@ -37,6 +37,15 @@ noncomputable section
 
 /-! ## Master OS theorem for the free GFF -/
 
+/-- Master theorem: the free GFF satisfies all Osterwalder-Schrader axioms.
+- OS0 is supplied by `QFT.gaussianFreeField_satisfies_OS0` via the holomorphic integral theorem
+- OS1 is supplied by `gaussianFreeField_satisfies_OS1_revised` via Fourier/momentum space methods
+- OS2 is supplied by `gaussian_satisfies_OS2` via Euclidean invariance of the free covariance
+- OS3 is supplied by `QFT.gaussianFreeField_OS3_real` via the Schur-Hadamard argument
+- OS4 Clustering is supplied by `QFT.gaussianFreeField_satisfies_OS4` via Gaussian factorization
+- OS4 Ergodicity is supplied by polynomial clustering (α=6) → ergodicity
+
+This is an unconditional theorem with no assumptions beyond m > 0. -/
 @[blueprint "thm:gff-master"
   -- Content fields (6)
   (title := "Master Theorem: GFF Satisfies All OS Axioms")
@@ -74,15 +83,6 @@ noncomputable section
   -- Validation fields (2)
   (skipValidation := false)
   (skipCrossRef := false)]
-/-- Master theorem: the free GFF satisfies all Osterwalder-Schrader axioms.
-- OS0 is supplied by `QFT.gaussianFreeField_satisfies_OS0` via the holomorphic integral theorem
-- OS1 is supplied by `gaussianFreeField_satisfies_OS1_revised` via Fourier/momentum space methods
-- OS2 is supplied by `gaussian_satisfies_OS2` via Euclidean invariance of the free covariance
-- OS3 is supplied by `QFT.gaussianFreeField_OS3_real` via the Schur-Hadamard argument
-- OS4 Clustering is supplied by `QFT.gaussianFreeField_satisfies_OS4` via Gaussian factorization
-- OS4 Ergodicity is supplied by polynomial clustering (α=6) → ergodicity
-
-This is an unconditional theorem with no assumptions beyond m > 0. -/
 theorem gaussianFreeField_satisfies_all_OS_axioms (m : ℝ) [Fact (0 < m)] :
     SatisfiesAllOS (μ_GFF m) where
   -- OS0 from the holomorphic integral theorem (differentiation under the integral)

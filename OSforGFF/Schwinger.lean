@@ -334,13 +334,13 @@ Z[J] = ∫ exp(i⟨ω, J⟩) dμ(ω) = ∑_{n=0}^∞ (i)^n/n! * S_n(J,...,J)
 
 This approach is more elementary and constructive than functional derivatives.
 -/
+/-- A (centered) Gaussian field measure: the generating functional is an exponential of a quadratic form. -/
 @[blueprint "def:gaussian-measure"
   (title := "Gaussian Measure")
   (statement := /-- A (centered) Gaussian field measure: $Z[J] = \exp(-\tfrac{1}{2} C(J,J))$ for some covariance $C$. -/)
   (uses := [GJGeneratingFunctional])
   (latexEnv := "definition")
   (latexLabel := "def:gaussian-measure")]
-/-- A (centered) Gaussian field measure: the generating functional is an exponential of a quadratic form. -/
 def IsGaussianMeasure (dμ : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∃ (Cov : TestFunction → TestFunction → ℝ),
     ∀ J : TestFunction,

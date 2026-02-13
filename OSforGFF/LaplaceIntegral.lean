@@ -134,15 +134,15 @@ private lemma Ioi_zero_eq_Ioc_union_Ioi : Ioi (0 : ℝ) = Ioc 0 1 ∪ Ioi 1 := b
   · intro hx; by_cases h : x ≤ 1 <;> [exact .inl ⟨hx, h⟩; exact .inr (not_le.mp h)]
   · intro h; cases h with | inl h => exact h.1 | inr h => exact lt_trans one_pos h
 
+/-- The Glasser integrand is integrable on (0, ∞).
+    Proof: On (0, 1], bounded by 1 on finite measure set.
+           On (1, ∞), dominated by e^{2c} · e^{-u²} which is Gaussian-integrable. -/
 @[blueprint "thm:glasser-integrable"
   (title := "Glasser Integrand Integrability")
   (statement := /-- The Glasser integrand $u \mapsto \exp(-(c/u - u)^2)$ is integrable on $(0, \infty)$. Split into $(0,1]$ (bounded by 1) and $(1,\infty)$ (dominated by Gaussian). -/)
   (latexEnv := "lemma")
   (latexLabel := "lem:glasser-integrable")
   (skipValidation := true)]
-/-- The Glasser integrand is integrable on (0, ∞).
-    Proof: On (0, 1], bounded by 1 on finite measure set.
-           On (1, ∞), dominated by e^{2c} · e^{-u²} which is Gaussian-integrable. -/
 theorem glasser_integrable (c : ℝ) (_hc : 0 < c) :
     IntegrableOn (fun u => exp (-(c/u - u)^2)) (Ioi 0) := by
   rw [Ioi_zero_eq_Ioc_union_Ioi]
@@ -416,14 +416,14 @@ lemma glasser_deriv_abs (c : ℝ) (hc : 0 < c) (u : ℝ) (hu : u ∈ Ioi 0) :
   have h : 0 < c / u^2 := div_pos hc (sq_pos_of_pos hu)
   rw [show -c / u^2 = -(c / u^2) by ring, abs_of_neg (by linarith)]; ring
 
+/-- The weighted integral equals √π via change of variables w = c/u - u.
+    This is the core analytical step. -/
 @[blueprint "thm:weighted-glasser"
   (title := "Weighted Glasser Integral equals √π")
   (statement := /-- The weighted integral $\int_0^\infty (1 + c/u^2) \exp(-(c/u - u)^2) \, du = \sqrt{\pi}$ via change of variables $w = c/u - u$. -/)
   (uses := [glasser_integrable, glasser_injOn, glasser_image_eq_univ])
   (latexEnv := "theorem")
   (latexLabel := "thm:weighted-glasser")]
-/-- The weighted integral equals √π via change of variables w = c/u - u.
-    This is the core analytical step. -/
 theorem weighted_glasser_integral_eq_gaussian (c : ℝ) (hc : 0 < c) :
     ∫ u in Ioi 0, (1 + c/u^2) * exp (-(c/u - u)^2) = sqrt π := by
   -- Use change of variables: w = c/u - u
@@ -554,6 +554,12 @@ lemma laplace_integral_subst_scale (a b : ℝ) (ha : 0 < a) (hb : 0 < b) :
 
 /-! ## Part 6: The main theorem -/
 
+/-- **Main Theorem**: The Laplace integral identity (Bessel K_{1/2}).
+
+    ∫₀^∞ s^{-1/2} exp(-a/s - b*s) ds = √(π/b) exp(-2√(ab))
+
+    This is Gradshteyn & Ryzhik 3.471.9 with ν = 1/2.
+-/
 @[blueprint "thm:laplace-integral"
   (title := "Laplace Integral Identity (Bessel K₁/₂)")
   (keyDeclaration := true)
@@ -562,12 +568,6 @@ lemma laplace_integral_subst_scale (a b : ℝ) (ha : 0 < a) (hb : 0 < b) :
   (latexEnv := "theorem")
   (latexLabel := "thm:laplace-integral")
   (misc := "Gradshteyn & Ryzhik 3.471.9; DLMF §10.32.10")]
-/-- **Main Theorem**: The Laplace integral identity (Bessel K_{1/2}).
-
-    ∫₀^∞ s^{-1/2} exp(-a/s - b*s) ds = √(π/b) exp(-2√(ab))
-
-    This is Gradshteyn & Ryzhik 3.471.9 with ν = 1/2.
--/
 theorem laplace_integral_half_power (a b : ℝ) (ha : 0 < a) (hb : 0 < b) :
     ∫ s in Ioi 0, s^(-(1/2 : ℝ)) * exp (-a/s - b*s) =
     sqrt (π / b) * exp (-2 * sqrt (a * b)) := by

@@ -275,6 +275,8 @@ lemma integrable_tail_small {f : E → ℂ} (hf : Integrable f) (ε : ℝ) (hε 
   rw [Real.norm_eq_abs, abs_of_nonneg h_nonneg] at hN
   exact hN
 
+/-- Convolution of an integrable function with a function vanishing at infinity
+also vanishes at infinity. This is a fundamental result in harmonic analysis. -/
 @[blueprint "thm:conv-vanishes-C0"
   (title := "L¹ ⋆ C₀ Vanishes at Infinity")
   (statement := /-- Convolution of an $L^1$ function with a $C_0$ function vanishes at infinity. Fundamental result in harmonic analysis. -/)
@@ -282,8 +284,6 @@ lemma integrable_tail_small {f : E → ℂ} (hf : Integrable f) (ε : ℝ) (hε 
   (latexLabel := "thm:conv-vanishes-C0")
   (mathlibReady := true)
   (message := "Pure harmonic analysis; no physics dependence")]
-/-- Convolution of an integrable function with a function vanishing at infinity
-also vanishes at infinity. This is a fundamental result in harmonic analysis. -/
 theorem convolution_vanishes_of_integrable_and_C0
     {f : E → ℂ} {g : E → ℂ}
     (hf_int : Integrable f)
@@ -589,12 +589,6 @@ theorem schwartz_bilinear_prod_integrable
 def schwartzBilinearIntegral (f g : SchwartzMap E ℂ) (K : E → ℝ) (a : E) : ℂ :=
   ∫ x : E, ∫ y : E, f x * (K (x - y) : ℂ) * g (y - a)
 
-@[blueprint "thm:schwartz-bilinear-decay"
-  (title := "Clustering Decay for Schwartz Bilinear Forms")
-  (statement := /-- For Schwartz functions $f, g$ and kernel $K$ with polynomial decay $|K(z)| \leq C/\|z\|^\alpha$, the bilinear integral $\int\!\!\int f(x) K(x-y) g(y-a) \to 0$ as $\|a\| \to \infty$. -/)
-  (uses := [convolution_vanishes_of_integrable_and_C0, schwartzBilinearIntegral, schwartz_bilinear_prod_integrable])
-  (latexEnv := "theorem")
-  (latexLabel := "thm:schwartz-bilinear-decay")]
 /-- **Clustering decay for Schwartz bilinear forms** (proof version)
 
 For Schwartz functions f, g and a kernel K with polynomial decay,
@@ -602,6 +596,12 @@ the bilinear integral tends to 0 as the translation parameter a → ∞.
 
 This version adds LocallyIntegrable hypothesis to handle kernel singularities.
 This proof replaces the former axiom (previously in TextbookAxioms.lean, now eliminated). -/
+@[blueprint "thm:schwartz-bilinear-decay"
+  (title := "Clustering Decay for Schwartz Bilinear Forms")
+  (statement := /-- For Schwartz functions $f, g$ and kernel $K$ with polynomial decay $|K(z)| \leq C/\|z\|^\alpha$, the bilinear integral $\int\!\!\int f(x) K(x-y) g(y-a) \to 0$ as $\|a\| \to \infty$. -/)
+  (uses := [convolution_vanishes_of_integrable_and_C0, schwartzBilinearIntegral, schwartz_bilinear_prod_integrable])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:schwartz-bilinear-decay")]
 theorem schwartz_bilinear_translation_decay_proof
     (f g : SchwartzMap E ℂ)
     (K : E → ℝ)

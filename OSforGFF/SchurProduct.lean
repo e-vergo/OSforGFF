@@ -380,13 +380,13 @@ lemma gram_psd_from_A_posdef
       -- transform LHS using hL, then rewrite inner sum via hinner, then fold back to RHS using hR
       simpa [this, hR] using hL
 
+/-- If A and B are positive definite, then the Kronecker-like product is positive definite. -/
 @[blueprint "lem:kronlike-posdef"
   (title := "Kronecker-like Product Preserves Positive Definiteness")
   (statement := /-- If $A$ and $B$ are positive definite, then the Kronecker-like product $K(p,q) = A_{p_1 q_1} B_{p_2 q_2}$ is positive definite. -/)
   (uses := [gram_psd_from_A_posdef, frobenius_pos_of_psd_posdef])
   (latexEnv := "lemma")
   (latexLabel := "lem:kronlike-posdef")]
-/-- If A and B are positive definite, then the Kronecker-like product is positive definite. -/
 lemma kronLike_posDef
   (A B : Matrix ι ι ℝ) (hA : A.PosDef) (hB : B.PosDef) :
   (kronLike (ι:=ι) A B).PosDef := by
@@ -493,6 +493,8 @@ lemma kronLike_posDef
       frobenius_pos_of_psd_posdef (ι:=ι) G B hG_psd hG_ne_zero hB
     exact this
 
+/-- Schur product theorem (real case, finite index):
+If A B are positive definite matrices over ℝ, then the Hadamard product is positive definite. -/
 @[blueprint "thm:schur-product"
   (title := "Schur Product Theorem")
   (keyDeclaration := true)
@@ -501,8 +503,6 @@ lemma kronLike_posDef
   (latexEnv := "theorem")
   (latexLabel := "thm:schur-product")
   (misc := "Horn & Johnson, Matrix Analysis, Thm 5.2.1")]
-/-- Schur product theorem (real case, finite index):
-If A B are positive definite matrices over ℝ, then the Hadamard product is positive definite. -/
 @[simp] theorem schur_product_posDef
   (A B : Matrix ι ι ℝ)
   (hA : A.PosDef) (hB : B.PosDef) :

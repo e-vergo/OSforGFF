@@ -70,13 +70,13 @@ open DFunLike (coe)
 noncomputable section
 open scoped MeasureTheory Complex BigOperators SchwartzMap
 
+/-- OS0 (Analyticity): The generating functional is analytic in the test functions. -/
 @[blueprint "def:os0"
   (title := "OS0: Analyticity")
   (keyDeclaration := true)
   (statement := /-- The generating functional $Z[\sum_i z_i J_i]$ is analytic in $(z_1, \ldots, z_n) \in \mathbb{C}^n$ for any finite collection of test functions $J_i$. -/)
   (latexEnv := "definition")
   (latexLabel := "def:os0")]
-/-- OS0 (Analyticity): The generating functional is analytic in the test functions. -/
 def OS0_Analyticity (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (n : ℕ) (J : Fin n → TestFunctionℂ),
     AnalyticOn ℂ (fun z : Fin n → ℂ =>
@@ -86,13 +86,13 @@ def OS0_Analyticity (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop 
 def TwoPointIntegrable (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   LocallyIntegrable (fun x => SchwingerTwoPointFunction dμ_config x) volume
 
+/-- OS1 (Regularity): The complex generating functional satisfies exponential bounds. -/
 @[blueprint "def:os1"
   (title := "OS1: Regularity")
   (keyDeclaration := true)
   (statement := /-- $\|Z[f]\| \le \exp\bigl(c\,(\|f\|_1 + \|f\|_p^p)\bigr)$ for some $1 \le p \le 2$ and $c > 0$, and if $p = 2$ then $S_2(x)$ is locally integrable. -/)
   (latexEnv := "definition")
   (latexLabel := "def:os1")]
-/-- OS1 (Regularity): The complex generating functional satisfies exponential bounds. -/
 def OS1_Regularity (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∃ (p : ℝ) (c : ℝ), 1 ≤ p ∧ p ≤ 2 ∧ c > 0 ∧
     (∀ (f : TestFunctionℂ),
@@ -100,18 +100,22 @@ def OS1_Regularity (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :
         Real.exp (c * (∫ x, ‖f x‖ ∂volume + ∫ x, ‖f x‖^p ∂volume))) ∧
     (p = 2 → TwoPointIntegrable dμ_config)
 
+/-- OS2 (Euclidean Invariance): The measure is invariant under Euclidean transformations. -/
 @[blueprint "def:os2"
   (title := "OS2: Euclidean Invariance")
   (keyDeclaration := true)
   (statement := /-- $Z[f] = Z[gf]$ for all $g \in E(4)$ and test functions $f$. -/)
   (latexEnv := "definition")
   (latexLabel := "def:os2")]
-/-- OS2 (Euclidean Invariance): The measure is invariant under Euclidean transformations. -/
 def OS2_EuclideanInvariance (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (g : QFT.E) (f : TestFunctionℂ),
     GJGeneratingFunctionalℂ dμ_config f =
     GJGeneratingFunctionalℂ dμ_config (QFT.euclidean_action g f)
 
+/-- Real formulation of OS3 reflection positivity using the real-valued positive time
+    subspace and the real generating functional. This version avoids explicit complex
+    coefficients and conjugation, aligning more closely with the new real-valued
+    `PositiveTimeTestFunction` infrastructure. -/
 @[blueprint "def:os3"
   (title := "OS3: Reflection Positivity")
   (keyDeclaration := true)
@@ -119,10 +123,6 @@ def OS2_EuclideanInvariance (dμ_config : ProbabilityMeasure FieldConfiguration)
   (uses := [PositiveTimeTestFunction, compTimeReflectionReal, GJGeneratingFunctional])
   (latexEnv := "definition")
   (latexLabel := "def:os3")]
-/-- Real formulation of OS3 reflection positivity using the real-valued positive time
-    subspace and the real generating functional. This version avoids explicit complex
-    coefficients and conjugation, aligning more closely with the new real-valued
-    `PositiveTimeTestFunction` infrastructure. -/
 def OS3_ReflectionPositivity (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (n : ℕ) (f : Fin n → PositiveTimeTestFunction) (c : Fin n → ℝ),
     let reflection_matrix := fun i j : Fin n =>
@@ -130,12 +130,6 @@ def OS3_ReflectionPositivity (dμ_config : ProbabilityMeasure FieldConfiguration
         ((f i).val - compTimeReflectionReal ((f j).val))
     0 ≤ ∑ i, ∑ j, c i * c j * (reflection_matrix i j).re
 
-@[blueprint "def:os4-clustering"
-  (title := "OS4: Clustering")
-  (keyDeclaration := true)
-  (statement := /-- $Z[f + T_a g] \to Z[f] \cdot Z[g]$ as $\|a\| \to \infty$: distant test functions become statistically independent. -/)
-  (latexEnv := "definition")
-  (latexLabel := "def:os4-clustering")]
 /-- OS4 (Clustering): Clustering via correlation decay.
 
     This is an alternative formulation that directly expresses the clustering property:
@@ -152,6 +146,12 @@ def OS3_ReflectionPositivity (dμ_config : ProbabilityMeasure FieldConfiguration
     positive definiteness of the covariance. The complex extension follows from
     analyticity (OS0) and regularity (OS1).
 -/
+@[blueprint "def:os4-clustering"
+  (title := "OS4: Clustering")
+  (keyDeclaration := true)
+  (statement := /-- $Z[f + T_a g] \to Z[f] \cdot Z[g]$ as $\|a\| \to \infty$: distant test functions become statistically independent. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:os4-clustering")]
 def OS4_Clustering (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (f g : TestFunction) (ε : ℝ), ε > 0 → ∃ (R : ℝ), R > 0 ∧ ∀ (a : SpaceTime),
     ‖a‖ > R →
@@ -200,6 +200,8 @@ def OS4_PolynomialClustering (dμ_config : ProbabilityMeasure FieldConfiguration
 
 /-! ## Bundled Axiom Conjunction -/
 
+/-- A probability measure on field configurations satisfies all Osterwalder-Schrader axioms.
+    This bundles OS0 through OS4 (clustering and ergodicity) into a single predicate. -/
 @[blueprint "def:satisfies-all-os"
   (title := "Full OS Axiom Bundle")
   (keyDeclaration := true)
@@ -207,8 +209,6 @@ def OS4_PolynomialClustering (dμ_config : ProbabilityMeasure FieldConfiguration
   (uses := [OS0_Analyticity, OS1_Regularity, OS2_EuclideanInvariance, OS3_ReflectionPositivity, OS4_Clustering, OS4_Ergodicity])
   (latexEnv := "definition")
   (latexLabel := "def:satisfies-all-os")]
-/-- A probability measure on field configurations satisfies all Osterwalder-Schrader axioms.
-    This bundles OS0 through OS4 (clustering and ergodicity) into a single predicate. -/
 structure SatisfiesAllOS (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop where
   os0 : OS0_Analyticity dμ_config
   os1 : OS1_Regularity dμ_config

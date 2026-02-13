@@ -82,6 +82,8 @@ the integral is ℂ-differentiable everywhere, hence analytic.
 The key insight is that `Fin n → ℂ` is a finite-dimensional ℂ-vector space,
 so analyticity is equivalent to being everywhere ℂ-differentiable. -/
 
+/-- Axiom: A ℂ-differentiable function on a finite-dimensional complex space is analytic
+    (Goursat's theorem in n dimensions). -/
 @[blueprint "axiom:goursat-hartogs"
   (title := "Goursat-Hartogs Theorem (Finite Dimensions)")
   (notReady := true)
@@ -90,8 +92,6 @@ so analyticity is equivalent to being everywhere ℂ-differentiable. -/
   (latexLabel := "axiom:goursat-hartogs")
   (blocked := "Requires Hartogs' theorem formalization not in Mathlib; classical complex analysis result")
   (below := "Used as key ingredient in OS0 analyticity proof")]
-/-- Axiom: A ℂ-differentiable function on a finite-dimensional complex space is analytic
-    (Goursat's theorem in n dimensions). -/
 axiom differentiable_analyticAt_finDim
     {n : ℕ}
     (f : (Fin n → ℂ) → ℂ)

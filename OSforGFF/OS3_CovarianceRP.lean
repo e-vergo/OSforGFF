@@ -454,6 +454,7 @@ lemma rpInnerProduct_toComplex_eq (m : ℝ) (f : TestFunction) :
   unfold rpInnerProduct
   rw [star_toComplex_eq_compTimeReflection]
 
+/-- For real test functions, the reflection positivity inner product is non-negative. -/
 @[blueprint "thm:covariance-rp-real"
   (title := "Covariance Reflection Positivity (Real)")
   (keyDeclaration := true)
@@ -461,7 +462,6 @@ lemma rpInnerProduct_toComplex_eq (m : ℝ) (f : TestFunction) :
   (uses := [freeCovariance_reflection_positive_bilinear, freeCovariance, compTimeReflectionReal])
   (latexEnv := "theorem")
   (latexLabel := "thm:covariance-rp-real")]
-/-- For real test functions, the reflection positivity inner product is non-negative. -/
 theorem freeCovariance_reflection_positive_bilinear_real (m : ℝ) [Fact (0 < m)] (f : TestFunction)
     (hf_supp : ∀ x : SpaceTime, x 0 ≤ 0 → f x = 0) :
   0 ≤ ∫ x, ∫ y, (QFT.compTimeReflectionReal f) x * freeCovariance m x y * f y := by
