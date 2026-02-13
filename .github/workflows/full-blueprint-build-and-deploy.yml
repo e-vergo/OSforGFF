@@ -2,8 +2,6 @@ name: Full Blueprint Build and Deploy
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
 
 permissions:
   contents: read
@@ -20,6 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: e-vergo/dress-blueprint-action@main
+        with:
+          docgen4-mode: docs-static
 
   deploy:
     needs: build
