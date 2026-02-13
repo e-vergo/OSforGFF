@@ -3,7 +3,7 @@ name: Full Blueprint Build and Deploy
 on:
   workflow_dispatch:
   push:
-    branches: [SBS]
+    branches: [main, SBS]
 
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
 
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/SBS'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/SBS'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
