@@ -45,6 +45,7 @@ import Mathlib.MeasureTheory.Measure.Haar.Unique
 import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 import Mathlib.MeasureTheory.Integral.IntegrableOn
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
+import Dress
 
 
 open MeasureTheory Set Filter
@@ -83,6 +84,13 @@ For f : ℝ → ℂ with ‖f‖² integrable on [a,b]:
   ‖∫_[a,b] f(x) dx‖² ≤ (b-a) · ∫_[a,b] ‖f(x)‖² dx
 
 This is |⟨1, f⟩|² ≤ ‖1‖² · ‖f‖² in L². -/
+@[blueprint "thm:cauchy-schwarz-set-integral"
+  (title := "Cauchy-Schwarz for Set Integrals")
+  (statement := /-- $\|\int_{[a,b]} f\|^2 \leq (b-a) \int_{[a,b]} \|f\|^2$ (Cauchy-Schwarz / Hölder with $p = q = 2$). -/)
+  (latexEnv := "theorem")
+  (latexLabel := "thm:cauchy-schwarz-set-integral")
+  (mathlibReady := true)
+  (message := "Pure Hölder inequality; no physics dependence")]
 theorem sq_setIntegral_le_measure_mul_setIntegral_sq_proved
     {f : ℝ → ℂ} {a b : ℝ} (hab : a ≤ b)
     (hf_sq : IntegrableOn (fun x => ‖f x‖^2) (Icc a b) volume) :
@@ -201,6 +209,12 @@ $$\int_\Omega \left\|\frac{1}{T}\int_0^T A_s(\omega)\,ds\right\|^2 d\mu(\omega) 
 3. Fubini: = (1/T) ∫_[0,T] (∫_Ω ‖A_s‖² dμ) ds
 4. Uniform bound: ≤ (1/T) ∫_[0,T] M_sq ds = (1/T) · T · M_sq = M_sq
 -/
+@[blueprint "thm:L2-time-average"
+  (title := "L² Bound for Time Averages")
+  (statement := /-- If $\int_\Omega \|A_s(\omega)\|^2 \, d\mu \leq M^2$ uniformly in $s \in [0,T]$, then $\int_\Omega \|(1/T)\int_0^T A_s \, ds\|^2 \, d\mu \leq M^2$. Cauchy-Schwarz + Fubini. -/)
+  (uses := [sq_setIntegral_le_measure_mul_setIntegral_sq_proved])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:L2-time-average")]
 theorem L2_time_average_bound (μ : Measure Ω) [SFinite μ]
     (A : ℝ → Ω → ℂ) (M_sq : ℝ) (T : ℝ) (hT : T > 0)
     -- Uniform L² bound

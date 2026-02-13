@@ -27,6 +27,7 @@ import OSforGFF.OS1_GFF
 import OSforGFF.OS2_GFF
 import OSforGFF.OS4_Clustering
 import OSforGFF.OS4_Ergodicity
+import Dress
 
 open scoped BigOperators
 
@@ -45,6 +46,39 @@ noncomputable section
 - OS4 Ergodicity is supplied by polynomial clustering (α=6) → ergodicity
 
 This is an unconditional theorem with no assumptions beyond m > 0. -/
+@[blueprint "thm:gff-master"
+  -- Content fields (6)
+  (title := "Master Theorem: GFF Satisfies All OS Axioms")
+  (statement := /-- The free Gaussian Free Field measure $\mu_{\mathrm{GFF}}(m)$ for mass $m > 0$ satisfies all five Osterwalder-Schrader axioms: OS0 (analyticity), OS1 (regularity), OS2 (Euclidean invariance), OS3 (reflection positivity), and OS4 (clustering + ergodicity). This is an unconditional theorem with no assumptions beyond $m > 0$. -/)
+  (proof := /-- Assembles five individual OS axiom proofs:
+    OS0 via holomorphic integral theorem (differentiation under the integral sign);
+    OS1 via Fourier/momentum space methods with $p = 2$, $c = 1/(2m^2)$;
+    OS2 via Euclidean invariance of the free covariance (change of variables);
+    OS3 via the Schur-Hadamard matrix argument and covariance reflection positivity;
+    OS4 clustering via Gaussian factorization and cross-covariance decay;
+    OS4 ergodicity via polynomial clustering ($\alpha = 6$) implies L2 convergence. -/)
+  (hasProof := true)
+  (above := /-- This is the culmination of the entire formalization, assembling all OS axiom proofs. -/)
+  (below := /-- Each OS axiom is proved in its own file; this file simply bundles them. -/)
+  -- Dependencies auto-inferred from proof term
+  -- Status fields (3): `ready` is the one we haven't used yet
+  (ready := true)
+  -- Metadata fields (7)
+  (keyDeclaration := true)
+  (message := "Unconditional: no assumptions beyond m > 0. Uses three axioms transitively: schwartz_nuclear, minlos_theorem, differentiable_analyticAt_finDim.")
+  (priorityItem := true)
+  (blocked := "")
+  (potentialIssue := "Three axioms remain unformalized: schwartz_nuclear (NuclearSpace.lean), minlos_theorem (Minlos.lean), differentiable_analyticAt_finDim (OS0_GFF.lean)")
+  (technicalDebt := "OS0 alternative proof in GaussianFreeField.lean could be unified with the holomorphic integral approach in OS0_GFF.lean")
+  (misc := "Glimm-Jaffe Quantum Physics pp. 89-90; Douglas-Hoback-Mei-Nissim 2025")
+  -- Discussion field (1)
+  (discussion := 316)
+  -- LaTeX fields (2)
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-master")
+  -- Validation fields (2)
+  (skipValidation := false)
+  (skipCrossRef := false)]
 theorem gaussianFreeField_satisfies_all_OS_axioms (m : ℝ) [Fact (0 < m)] :
     SatisfiesAllOS (μ_GFF m) where
   -- OS0 from the holomorphic integral theorem (differentiation under the integral)

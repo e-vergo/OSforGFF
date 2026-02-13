@@ -7,6 +7,7 @@ Authors: Michael R. Douglas, Sarah Hoback, Anna Mei, Ron Nissim
 import OSforGFF.Basic
 import OSforGFF.SpacetimeDecomp
 import Mathlib.Analysis.SpecialFunctions.JapaneseBracket
+import Dress
 
 /-!
 # Schwartz Tonelli Factorization
@@ -110,6 +111,12 @@ depending only on time coordinates, the double integral factors:
 where G_f(t) = ∫ ‖f(t, v)‖ dv is the spatial integral at time t.
 
 This is a key tool for establishing reflection positivity (OS3) bounds. -/
+@[blueprint "thm:schwartz-tonelli"
+  (title := "Tonelli Factorization for Schwartz Functions")
+  (statement := /-- Double integrals over SpaceTime factorize when the kernel depends only on time coordinates: $\int\!\!\int \|f\| \|g\| K(x_0, y_0) = \int\!\!\int K(t_1, t_2) G_f(t_1) G_g(t_2)$ where $G_f(t) = \int \|f(t,v)\| \, dv$. -/)
+  (uses := [schwartz_slice_integrable, spacetimeDecomp])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:schwartz-tonelli")]
 theorem schwartz_tonelli_spacetime
     (f g : SchwartzMap SpaceTime ℂ)
     (K : ℝ → ℝ → ℝ)

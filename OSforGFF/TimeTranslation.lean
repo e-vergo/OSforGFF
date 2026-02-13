@@ -11,6 +11,7 @@ import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import Mathlib.Tactic
 
 import OSforGFF.Basic
+import Dress
 
 /-!
 # Time Translation Operators
@@ -218,6 +219,11 @@ def timeTranslationSchwartzℂCLM (s : ℝ) : TestFunctionℂ →L[ℂ] TestFunc
   SchwartzMap.compCLMOfAntilipschitz ℂ (timeShift_hasTemperateGrowth s) (timeShift_antilipschitz s)
 
 /-- Time translation on complex-valued Schwartz functions. -/
+@[blueprint "def:time-translation"
+  (title := "Time Translation on Schwartz Space")
+  (statement := /-- Time translation $T_s : \mathcal{S}(\mathbb{R}^4, \mathbb{C}) \to \mathcal{S}(\mathbb{R}^4, \mathbb{C})$ defined by $(T_s f)(t, \vec{x}) = f(t + s, \vec{x})$. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:time-translation")]
 def timeTranslationSchwartzℂ (s : ℝ) (f : TestFunctionℂ) : TestFunctionℂ :=
   timeTranslationSchwartzℂCLM s f
 

@@ -12,6 +12,7 @@ import OSforGFF.OS3_MixedRep
 import OSforGFF.OS3_MixedRepInfra
 import OSforGFF.Parseval
 import OSforGFF.Covariance
+import Dress
 import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 
 /-!
@@ -454,6 +455,13 @@ lemma rpInnerProduct_toComplex_eq (m : ℝ) (f : TestFunction) :
   rw [star_toComplex_eq_compTimeReflection]
 
 /-- For real test functions, the reflection positivity inner product is non-negative. -/
+@[blueprint "thm:covariance-rp-real"
+  (title := "Covariance Reflection Positivity (Real)")
+  (keyDeclaration := true)
+  (statement := /-- For real positive-time test functions $f$, the reflection positivity inner product is non-negative: $\int\!\!\int (\theta f)(x)\, C(x,y)\, f(y)\, dx\, dy \ge 0$. -/)
+  (uses := [freeCovariance_reflection_positive_bilinear, freeCovariance, compTimeReflectionReal])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:covariance-rp-real")]
 theorem freeCovariance_reflection_positive_bilinear_real (m : ℝ) [Fact (0 < m)] (f : TestFunction)
     (hf_supp : ∀ x : SpaceTime, x 0 ≤ 0 → f x = 0) :
   0 ≤ ∫ x, ∫ y, (QFT.compTimeReflectionReal f) x * freeCovariance m x y * f y := by

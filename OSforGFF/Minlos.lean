@@ -16,6 +16,7 @@ import Mathlib.Analysis.LocallyConvex.Basic
 import Mathlib.Topology.Algebra.Module.WeakDual
 import Mathlib.Analysis.Distribution.SchwartzSpace.Deriv
 import OSforGFF.NuclearSpace
+import Dress
 import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.Analysis.InnerProductSpace.EuclideanDist
@@ -74,6 +75,19 @@ instance : MeasurableSpace (WeakDual ℝ E) := borel _
     - Construction of the Gaussian Free Field
 
     **References**: Minlos (1959), Gel'fand-Vilenkin Vol. 4, Billingsley. -/
+@[blueprint "axiom:minlos"
+  (title := "Minlos Theorem")
+  (keyDeclaration := true)
+  (notReady := true)
+  (statement := /-- On a nuclear locally convex space $E$, a continuous, positive definite, normalized functional $\Phi : E \to \mathbb{C}$ is the characteristic functional of a unique probability measure $\mu$ on $E'$: $\Phi(f) = \int_{E'} e^{i\langle f, \omega \rangle}\, d\mu(\omega)$. -/)
+  (uses := [NuclearSpace, IsPositiveDefinite])
+  (latexEnv := "axiom")
+  (latexLabel := "axiom:minlos")
+  (priorityItem := true)
+  (blocked := "Requires deep functional analysis infrastructure not in Mathlib: nuclear space theory, Bochner-Minlos duality")
+  (potentialIssue := "This is an axiom, not a theorem. Full formalization would require nuclear space characterization theorems.")
+  (discussion := 321)
+  (misc := "Minlos (1959), Gel'fand & Vilenkin Vol. 4 Ch. IV, Billingsley §19. The nuclear hypothesis is essential -- the theorem fails for general locally convex spaces.")]
 axiom minlos_theorem
   [NuclearSpace E]
   (Φ : E → ℂ)
@@ -183,6 +197,13 @@ lemma gaussian_positive_definite_via_embedding
 
     **Note**: We require H to be an inner product space (not just normed) because the
     Gaussian RBF kernel is only positive definite for Hilbert spaces. -/
+@[blueprint "thm:minlos-gaussian"
+  (title := "Minlos Gaussian Construction")
+  (keyDeclaration := true)
+  (statement := /-- If the covariance $C(f,f) = \|Tf\|^2$ for a linear embedding $T : E \to H$ into a Hilbert space, then Minlos yields a Gaussian probability measure $\mu$ on $E'$ with CF $\Phi(f) = e^{-\frac{1}{2}C(f,f)}$. -/)
+  (uses := [minlos_theorem, gaussian_positive_definite_via_embedding, gaussian_characteristic_functional])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:minlos-gaussian")]
 theorem minlos_gaussian_construction
   [NuclearSpace E]
   {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
@@ -251,6 +272,13 @@ and by uniqueness the measure is Euclidean-invariant. -/
 
     Note: Not used in the master theorem (OS2 is proved by direct change of variables).
     Kept as documentation of the alternative uniqueness-based approach. -/
+@[blueprint "thm:gaussian-symmetry"
+  (title := "Gaussian Measure Symmetry Transfer")
+  (statement := /-- If the covariance form is invariant under a linear map $g$, i.e.\ $C(gf, gf) = C(f, f)$, then the Gaussian measure $\mu$ is invariant under the dual action of $g$. -/)
+  (uses := [minlos_uniqueness, gaussian_characteristic_functional])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gaussian-symmetry")
+  (message := "Alternative approach to OS2; not used in master theorem which uses direct change of variables")]
 theorem gaussian_measure_symmetry
   [NuclearSpace E]
   (covariance_form : E → E → ℝ)

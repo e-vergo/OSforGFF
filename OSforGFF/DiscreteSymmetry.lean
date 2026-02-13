@@ -40,6 +40,7 @@ import Mathlib.Analysis.Normed.Module.RCLike.Real
 
 import OSforGFF.Basic
 import OSforGFF.Euclidean
+import Dress
 
 /-!
 ## Discrete Symmetries for AQFT
@@ -117,6 +118,12 @@ open MeasureTheory
 
 namespace QFT
 
+@[blueprint "def:time-reflection"
+  (title := "Time Reflection")
+  (statement := /-- Time reflection $\Theta : (t, \vec{x}) \mapsto (-t, \vec{x})$, the fundamental discrete symmetry for OS-3 (reflection positivity). -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:time-reflection")
+  (misc := "Osterwalder-Schrader, Comm. Math. Phys. 31 (1973)")]
 abbrev timeReflection (x : SpaceTime) : SpaceTime :=
   (WithLp.equiv 2 _).symm (Function.update x.ofLp 0 (-x.ofLp 0))
 
@@ -174,6 +181,12 @@ lemma timeReflection_inner_map (x y : SpaceTime) :
   · simp [h]
 
 /-- Time reflection as a linear isometry equivalence -/
+@[blueprint "def:time-reflection-isometry"
+  (title := "Time Reflection Linear Isometry")
+  (statement := /-- Time reflection as a linear isometry equivalence on spacetime, $\Theta^2 = \mathrm{id}$. -/)
+  (uses := [timeReflection])
+  (latexEnv := "definition")
+  (latexLabel := "def:time-reflection-isometry")]
 def timeReflectionLE : SpaceTime ≃ₗᵢ[ℝ] SpaceTime :=
 { toFun := timeReflection
   invFun := timeReflection  -- Time reflection is self-inverse
@@ -227,6 +240,12 @@ example (x : SpaceTime) :
     where `timeReflection` negates the time coordinate (0th component) while
     preserving spatial coordinates. This version acts on complex test functions and
     is used to formulate the Osterwalder-Schrader star operation. -/
+@[blueprint "def:comp-time-reflection"
+  (title := "Composition with Time Reflection")
+  (statement := /-- The pullback operator $\Theta^* : \mathcal{S}(\mathbb{R}^4, \mathbb{C}) \to \mathcal{S}(\mathbb{R}^4, \mathbb{C})$ defined by $(\Theta^* f)(x) = f(\Theta x)$. -/)
+  (uses := [timeReflection])
+  (latexEnv := "definition")
+  (latexLabel := "def:comp-time-reflection")]
 noncomputable def compTimeReflection : TestFunctionℂ →L[ℝ] TestFunctionℂ := by
   have hg_upper : ∃ (k : ℕ) (C : ℝ), ∀ (x : SpaceTime), ‖x‖ ≤ C * (1 + ‖timeReflectionCLM x‖) ^ k := by
     use 1; use 1; simp; intro x

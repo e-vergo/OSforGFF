@@ -6,6 +6,7 @@ Authors: Michael R. Douglas, Sarah Hoback, Anna Mei, Ron Nissim
 
 import OSforGFF.Basic
 import OSforGFF.SchwartzProdIntegrable
+import Dress
 
 /-!
 # Spacetime Decomposition
@@ -46,6 +47,11 @@ def piLpMeasurableEquiv (n : ℕ) : PiLp 2 (fun _ : Fin n => ℝ) ≃ᵐ (Fin n 
     1. piLpMeasurableEquiv : EuclideanSpace ℝ (Fin 4) → (Fin 4 → ℝ)
     2. piFinSuccAbove 0 : (Fin 4 → ℝ) → ℝ × (Fin 3 → ℝ)
     3. id × piLpMeasurableEquiv.symm : ℝ × (Fin 3 → ℝ) → ℝ × SpatialCoords -/
+@[blueprint "def:spacetime-decomp"
+  (title := "Spacetime Decomposition")
+  (statement := /-- The measure-preserving decomposition $\mathbb{R}^4 \cong \mathbb{R} \times \mathbb{R}^3$ splitting time and spatial components. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:spacetime-decomp")]
 def spacetimeDecomp : SpaceTime ≃ᵐ ℝ × SpatialCoords :=
   (piLpMeasurableEquiv STDimension).trans
   ((MeasurableEquiv.piFinSuccAbove (fun _ => ℝ) 0).trans
@@ -60,6 +66,12 @@ lemma piLpMeasurableEquiv_measurePreserving (n : ℕ) :
   exact PiLp.volume_preserving_ofLp (ι := Fin n)
 
 /-- The spacetime decomposition preserves measure. -/
+@[blueprint "thm:spacetime-decomp-measure"
+  (title := "Spacetime Decomposition Preserves Measure")
+  (statement := /-- The spacetime decomposition preserves Lebesgue measure: $\mathrm{vol}_{\mathbb{R}^4} = \mathrm{vol}_\mathbb{R} \otimes \mathrm{vol}_{\mathbb{R}^3}$. -/)
+  (uses := [spacetimeDecomp])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:spacetime-decomp-measure")]
 theorem spacetimeDecomp_measurePreserving :
     MeasurePreserving spacetimeDecomp (volume : Measure SpaceTime) volume := by
   unfold spacetimeDecomp

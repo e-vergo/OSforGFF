@@ -18,6 +18,7 @@ import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 
 import OSforGFF.Basic
 import OSforGFF.Minlos
+import Dress
 import Mathlib.MeasureTheory.Measure.Map
 import Mathlib.MeasureTheory.Measure.Typeclasses.Probability
 
@@ -72,6 +73,12 @@ lemma negMap_measurable : Measurable negMap := by
 
 /-- Symmetry under global sign flip induced by the real Gaussian CF.
     Note: Requires NuclearSpace instance for Minlos uniqueness theorem. -/
+@[blueprint "lem:integral-neg-invariance"
+  (title := "Sign-Flip Symmetry of Gaussian Measure")
+  (statement := /-- For a Gaussian measure $\mu$ with CF $e^{-\frac{1}{2}C(f,f)}$, $\int f(\omega)\,d\mu = \int f(-\omega)\,d\mu$ for all integrable $f$. -/)
+  (uses := [CovarianceForm, minlos_uniqueness, negMap_measurable])
+  (latexEnv := "lemma")
+  (latexLabel := "lem:integral-neg-invariance")]
 lemma integral_neg_invariance
   [NuclearSpace TestFunction]
   (C : CovarianceForm) (μ : ProbabilityMeasure FieldConfiguration)
@@ -193,6 +200,12 @@ lemma integral_neg_invariance
   simp [negMap]
 
 /-- Zero mean from the real Gaussian characteristic functional, via symmetry and L¹. -/
+@[blueprint "lem:moment-zero"
+  (title := "Zero Mean of Gaussian Measure")
+  (statement := /-- A Gaussian measure with real CF $e^{-\frac{1}{2}C(f,f)}$ has zero mean: $\int \omega(a)\,d\mu(\omega) = 0$. -/)
+  (uses := [integral_neg_invariance, CovarianceForm])
+  (latexEnv := "lemma")
+  (latexLabel := "lem:moment-zero")]
 lemma moment_zero_from_realCF
   [NuclearSpace TestFunction]
   (C : CovarianceForm) (μ : ProbabilityMeasure FieldConfiguration)

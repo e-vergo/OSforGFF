@@ -53,6 +53,7 @@ import Mathlib.Analysis.SpecialFunctions.Integrability.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 import Mathlib.MeasureTheory.Function.LpSeminorm.CompareExp
 import Mathlib.MeasureTheory.Constructions.HaarToSphere
+import Dress
 
 /-!
 ## Functional Analysis for AQFT
@@ -163,6 +164,13 @@ instance [MeasurableSpace α] (μ : Measure α) : MeasurableSpace (Lp ℂ 2 μ) 
 instance [MeasurableSpace α] (μ : Measure α) : BorelSpace (Lp ℂ 2 μ) := ⟨rfl⟩
 
 -- Check if Complex.ofRealCLM is an isometry
+@[blueprint "lem:ofReal-isometry"
+  (title := "Real-to-Complex Isometry")
+  (statement := /-- The canonical embedding $\mathbb{R} \hookrightarrow \mathbb{C}$ via `ofRealCLM` is an isometry. -/)
+  (mathlibReady := true)
+  (message := "Should be in Mathlib Complex.Basic or RCLike")
+  (latexEnv := "lemma")
+  (latexLabel := "lem:ofReal-isometry")]
 lemma Complex.ofRealCLM_isometry : Isometry (Complex.ofRealCLM : ℝ →L[ℝ] ℂ) := by
   -- Complex.ofRealCLM is defined as ofRealLI.toContinuousLinearMap,
   -- where ofRealLI is a linear isometry
@@ -251,6 +259,13 @@ abbrev L2Complex (d : ℕ) := Lp ℂ 2 (volume : Measure (EuclideanRd d))
 /-- Embedding Schwartz functions into L² space using Mathlib's toLpCLM.
     This is a continuous linear map from Schwartz space to L²(ℝᵈ, ℂ).
     ✅ IMPLEMENTED: Uses SchwartzMap.toLpCLM from Mathlib -/
+@[blueprint "def:schwartz-to-L2"
+  (title := "Schwartz to L2 Embedding")
+  (statement := /-- The continuous linear embedding $\iota : \mathcal{S}(\mathbb{R}^d, \mathbb{C}) \hookrightarrow L^2(\mathbb{R}^d, \mathbb{C})$. -/)
+  (mathlibReady := true)
+  (message := "General Schwartz-to-Lp embedding; candidate for Mathlib contribution")
+  (latexEnv := "definition")
+  (latexLabel := "def:schwartz-to-L2")]
 noncomputable def schwartzToL2 (d : ℕ) : SchwartzRd d →L[ℂ] L2Complex d :=
   SchwartzMap.toLpCLM ℂ ℂ 2 (volume : Measure (EuclideanRd d))
 
@@ -300,6 +315,13 @@ lemma linfty_mul_L2_bound_aux {μ : Measure α}
 
 /-- Given a measurable function `g` that is essentially bounded by `C`,
     multiplication by `g` defines a bounded linear operator on `L²`. -/
+@[blueprint "def:linfty-mul-L2"
+  (title := "L-infinity Multiplication Operator")
+  (statement := /-- For $g \in L^\infty(\mu)$ with $\|g\|_\infty \le C$, the multiplication operator $M_g : L^2 \to L^2$ defined by $f \mapsto gf$ is bounded with $\|M_g\| \le C$. -/)
+  (mathlibReady := true)
+  (message := "General L-infinity multiplication on L2; useful for Mathlib's operator theory")
+  (latexEnv := "definition")
+  (latexLabel := "def:linfty-mul-L2")]
 noncomputable def linfty_mul_L2_CLM {μ : Measure α}
     (g : α → ℂ) (hg_meas : Measurable g) (C : ℝ) (hC : 0 < C)
     (hg_bound : ∀ᵐ x ∂μ, ‖g x‖ ≤ C) :
@@ -344,6 +366,14 @@ lemma linfty_mul_L2_CLM_spec {μ : Measure α}
 
 /-- The operator norm of the multiplication operator is bounded by C.
     This gives ‖Mg f‖₂ ≤ C · ‖f‖₂ for all f ∈ L². -/
+@[blueprint "thm:linfty-mul-norm-bound"
+  (title := "Multiplication Operator Norm Bound")
+  (statement := /-- The multiplication operator satisfies $\|M_g f\|_2 \le C \cdot \|f\|_2$ for all $f \in L^2$. -/)
+  (uses := [linfty_mul_L2_CLM])
+  (mathlibReady := true)
+  (message := "Norm bound for L-infinity multiplication; pairs with linfty_mul_L2_CLM")
+  (latexEnv := "theorem")
+  (latexLabel := "thm:linfty-mul-norm-bound")]
 theorem linfty_mul_L2_CLM_norm_bound {μ : Measure α}
     (g : α → ℂ) (hg_meas : Measurable g) (C : ℝ) (hC : 0 < C)
     (hg_bound : ∀ᵐ x ∂μ, ‖g x‖ ≤ C)
@@ -510,6 +540,13 @@ lemma integrableOn_compact_diff_ball {d : ℕ}
 
 /-- Functions with polynomial decay are locally integrable.
     For d-dimensional space, if α < d and |f(x)| ≤ C‖x‖^{-α}, then f is locally integrable. -/
+@[blueprint "thm:locally-integrable-rpow"
+  (title := "Local Integrability from Power Decay")
+  (statement := /-- If $d \ge 3$, $\alpha < d$, and $|f(x)| \le C \|x\|^{-\alpha}$, then $f$ is locally integrable on $\mathbb{R}^d$. -/)
+  (mathlibReady := true)
+  (message := "General local integrability criterion; not specific to QFT")
+  (latexEnv := "theorem")
+  (latexLabel := "thm:locally-integrable-rpow")]
 theorem locallyIntegrable_of_rpow_decay_real {d : ℕ} (hd : d ≥ 3)
     {f : EuclideanSpace ℝ (Fin d) → ℝ} {C : ℝ} {α : ℝ}
     (hC : C > 0) (hα : α < d)
@@ -582,6 +619,11 @@ This applies to exponentially decaying kernels like the massive free covariance.
     - Schwartz functions are integrable: ‖g‖_{L¹} < ∞
     - K₀ is integrable: ‖K₀‖_{L¹} < ∞
     - Then: ∫∫ |f(x) K₀(x-y) g(y)| dx dy ≤ ‖f‖_∞ · ‖K₀‖_{L¹} · ‖g‖_{L¹} < ∞ -/
+@[blueprint "thm:schwartz-bilinear-integrable"
+  (title := "Schwartz Bilinear Integrability")
+  (statement := /-- For a translation-invariant $L^1$ kernel $K_0$ and Schwartz test functions $f, g$, the bilinear form $f(x) K_0(x-y) g(y)$ is integrable on $\mathbb{R}^d \times \mathbb{R}^d$. -/)
+  (latexEnv := "theorem")
+  (latexLabel := "thm:schwartz-bilinear-integrable")]
 theorem schwartz_bilinear_integrable_of_translationInvariant_L1
     {d : ℕ}
     (K₀ : EuclideanSpace ℝ (Fin d) → ℂ)
@@ -696,6 +738,13 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [MeasurableSpace
 
 /-- A Schwartz function times a bounded measurable function is integrable.
     This is the key technical lemma for Fourier-type integrals. -/
+@[blueprint "lem:schwartz-mul-bounded"
+  (title := "Schwartz Times Bounded is Integrable")
+  (statement := /-- If $f \in \mathcal{S}$ and $g$ is bounded measurable with $\|g\|_\infty \le 1$, then $fg$ is integrable. -/)
+  (mathlibReady := true)
+  (message := "General Schwartz integrability result; useful for Fourier analysis in Mathlib")
+  (latexEnv := "lemma")
+  (latexLabel := "lem:schwartz-mul-bounded")]
 lemma SchwartzMap.integrable_mul_bounded (f : SchwartzMap E ℂ) (g : E → ℂ)
     (hg_meas : Measurable g) (hg_bdd : ∀ x, ‖g x‖ ≤ 1) :
     Integrable (fun x => f x * g x) μ := by
@@ -755,6 +804,12 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     This follows from the Mean Value Theorem: f(t,x) - f(0,x) = ∫₀ᵗ ∂ₜf dt,
     and since ∂ₜf is bounded (Schwartz), we get |f(t,x)| ≤ C·t.
 -/
+@[blueprint "thm:schwartz-linear-vanishing"
+  (title := "Schwartz Linear Vanishing Bound")
+  (statement := /-- If $f \in \mathcal{S}(\mathbb{R} \times E, \mathbb{C})$ vanishes for $t \le 0$, then $\|f(t,x)\| \le C \cdot t$ for all $t \ge 0$. -/)
+  (latexEnv := "theorem")
+  (latexLabel := "thm:schwartz-linear-vanishing")
+  (misc := "Key UV regularization lemma for QFT integrals")]
 theorem schwartz_vanishing_linear_bound_general
     (f : SchwartzMap (ℝ × E) ℂ)
     (h_vanish : ∀ t x, t ≤ 0 → f (t, x) = 0) :
@@ -855,6 +910,13 @@ lemma sub_const_antilipschitz {E : Type*} [NormedAddCommGroup E] (a : E) :
 
     This is proved using Mathlib's `compCLMOfAntilipschitz`: translation is composition
     with `x ↦ x - a`, which has temperate growth and is antilipschitz (an isometry). -/
+@[blueprint "def:schwartz-translate"
+  (title := "Schwartz Translation")
+  (statement := /-- For $f \in \mathcal{S}(E, F)$ and $a \in E$, the translated function $f(\cdot - a) \in \mathcal{S}(E, F)$. Translation preserves the Schwartz class. -/)
+  (mathlibReady := true)
+  (message := "Fundamental Schwartz space property; should be in Mathlib")
+  (latexEnv := "definition")
+  (latexLabel := "def:schwartz-translate")]
 noncomputable def SchwartzMap.translate {E F : Type*}
     [NormedAddCommGroup E] [NormedSpace ℝ E]
     [NormedAddCommGroup F] [NormedSpace ℝ F]
@@ -884,6 +946,13 @@ open Real
     |f(x)| ≤ C / (1 + |x|)^N. If N > dim(V), this implies integrability.
 
     **Reference**: Stein-Weiss, Chapter 1, Proposition 1.1 -/
+@[blueprint "thm:schwartz-integrable-decay"
+  (title := "Schwartz Integrable Decay")
+  (statement := /-- For $f \in \mathcal{S}(\mathbb{R}^n)$ and $N > \dim(V)$, there exists $C > 0$ such that $\|f(x)\| \le C / (1 + \|x\|)^N$. -/)
+  (mathlibReady := true)
+  (message := "Explicit Schwartz decay bound; standard harmonic analysis result for Mathlib")
+  (latexEnv := "theorem")
+  (latexLabel := "thm:schwartz-integrable-decay")]
 theorem schwartz_integrable_decay {V : Type*} [NormedAddCommGroup V]
     [NormedSpace ℝ V] [FiniteDimensional ℝ V] [MeasureSpace V] [BorelSpace V]
     (f : SchwartzMap V ℂ) (N : ℕ) (_hN : Module.finrank ℝ V < N) :
@@ -1042,6 +1111,11 @@ lemma bumpSelfConv_support_tendsto {ι : Type*} {l : Filter ι} [l.NeBot]
     2. By associativity: ∫∫ φ(x-a) C(x-y) φ(y) dx dy = (ψ ⋆ C)(a)
     3. Apply single-convolution theorem: (ψ ⋆ C)(a) → C(a)
 -/
+@[blueprint "thm:double-mollifier"
+  (title := "Double Mollifier Convergence")
+  (statement := /-- For a continuous kernel $C$ (away from the origin), the double mollifier convolution converges: $\int\!\int \varphi_\varepsilon(x-a) C(x-y) \varphi_\varepsilon(y)\,dx\,dy \to C(a)$ as $\varepsilon \to 0$. -/)
+  (latexEnv := "theorem")
+  (latexLabel := "thm:double-mollifier")]
 theorem double_mollifier_convergence
     (C : E → ℝ)
     (hC : ContinuousOn C {x | x ≠ 0})

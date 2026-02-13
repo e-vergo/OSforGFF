@@ -8,6 +8,7 @@ import Mathlib.Analysis.Complex.ExponentialBounds
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
 import Mathlib.MeasureTheory.Integral.IntegralEqImproper
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+import Dress
 
 /-!
 # Modified Bessel Function K₁
@@ -44,6 +45,13 @@ open MeasureTheory Set Filter Asymptotics Real
 /-- The modified Bessel function K₁(z) via cosh integral representation.
     K₁(z) = ∫₀^∞ exp(-z cosh(t)) cosh(t) dt
     This is well-defined and positive for z > 0. -/
+@[blueprint "def:bessel-K1"
+  (title := "Modified Bessel Function K1")
+  (statement := /-- The modified Bessel function $K_1(z) = \int_0^\infty e^{-z \cosh t} \cosh t \, dt$, well-defined and positive for $z > 0$. -/)
+  (mathlibReady := true)
+  (message := "Standard special function; candidate for Mathlib.Analysis.SpecialFunctions")
+  (latexEnv := "definition")
+  (latexLabel := "def:bessel-K1")]
 noncomputable def besselK1 (z : ℝ) : ℝ :=
   ∫ t : ℝ in Ici 0, exp (-z * cosh t) * cosh t
 
@@ -1034,6 +1042,12 @@ lemma bessel_symmetry_integral (z : ℝ) (hz : 0 < z) :
 
     This is proven directly via the substitution t = (r/(2m)) exp(u),
     which transforms the integral to the cosh representation of K₁. -/
+@[blueprint "lem:schwinger-eq-bessel"
+  (title := "Schwinger Integral Equals Bessel K1")
+  (statement := /-- The Schwinger proper-time integral equals $(m/r) K_1(mr)$, connecting the heat kernel representation to the Bessel function. -/)
+  (uses := [besselK1])
+  (latexEnv := "lemma")
+  (latexLabel := "lem:schwinger-eq-bessel")]
 lemma schwingerIntegral_eq_besselK1 (m r : ℝ) (hm : 0 < m) (hr : 0 < r) :
     ∫ t in Ioi 0, (1 / t^2) * exp (-m^2 * t - r^2 / (4 * t)) =
     (4 * m / r) * besselK1 (m * r) := by

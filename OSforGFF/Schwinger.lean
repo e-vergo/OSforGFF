@@ -17,6 +17,7 @@ import Mathlib.Algebra.Order.Group.Unbundled.Abs
 import OSforGFF.Basic
 import OSforGFF.FunctionalAnalysis
 import OSforGFF.ComplexTestFunction
+import Dress
 
 /-!
 ## Schwinger Functions for AQFT
@@ -125,6 +126,14 @@ S_n(f₁,...,fₙ) = (-i)ⁿ (coefficient of (iJ)ⁿ/n! in Z[J])
 
     This is the fundamental object in constructive QFT - all physics is contained
     in the infinite sequence of Schwinger functions {S_n}_{n=1}^∞. -/
+@[blueprint "def:schwinger-function"
+  (title := "Schwinger n-Point Function")
+  (keyDeclaration := true)
+  (statement := /-- $S_n(f_1, \ldots, f_n) = \int \langle\omega, f_1\rangle \cdots \langle\omega, f_n\rangle \, d\mu(\omega)$. The fundamental correlation functions of constructive QFT. -/)
+  (uses := [distributionPairing, FieldConfiguration])
+  (latexEnv := "definition")
+  (latexLabel := "def:schwinger-function")
+  (misc := "Osterwalder-Schrader 1973, 1975")]
 def SchwingerFunction (dμ_config : ProbabilityMeasure FieldConfiguration) (n : ℕ)
   (f : Fin n → TestFunction) : ℝ :=
   ∫ ω, (∏ i, distributionPairing ω (f i)) ∂dμ_config.toMeasure
@@ -326,6 +335,12 @@ Z[J] = ∫ exp(i⟨ω, J⟩) dμ(ω) = ∑_{n=0}^∞ (i)^n/n! * S_n(J,...,J)
 This approach is more elementary and constructive than functional derivatives.
 -/
 /-- A (centered) Gaussian field measure: the generating functional is an exponential of a quadratic form. -/
+@[blueprint "def:gaussian-measure"
+  (title := "Gaussian Measure")
+  (statement := /-- A (centered) Gaussian field measure: $Z[J] = \exp(-\tfrac{1}{2} C(J,J))$ for some covariance $C$. -/)
+  (uses := [GJGeneratingFunctional])
+  (latexEnv := "definition")
+  (latexLabel := "def:gaussian-measure")]
 def IsGaussianMeasure (dμ : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∃ (Cov : TestFunction → TestFunction → ℝ),
     ∀ J : TestFunction,

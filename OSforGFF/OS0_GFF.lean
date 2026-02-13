@@ -22,6 +22,7 @@ import OSforGFF.Schwinger
 import OSforGFF.OS_Axioms
 import OSforGFF.GFFMconstruct
 import OSforGFF.ComplexTestFunction
+import Dress
 import Mathlib.MeasureTheory.Measure.Complex
 import Mathlib.Analysis.Complex.CauchyIntegral
 import Mathlib.Analysis.Complex.HasPrimitives
@@ -83,6 +84,14 @@ so analyticity is equivalent to being everywhere ℂ-differentiable. -/
 
 /-- Axiom: A ℂ-differentiable function on a finite-dimensional complex space is analytic
     (Goursat's theorem in n dimensions). -/
+@[blueprint "axiom:goursat-hartogs"
+  (title := "Goursat-Hartogs Theorem (Finite Dimensions)")
+  (notReady := true)
+  (statement := /-- A $\mathbb{C}$-differentiable function $f : \mathbb{C}^n \to \mathbb{C}$ is analytic at every point. This is Goursat's theorem generalized to $n$ complex variables (Hartogs' theorem). -/)
+  (latexEnv := "axiom")
+  (latexLabel := "axiom:goursat-hartogs")
+  (blocked := "Requires Hartogs' theorem formalization not in Mathlib; classical complex analysis result")
+  (below := /-- Used as key ingredient in OS0 analyticity proof. -/)]
 axiom differentiable_analyticAt_finDim
     {n : ℕ}
     (f : (Fin n → ℂ) → ℂ)
@@ -1117,6 +1126,13 @@ theorem gff_integrand_fderiv_bound (n : ℕ) (J : Fin n → TestFunctionℂ) (z�
     2. The integrand is analytic in z for each ω
     3. The integral is locally bounded (in fact, bounded by 1 since |exp(ix)| = 1)
 -/
+@[blueprint "thm:gff-os0"
+  (title := "GFF Satisfies OS0")
+  (keyDeclaration := true)
+  (statement := /-- The generating functional of the Gaussian Free Field is analytic: $Z[\sum_i z_i J_i]$ is analytic in $(z_1, \ldots, z_n) \in \mathbb{C}^n$. -/)
+  (uses := [OS0_Analyticity, gaussianFreeField_free, holomorphic_integral_of_locally_L1_bound, differentiable_analyticAt_finDim])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-os0")]
 theorem gaussianFreeField_satisfies_OS0 : OS0_Analyticity (μ_GFF m) := by
   intro n J
   -- Apply the holomorphic integral theorem

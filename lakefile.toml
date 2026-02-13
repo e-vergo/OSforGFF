@@ -1,0 +1,16 @@
+name = "OSforGFF"
+version = "0.1.0"
+defaultTargets = ["OSforGFF"]
+
+
+[[lean_lib]]
+name = "OSforGFF"
+
+[[require]]
+name = "Dress"
+git = "https://github.com/e-vergo/Dress.git"
+rev = "main"
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"

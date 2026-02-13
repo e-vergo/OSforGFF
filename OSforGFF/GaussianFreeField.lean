@@ -25,6 +25,7 @@ import OSforGFF.Minlos
 import OSforGFF.Covariance
 import OSforGFF.MinlosAnalytic
 import OSforGFF.Schwinger
+import Dress
 
 /-!
 ## Gaussian Free Field — OS0 (Alternative) and OS2
@@ -216,6 +217,12 @@ def CovarianceEuclideanInvariantℂ (dμ_config : ProbabilityMeasure FieldConfig
     SchwingerFunctionℂ₂ dμ_config (QFT.euclidean_action g f) (QFT.euclidean_action g h) =
     SchwingerFunctionℂ₂ dμ_config f h
 
+@[blueprint "thm:gaussian-os2"
+  (title := "Gaussian Measures Satisfy OS2")
+  (statement := /-- For Gaussian measures with $E(4)$-invariant covariance, $Z[gf] = Z[f]$ for all Euclidean transformations $g$. -/)
+  (uses := [isGaussianGJ, CovarianceEuclideanInvariantℂ, OS2_EuclideanInvariance])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gaussian-os2")]
 theorem gaussian_satisfies_OS2
   (dμ_config : ProbabilityMeasure FieldConfiguration)
   (h_gaussian : isGaussianGJ dμ_config)

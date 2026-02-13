@@ -13,6 +13,7 @@ import Mathlib.Analysis.Calculus.MeanValue
 import Mathlib.Analysis.Calculus.Deriv.Basic
 import OSforGFF.FunctionalAnalysis
 import OSforGFF.Basic
+import Dress
 
 
 open MeasureTheory SchwartzMap Real Set Metric
@@ -36,6 +37,11 @@ section SpaceTime
 
 /-- For a Schwartz function vanishing on {x₀ ≤ 0}, the linear bound ‖f(x)‖ ≤ C · x₀ holds.
     Follows from mean value theorem + global derivative bounds on Schwartz functions. -/
+@[blueprint "thm:schwartz-vanishing-linear"
+  (title := "Schwartz Vanishing Linear Bound")
+  (statement := /-- For a Schwartz function vanishing on $\{x_0 \leq 0\}$, the linear bound $\|f(x)\| \leq C \cdot x_0$ holds. Mean value theorem + global derivative bounds. -/)
+  (latexEnv := "theorem")
+  (latexLabel := "thm:schwartz-vanishing-linear")]
 theorem schwartz_vanishing_linear_bound (f : TestFunctionℂ)
     (hf_supp : ∀ x : SpaceTime, x 0 ≤ 0 → f x = 0) :
     ∃ C : ℝ, 0 < C ∧ ∀ x : SpaceTime, 0 < x 0 → ‖f x‖ ≤ C * (x 0) := by

@@ -5,6 +5,7 @@ Authors: Michael R. Douglas, Sarah Hoback, Anna Mei, Ron Nissim
 -/
 import OSforGFF.FourierTransforms
 import OSforGFF.CovarianceMomentum
+import Dress
 
 /-!
 # Parseval Identity for Covariance
@@ -135,6 +136,11 @@ Key relationship: `f̂_phys(2πξ) = 𝓕f(ξ)` -/
 
 /-- The physics-convention Fourier transform of a Schwartz function.
     Uses `exp(-i⟨k,x⟩)` instead of Mathlib's `exp(-2πi⟨x,ξ⟩)`. -/
+@[blueprint "def:physics-fourier"
+  (title := "Physics Fourier Transform")
+  (statement := /-- The physics convention Fourier transform $\hat{f}(k) = \int f(x) e^{-i\langle k, x \rangle}\,dx$ (without $2\pi$ factors). -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:physics-fourier")]
 noncomputable def physicsFourierTransform (f : TestFunctionℂ) (k : SpaceTime) : ℂ :=
   ∫ x, f x * Complex.exp (-Complex.I * ((@inner ℝ SpaceTime _ k x : ℝ) : ℂ)) ∂volume
 

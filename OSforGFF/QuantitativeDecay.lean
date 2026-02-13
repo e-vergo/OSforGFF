@@ -12,6 +12,7 @@ import Mathlib.Analysis.SpecialFunctions.JapaneseBracket
 import Mathlib.Topology.MetricSpace.Bounded
 import Mathlib.Probability.Moments.IntegrableExpMul
 import OSforGFF.SchwartzTranslationDecay
+import Dress
 
 /-!
 # Quantitative Decay for Schwartz Bilinear Forms
@@ -55,6 +56,11 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- A function f has polynomial decay of order N with constant C if
     ‖f(x)‖ ≤ C / (1 + ‖x‖)^N for all x. -/
+@[blueprint "def:polynomial-decay-bound"
+  (title := "Polynomial Decay Bound")
+  (statement := /-- A function $f$ has polynomial decay of order $N$ with constant $C$ if $\|f(x)\| \leq C / (1 + \|x\|)^N$ for all $x$. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:polynomial-decay-bound")]
 structure PolynomialDecayBound {E F : Type*} [NormedAddCommGroup E]
     [NormedAddCommGroup F] (f : E → F) (N : ℝ) where
   C : ℝ
@@ -755,6 +761,14 @@ The proof structure:
 2. Show H(y) = ∫ f(x) K(x-y) dx = H_sing(y) + H_tail(y) has polynomial decay
 3. The integral I(a) = ∫ H(y) g(y-a) dy = (H ⋆ ǧ)(a) where ǧ(z) = g(-z)
 4. Apply convolution_polynomial_decay to get the result -/
+@[blueprint "thm:schwartz-bilinear-poly-decay"
+  (title := "Schwartz Bilinear Translation Decay (Quantitative)")
+  (keyDeclaration := true)
+  (statement := /-- For Schwartz functions $f, g$ and kernel $K$ with exponential decay $|K(z)| \leq C_K e^{-m\|z\|}$, the bilinear integral decays polynomially: $\|\int\!\!\int f(x) K(x-y) g(y-a)\| \leq c (1+\|a\|)^{-\alpha}$ for any $\alpha > 0$. -/)
+  (uses := [convolution_expDecay_polynomial_decay, convolution_polynomial_decay, schwartz_has_polynomial_decay])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:schwartz-bilinear-poly-decay")
+  (misc := "Reed-Simon Vol. II, Ch. X; Glimm-Jaffe Sec. 6.2")]
 theorem schwartz_bilinear_translation_decay_polynomial_proof
     (f g : SchwartzMap E ℂ)
     (K : E → ℝ)

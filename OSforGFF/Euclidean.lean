@@ -22,6 +22,7 @@ import Mathlib.Topology.MetricSpace.Isometry
 import Mathlib.MeasureTheory.Function.LpSpace.ContinuousCompMeasurePreserving
 
 import OSforGFF.Basic
+import Dress
 
 /-!
 ## Euclidean Group Actions for AQFT
@@ -110,6 +111,12 @@ abbrev O4 : Type :=
 
 /-!  Euclidean group -/
 /-- Euclidean motion = rotation / reflection + translation. E= R^4 x O(4)-/
+@[blueprint "def:euclidean-group"
+  (title := "Euclidean Group")
+  (statement := /-- The Euclidean group $E(4) = \mathbb{R}^4 \rtimes O(4)$, consisting of a rotation/reflection $R \in O(4)$ and a translation $t \in \mathbb{R}^4$. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:euclidean-group")
+  (misc := "Glimm-Jaffe, Quantum Physics, Ch. 3")]
 structure E where
   R : O4
   t : SpaceTime
@@ -292,6 +299,12 @@ open MeasureTheory
 /-- For every rigid motion `g : E`, the push‑forward of Lebesgue measure `μ`
     by the map `x ↦ g • x` is again `μ`.  Equivalently, `act g` is
     measure‑preserving. -/
+@[blueprint "lem:measure-preserving-act"
+  (title := "Euclidean Actions Preserve Measure")
+  (statement := /-- For every rigid motion $g \in E(4)$, the map $x \mapsto g \cdot x$ preserves Lebesgue measure. -/)
+  (uses := [E, act])
+  (latexEnv := "lemma")
+  (latexLabel := "lem:measure-preserving-act")]
 lemma measurePreserving_act (g : E) :
     MeasurePreserving (fun x : SpaceTime => act g x) μ μ := by
   have rot : MeasurePreserving (fun x : SpaceTime => g.R x) μ μ := by
@@ -404,6 +417,12 @@ lemma euclidean_pullback_polynomial_bounds (g : E) :
     For g ∈ E and f ∈ TestFunctionℂ, define (g • f)(x) = f(g⁻¹ • x).
     This is the standard pullback action: to evaluate the transformed function
     at x, we evaluate the original function at the inverse-transformed point. -/
+@[blueprint "def:euclidean-action"
+  (title := "Euclidean Action on Test Functions")
+  (statement := /-- For $g \in E(4)$ and $f \in \mathcal{S}(\mathbb{R}^4, \mathbb{C})$, define $(g \cdot f)(x) = f(g^{-1} \cdot x)$ via pullback. -/)
+  (uses := [E])
+  (latexEnv := "definition")
+  (latexLabel := "def:euclidean-action")]
 noncomputable def euclidean_action (g : E) (f : TestFunctionℂ) : TestFunctionℂ :=
   SchwartzMap.compCLM (𝕜 := ℂ)
     (hg := euclidean_pullback_temperate_growth g)

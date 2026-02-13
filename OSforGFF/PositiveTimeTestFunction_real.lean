@@ -13,6 +13,7 @@ import Mathlib.LinearAlgebra.TensorAlgebra.Basic
 
 import OSforGFF.Basic
 import OSforGFF.DiscreteSymmetry
+import Dress
 
 /-!
 # Positive Time Test Functions and Star Operations
@@ -49,6 +50,11 @@ lemma is_open_positiveTimeSet : IsOpen positiveTimeSet :=
   isOpen_lt continuous_const (PiLp.continuous_apply 2 (fun _ => ℝ) (0 : Fin STDimension))
 
 /-- Submodule of **real-valued** test functions supported in the positive time region -/
+@[blueprint "def:positive-time-submodule"
+  (title := "Positive Time Test Functions")
+  (statement := /-- The submodule of real Schwartz functions supported in the positive time region $\{x \in \mathbb{R}^4 : x_0 > 0\}$. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:positive-time-submodule")]
 def PositiveTimeTestFunctions.submodule : Submodule ℝ TestFunction where
   carrier := { f : TestFunction | tsupport f ⊆ positiveTimeSet }
   zero_mem' := by

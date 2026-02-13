@@ -12,6 +12,7 @@ import Mathlib.Order.Filter.Basic
 
 import OSforGFF.Basic
 import OSforGFF.Schwinger
+import Dress
 
 /-!
 ## Schwinger Two-Point Function
@@ -112,6 +113,15 @@ noncomputable def standardBumpSequence (n : ℕ) (hn : n ≠ 0) : ContDiffBump (
     freeCovarianceKernel and makes the decay bounds hold trivially at x = 0.
 
     For the GFF, this limit equals freeCovarianceKernel(x) by `double_mollifier_convergence`. -/
+@[blueprint "def:schwinger-two-point"
+  (title := "Schwinger Two-Point Function S₂(x)")
+  (keyDeclaration := true)
+  (statement := /-- $S_2(x) := \lim_{n \to \infty} \iint \varphi_{1/n}(u - x)\, \langle\phi(u)\phi(v)\rangle\, \varphi_{1/n}(v)\, du\, dv$, with $S_2(0) = 0$ by regularization. -/)
+  (uses := [SmearedTwoPointFunction, standardBumpSequence])
+  (latexEnv := "definition")
+  (latexLabel := "def:schwinger-two-point")
+  (message := "Limit-based definition replacing DiracDelta approach; regularizes S₂(0) = 0")
+  (message := "The old definition used DiracDelta which required sorry since delta functions are distributions, not test functions. The mollifier-limit approach is mathematically rigorous.")]
 noncomputable def SchwingerTwoPointFunction
     (dμ_config : ProbabilityMeasure FieldConfiguration) (x : SpaceTime) : ℝ :=
   -- Regularize at coincident points: S₂(0) = 0
@@ -141,6 +151,12 @@ theorem schwingerTwoPointFunction_zero
     This holds for Gaussian measures where C is the covariance kernel.
 
     The proof uses `double_mollifier_convergence` from FunctionalAnalysis.lean. -/
+@[blueprint "thm:smeared-tendsto-schwinger"
+  (title := "Smeared Two-Point Convergence")
+  (statement := /-- As the bump width $\varepsilon \to 0$, the smeared two-point function converges to the covariance kernel: $\text{SmearedTwoPointFunction}(\mu, \varphi_\varepsilon, x) \to C(x)$. -/)
+  (uses := [SmearedTwoPointFunction, double_mollifier_convergence])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:smeared-tendsto-schwinger")]
 theorem smearedTwoPoint_tendsto_schwingerTwoPoint
     (dμ_config : ProbabilityMeasure FieldConfiguration) (x : SpaceTime) (hx : x ≠ 0)
     {ι : Type*} {l : Filter ι} [l.NeBot]
@@ -177,6 +193,14 @@ theorem smearedTwoPoint_tendsto_schwingerTwoPoint
 
     Note: For x = 0, the SchwingerTwoPointFunction is defined to be 0 by regularization,
     so this theorem requires x ≠ 0. -/
+@[blueprint "thm:schwinger-two-point-eq-kernel"
+  (title := "S₂ Equals Covariance Kernel")
+  (keyDeclaration := true)
+  (statement := /-- For measures with continuous covariance kernel $C$, $S_2(x) = C(x)$ for all $x \neq 0$. -/)
+  (uses := [SchwingerTwoPointFunction, smearedTwoPoint_tendsto_schwingerTwoPoint])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:schwinger-two-point-eq-kernel")
+  (above := /-- This is the key theorem connecting the distribution-theoretic $S_2$ to the pointwise kernel. -/)]
 theorem schwingerTwoPointFunction_eq_kernel
     (dμ_config : ProbabilityMeasure FieldConfiguration) (x : SpaceTime) (hx : x ≠ 0)
     (C : SpaceTime → ℝ)

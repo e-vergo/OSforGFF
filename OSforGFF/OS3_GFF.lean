@@ -13,6 +13,7 @@ import OSforGFF.HadamardExp
 import OSforGFF.CovarianceR
 import OSforGFF.OS3_CovarianceRP
 import OSforGFF.GFFIsGaussian
+import Dress
 
 /-!
 ## Real Reflection Positivity for the Gaussian Free Field
@@ -506,6 +507,13 @@ lemma gaussianFreeField_OS3_matrix_real
 
 /-- Main theorem: the Gaussian free field satisfies the real reflection
   positivity axiom. -/
+@[blueprint "thm:gff-os3"
+  (title := "GFF Satisfies OS3")
+  (keyDeclaration := true)
+  (statement := /-- The Gaussian Free Field satisfies the real reflection positivity axiom: for positive-time test functions $f_i$ and real coefficients $c_i$, $\sum_{i,j} c_i c_j \mathrm{Re}\,Z[f_i - \theta f_j] \ge 0$. -/)
+  (uses := [OS3_ReflectionPositivity, gaussianFreeField_free, gaussianFreeField_OS3_matrix_real])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-os3")]
 theorem gaussianFreeField_OS3_real :
     OS3_ReflectionPositivity (gaussianFreeField_free m) := by
   intro n f c

@@ -6,6 +6,7 @@ Authors: Michael R. Douglas, Sarah Hoback, Anna Mei, Ron Nissim
 
 import OSforGFF.OS0_GFF
 import OSforGFF.GaussianMoments
+import Dress
 
 /-!
 ## Complex GFF Results via OS0 Analyticity
@@ -464,6 +465,13 @@ end GFFIsGaussian
     both S₂ and freeCovarianceℂ_bilinear are bilinear, and they agree on real inputs.
 
     For any complex f = fRe + I•fIm, g = gRe + I•gIm, we expand by bilinearity. -/
+@[blueprint "thm:gff-two-point-eq-covariance"
+  (title := "S₂ = Complex Covariance (GFF)")
+  (keyDeclaration := true)
+  (statement := /-- For complex test functions, $S_2(\mu_m, f, g) = C_m^{\mathbb{C}}(f, g)$. Extends the real polarization identity to complex test functions by bilinearity. -/)
+  (uses := [covariance_bilinear_from_general])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-two-point-eq-covariance")]
 theorem gff_two_point_equals_covarianceℂ_free (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) :
     SchwingerFunctionℂ₂ (gaussianFreeField_free m) f g = freeCovarianceℂ_bilinear m f g := by
   -- Decompose complex test functions into real and imaginary parts
@@ -540,6 +548,13 @@ theorem gff_complex_generating (m : ℝ) [Fact (0 < m)] :
     This combines:
     1. Centering: E[⟨ω,φ⟩] = 0 (from gaussianFreeField_free_centered)
     2. Gaussian CF: Z[J] = exp(-½ S₂(J,J)) (from gff_complex_generating) -/
+@[blueprint "thm:gff-is-gaussian"
+  (title := "GFF is Gaussian")
+  (keyDeclaration := true)
+  (statement := /-- The free GFF measure constructed via Minlos is Gaussian: it is centered and its generating functional satisfies $Z[J] = e^{-\frac{1}{2}S_2(J,J)}$. -/)
+  (uses := [gaussianFreeField_free_centered, gff_complex_generating, isGaussianGJ])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-is-gaussian")]
 theorem isGaussianGJ_gaussianFreeField_free (m : ℝ) [Fact (0 < m)] :
     isGaussianGJ (gaussianFreeField_free m) := by
   constructor

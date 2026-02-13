@@ -10,6 +10,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 import Mathlib.Analysis.Calculus.Deriv.Inv
 import Mathlib.MeasureTheory.Function.Jacobian
+import Dress
 
 /-!
 # Proof of the Laplace Integral Identity (Bessel K_{1/2})
@@ -136,6 +137,12 @@ private lemma Ioi_zero_eq_Ioc_union_Ioi : Ioi (0 : ℝ) = Ioc 0 1 ∪ Ioi 1 := b
 /-- The Glasser integrand is integrable on (0, ∞).
     Proof: On (0, 1], bounded by 1 on finite measure set.
            On (1, ∞), dominated by e^{2c} · e^{-u²} which is Gaussian-integrable. -/
+@[blueprint "thm:glasser-integrable"
+  (title := "Glasser Integrand Integrability")
+  (statement := /-- The Glasser integrand $u \mapsto \exp(-(c/u - u)^2)$ is integrable on $(0, \infty)$. Split into $(0,1]$ (bounded by 1) and $(1,\infty)$ (dominated by Gaussian). -/)
+  (latexEnv := "lemma")
+  (latexLabel := "lem:glasser-integrable")
+  (skipValidation := true)]
 theorem glasser_integrable (c : ℝ) (_hc : 0 < c) :
     IntegrableOn (fun u => exp (-(c/u - u)^2)) (Ioi 0) := by
   rw [Ioi_zero_eq_Ioc_union_Ioi]
@@ -411,6 +418,12 @@ lemma glasser_deriv_abs (c : ℝ) (hc : 0 < c) (u : ℝ) (hu : u ∈ Ioi 0) :
 
 /-- The weighted integral equals √π via change of variables w = c/u - u.
     This is the core analytical step. -/
+@[blueprint "thm:weighted-glasser"
+  (title := "Weighted Glasser Integral equals √π")
+  (statement := /-- The weighted integral $\int_0^\infty (1 + c/u^2) \exp(-(c/u - u)^2) \, du = \sqrt{\pi}$ via change of variables $w = c/u - u$. -/)
+  (uses := [glasser_integrable, glasser_injOn, glasser_image_eq_univ])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:weighted-glasser")]
 theorem weighted_glasser_integral_eq_gaussian (c : ℝ) (hc : 0 < c) :
     ∫ u in Ioi 0, (1 + c/u^2) * exp (-(c/u - u)^2) = sqrt π := by
   -- Use change of variables: w = c/u - u
@@ -444,6 +457,14 @@ theorem weighted_glasser_integral_eq_gaussian (c : ℝ) (hc : 0 < c) :
   -- Now h_cov : ∫ w, exp(-w²) = ∫ u in Ioi 0, (1 + c/u²) * exp(-(c/u - u)²)
   rw [← h_cov, Measure.restrict_univ, h_gaussian]
 
+@[blueprint "thm:glasser-gaussian"
+  (title := "Glasser Gaussian Integral")
+  (statement := /-- $\int_0^\infty \exp(-(c/u - u)^2) \, du = \sqrt{\pi}/2$ for $c > 0$. The Glasser/Cauchy-Schlömilch identity. -/)
+  (uses := [weighted_glasser_integral_eq_gaussian, glasser_integral_double])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:glasser-gaussian")
+  (mathlibReady := true)
+  (message := "Pure analysis result, no physics dependence")]
 theorem glasser_gaussian_integral (c : ℝ) (hc : 0 < c) :
     ∫ u in Ioi 0, exp (-(c/u - u)^2) = sqrt π / 2 := by
   linarith [glasser_integral_double c hc, weighted_glasser_integral_eq_gaussian c hc]
@@ -539,6 +560,14 @@ lemma laplace_integral_subst_scale (a b : ℝ) (ha : 0 < a) (hb : 0 < b) :
 
     This is Gradshteyn & Ryzhik 3.471.9 with ν = 1/2.
 -/
+@[blueprint "thm:laplace-integral"
+  (title := "Laplace Integral Identity (Bessel K₁/₂)")
+  (keyDeclaration := true)
+  (statement := /-- $\int_0^\infty s^{-1/2} e^{-a/s - bs} \, ds = \sqrt{\pi/b} \, e^{-2\sqrt{ab}}$. This is Gradshteyn & Ryzhik 3.471.9 with $\nu = 1/2$. -/)
+  (uses := [glasser_gaussian_integral, laplace_integral_subst_sq, laplace_integral_factor, laplace_integral_subst_scale])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:laplace-integral")
+  (misc := "Gradshteyn & Ryzhik 3.471.9; DLMF §10.32.10")]
 theorem laplace_integral_half_power (a b : ℝ) (ha : 0 < a) (hb : 0 < b) :
     ∫ s in Ioi 0, s^(-(1/2 : ℝ)) * exp (-a/s - b*s) =
     sqrt (π / b) * exp (-2 * sqrt (a * b)) := by

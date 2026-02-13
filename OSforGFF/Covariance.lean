@@ -24,6 +24,7 @@ import OSforGFF.FunctionalAnalysis
 import OSforGFF.CovarianceMomentum
 import OSforGFF.FourierTransforms
 import OSforGFF.Parseval
+import Dress
 
 /-!
 # Free Covariance for Gaussian Free Field
@@ -623,10 +624,23 @@ theorem freeCovarianceℂ_regulated_positive (α : ℝ) (hα : 0 < α) (m : ℝ)
   · exact freePropagatorMomentum_mathlib_nonneg m (Fact.out) k
 
 /-- Complex extension of the covariance for complex test functions (limit form via Bessel). -/
+@[blueprint "def:free-covariance-complex"
+  (title := "Free Covariance (Complex Bilinear)")
+  (statement := /-- $\langle f, C g \rangle = \int\!\!\int f(x) \, C(x,y) \, \overline{g(y)} \, dx \, dy$ for complex test functions, using the Bessel form. -/)
+  (uses := [freeCovarianceBessel])
+  (latexEnv := "definition")
+  (latexLabel := "def:free-covariance-complex")]
 def freeCovarianceℂ (m : ℝ) (f g : TestFunctionℂ) : ℂ :=
   ∫ x, ∫ y, (f x) * (freeCovariance m x y) * (starRingEnd ℂ (g y)) ∂volume ∂volume
 
 /-- The complex covariance (Bessel form) is positive definite. -/
+@[blueprint "thm:covariance-positive"
+  (title := "Free Covariance is Positive Definite")
+  (keyDeclaration := true)
+  (statement := /-- $\text{Re}\langle f, C f \rangle \geq 0$ for all test functions $f$. The free covariance is positive definite. Proved by taking $\alpha \to 0^+$ limit of the regulated form. -/)
+  (uses := [freeCovarianceℂ, freeCovarianceℂ_regulated_positive])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:covariance-positive")]
 theorem freeCovarianceℂ_positive (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     0 ≤ (freeCovarianceℂ m f f).re := by
   -- The regulated form converges to the Bessel form as α → 0⁺

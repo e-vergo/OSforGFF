@@ -12,6 +12,7 @@ import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.Analysis.Distribution.SchwartzSpace.Deriv
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.Data.Complex.Basic
+import Dress
 
 import OSforGFF.Basic
 import OSforGFF.PositiveTimeTestFunction_real
@@ -44,6 +45,12 @@ namespace QFT
 /-! ## Real Covariance Form -/
 
 /-- Real covariance bilinear form induced by the free covariance kernel. -/
+@[blueprint "def:free-covariance-real"
+  (title := "Free Covariance (Real Bilinear Form)")
+  (statement := /-- $C(f,g) = \int\!\!\int f(x) \, C(x,y) \, g(y) \, dx \, dy$ for real test functions. -/)
+  (uses := [freeCovariance])
+  (latexEnv := "definition")
+  (latexLabel := "def:free-covariance-real")]
 noncomputable def freeCovarianceFormR (m : ℝ) (f g : TestFunction) : ℝ :=
   ∫ x, ∫ y, (f x) * (freeCovariance m x y) * (g y) ∂volume ∂volume
 
@@ -461,6 +468,12 @@ theorem freeCovarianceFormR_continuous (m : ℝ) [Fact (0 < m)] :
 /-! ## Positivity and Other Properties -/
 
 /-- Positivity of the real covariance quadratic form. -/
+@[blueprint "thm:covariance-real-pos"
+  (title := "Real Covariance Positivity")
+  (statement := /-- $C(f,f) \geq 0$ for all real test functions $f$. Follows from the complex positivity result by restriction. -/)
+  (uses := [freeCovarianceFormR, freeCovarianceℂ_positive])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:covariance-real-pos")]
 theorem freeCovarianceFormR_pos (m : ℝ) [Fact (0 < m)] :
     ∀ f : TestFunction, 0 ≤ freeCovarianceFormR m f f := by
   intro f
