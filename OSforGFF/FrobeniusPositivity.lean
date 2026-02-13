@@ -13,6 +13,7 @@ We work over ℝ with finite index type ι.
 import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Spectrum
+import Architect
 import Mathlib.Data.Finset.Basic
 import Mathlib.LinearAlgebra.Matrix.Diagonal
 import Mathlib.LinearAlgebra.Matrix.Orthogonal
@@ -168,6 +169,12 @@ lemma posSemidef_diag_pos_exists_of_ne_zero
     simp [hoff i j]
   exact hH_ne_zero this
 
+@[blueprint "lem:frobenius-positivity"
+  (title := "Frobenius Positivity Lemma")
+  (statement := /-- If $G$ is PSD and nonzero, and $B$ is PD, then $\langle G, B \rangle_F = \sum_{j,l} G_{jl} B_{jl} > 0$. Uses spectral decomposition: $B = UDU^T$, then $\text{tr}(HD) = \sum_i \lambda_i H_{ii} > 0$. -/)
+  (uses := [frobenius_eq_trace_transpose_mul, congr_transpose_mul_mul_ne_zero, posSemidef_diag_pos_exists_of_ne_zero])
+  (latexEnv := "lemma")
+  (latexLabel := "lem:frobenius-positivity")]
 /-- Frobenius positivity for a nonzero PSD matrix against a PD matrix (real case).
 If `G` is positive semidefinite and nonzero, and `B` is positive definite,
 then the Frobenius inner product `∑ j, ∑ l, G j l * B j l` is strictly positive.

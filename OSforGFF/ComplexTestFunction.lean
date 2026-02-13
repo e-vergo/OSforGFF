@@ -10,6 +10,7 @@ import Mathlib.Topology.Algebra.Module.Multilinear.Basic
 import Mathlib.Analysis.Complex.OperatorNorm
 
 import OSforGFF.Basic
+import Architect
 
 /-!
 ## Complex Test Function Linearity
@@ -221,6 +222,11 @@ lemma iteratedFDeriv_ofReal_norm_eq (f : TestFunction) (n : ℕ) (x : SpaceTime)
   exact norm_compContinuousMultilinearMap_ofReal (iteratedFDeriv ℝ n f.toFun x)
 
 /-- Embed a real test function as a complex-valued test function by coercing values via ℝ → ℂ. -/
+@[blueprint "def:to-complex"
+  (title := "Real to Complex Embedding")
+  (statement := /-- The canonical embedding of real test functions into complex test functions, $f \mapsto f + 0i$. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:to-complex")]
 def toComplex (f : TestFunction) : TestFunctionℂ :=
   SchwartzMap.mk (fun x => (f x : ℂ)) (by
     -- ℝ → ℂ coercion is smooth
@@ -311,6 +317,11 @@ conjugation is a continuous ℝ-linear map on ℂ. -/
 
     This is defined using the continuous ℝ-linear equivalence `Complex.conjCLE : ℂ ≃L[ℝ] ℂ`.
     Since conjugation is smooth and an isometry, it preserves all Schwartz seminorms. -/
+@[blueprint "def:conj-schwartz"
+  (title := "Schwartz Conjugation")
+  (statement := /-- Complex conjugation on Schwartz space: $f \mapsto \bar{f}$. Preserves the Schwartz class. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:conj-schwartz")]
 noncomputable def conjSchwartz {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     (f : SchwartzMap E ℂ) : SchwartzMap E ℂ := {
   toFun := fun x => starRingEnd ℂ (f x)

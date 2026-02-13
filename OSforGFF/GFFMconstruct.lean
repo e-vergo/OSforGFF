@@ -36,6 +36,7 @@ import OSforGFF.Covariance
 import OSforGFF.CovarianceR
 import OSforGFF.MinlosAnalytic
 import OSforGFF.ComplexTestFunction
+import Architect
 
 /-!
 ## Gaussian Free Field Construction via Minlos Theorem
@@ -148,6 +149,14 @@ def isGaussianGJ (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
     applied to `TestFunction = SchwartzMap SpaceTime ℝ`. -/
 instance instNuclear_TestFunction : NuclearSpace TestFunction := schwartz_nuclear
 
+@[blueprint "def:gff-construct"
+  (title := "Gaussian Free Field Construction (Minlos)")
+  (keyDeclaration := true)
+  (statement := /-- Constructs the GFF probability measure on $\mathcal{S}'(\mathbb{R}^d)$ for mass $m > 0$ via the Minlos theorem applied to the Gaussian CF $\Phi(f) = e^{-\frac{1}{2}C_m(f,f)}$ with the free covariance. -/)
+  (uses := [minlos_theorem, sqrtPropagatorEmbedding, freeCovarianceFormR, gaussian_measure_characteristic_functional])
+  (latexEnv := "definition")
+  (latexLabel := "def:gff-construct")
+  (message := "Core construction: applies Minlos via square-root propagator embedding into Hilbert space")]
 /-- Specialized Minlos construction for the free field using the square-root propagator embedding. -/
 noncomputable def constructGaussianMeasureMinlos_free (m : ℝ) [Fact (0 < m)] :
   ProbabilityMeasure FieldConfiguration := by
@@ -267,6 +276,14 @@ private lemma gff_pushforward_charFun
   push_cast
   ring
 
+@[blueprint "thm:gff-pairing-gaussian"
+  (title := "GFF Pushforward is 1D Gaussian")
+  (keyDeclaration := true)
+  (statement := /-- The pushforward of the GFF measure $\mu_m$ by pairing with test function $\varphi$ is a centered 1D Gaussian: $(\mu_m)_*(\langle\cdot,\varphi\rangle) = \mathcal{N}(0, C_m(\varphi,\varphi))$. -/)
+  (uses := [gaussianFreeField_free, gff_real_characteristic, freeCovarianceFormR_pos])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-pairing-gaussian")
+  (above := "Key bridge theorem: reduces infinite-dimensional GFF analysis to 1D Gaussian theory")]
 /-- The pushforward of the GFF measure by pairing with a test function is a 1D Gaussian.
     Proven via characteristic functions and Lévy's uniqueness theorem. -/
 theorem gff_pairing_is_gaussian
@@ -284,6 +301,12 @@ theorem gff_pairing_is_gaussian
   rw [Real.coe_toNNReal _ h_pos]
   ring
 
+@[blueprint "thm:gff-fernique"
+  (title := "Fernique's Theorem for GFF")
+  (statement := /-- Every distribution pairing $\langle\omega, \varphi\rangle$ has finite moments of all orders $p < \infty$ under the GFF measure. -/)
+  (uses := [gff_pairing_is_gaussian])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-fernique")]
 /-- **Fernique's Theorem for GFF**: Every distribution pairing has finite moments of all orders.
 
     This is proven using characteristic functions:
@@ -376,6 +399,12 @@ def freeCovarianceForm (m : ℝ) [Fact (0 < m)] : MinlosAnalytic.CovarianceForm 
     smul_left := freeCovarianceFormR_smul_left m
     gaussian_cf_pd := freeCovarianceFormR_gaussian_cf_pd m }
 
+@[blueprint "thm:gff-centered"
+  (title := "GFF Has Zero Mean")
+  (statement := /-- The GFF measure is centered: $\mathbb{E}[\langle\omega, \varphi\rangle] = 0$ for all test functions $\varphi$. Follows from sign-flip symmetry of the Gaussian CF. -/)
+  (uses := [gaussianFreeField_free, gff_real_characteristic, integral_neg_invariance, moment_zero_from_realCF])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-centered")]
 /-- The GFF has zero mean: the measure is centered.
 
     Proof: The characteristic functional `gff_real_characteristic` shows that

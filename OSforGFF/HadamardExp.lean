@@ -12,6 +12,7 @@ the entrywise exponential preserves positive definiteness via Hadamard series.
 
 import OSforGFF.SchurProduct
 import Mathlib.Analysis.SpecialFunctions.Exp
+import Architect
 import Mathlib.Analysis.Normed.Algebra.Exponential
 import Mathlib.Analysis.Complex.TaylorSeries
 import Mathlib.Analysis.SpecialFunctions.ExpDeriv
@@ -33,6 +34,11 @@ universe u
 
 variable {ι : Type u} [Fintype ι] [DecidableEq ι]
 
+@[blueprint "def:entrywise-exp"
+  (title := "Entrywise Matrix Exponential")
+  (statement := /-- Entrywise real exponential of a matrix: $(e^R)_{ij} = e^{R_{ij}}$. Used in the OS-3 reflection positivity proof. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:entrywise-exp")]
 /-- Entrywise real exponential of a matrix: `(entrywiseExp R) i j = exp (R i j)`.
     Used for the OS3 proof (Glimm–Jaffe): if `R` is PSD, then `exp(R)` (entrywise) should be PSD. -/
 noncomputable def entrywiseExp (R : Matrix ι ι ℝ) : Matrix ι ι ℝ :=
@@ -137,6 +143,12 @@ lemma hadamardOne_hMul_left (R : Matrix ι ι ℝ) : Matrix.hadamard (hadamardOn
   ext i j; simp [hadamardOne, Matrix.hadamard]
 
 
+@[blueprint "lem:hadamard-pow-posdef"
+  (title := "Hadamard Powers Preserve Positive Definiteness")
+  (statement := /-- For $n \geq 1$, the $n$-fold Hadamard power $R^{\circ n}$ of a positive definite matrix $R$ is positive definite. Proof by induction using the Schur product theorem. -/)
+  (uses := [schur_product_posDef])
+  (latexEnv := "lemma")
+  (latexLabel := "lem:hadamard-pow-posdef")]
 /-- Hadamard powers of a positive definite matrix are positive definite for all n ≥ 1. -/
 lemma hadamardPow_posDef_of_posDef
   (R : Matrix ι ι ℝ) (hR : R.PosDef) : ∀ n, 1 ≤ n → (hadamardPow R n).PosDef := by
@@ -302,6 +314,13 @@ lemma summable_hadamardQuadSeries
   rw [h_eq]
   exact h_outer
 
+@[blueprint "thm:entrywise-exp-posdef"
+  (title := "Entrywise Exponential Preserves Positive Definiteness")
+  (keyDeclaration := true)
+  (statement := /-- If $R$ is positive definite, then $e^R$ (entrywise) is positive definite. Each Hadamard power is PD by Schur; the $n=1$ term gives $x^T R x > 0$; interchange follows from absolute convergence. -/)
+  (uses := [hadamardPow_posDef_of_posDef, entrywiseExp_eq_hadamardSeries, quadratic_form_entrywiseExp_hadamardSeries])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:entrywise-exp-posdef")]
 /-- The Hadamard-series entrywise exponential preserves positive definiteness.
     Sketch: each Hadamard power (for n ≥ 1) is PD by the Schur product theorem and induction;
     summing with positive coefficients 1/n! yields strictly positive quadratic form for every x ≠ 0
@@ -415,6 +434,13 @@ lemma posDef_entrywiseExp_hadamardSeries_of_posDef
 set_option maxHeartbeats 1000000
 --set_option diagnostics true
 
+@[blueprint "thm:entrywise-exp-psd"
+  (title := "Entrywise Exponential Preserves PSD")
+  (statement := /-- If $R$ is positive semidefinite, then $e^R$ (entrywise) is PSD. Follows from PD case by $\varepsilon$-perturbation: $R + \varepsilon I$ is PD, take $\varepsilon \to 0^+$. -/)
+  (uses := [posDef_entrywiseExp_hadamardSeries_of_posDef, continuous_entrywiseExp])
+  (latexEnv := "lemma")
+  (latexLabel := "lem:entrywise-exp-psd")
+  (technicalDebt := "Proof simplified to avoid matrix reduction timeouts; set_option maxHeartbeats 1000000 active")]
 /-- The Hadamard-series entrywise exponential preserves positive semidefiniteness.
     This follows from the positive definite case by continuity: if R is PSD, then
     R + εI is PD for ε > 0, so entrywiseExp_hadamardSeries(R + εI) is PD, and

@@ -13,6 +13,7 @@ import Mathlib.Analysis.Distribution.SchwartzSpace.Deriv
 import Mathlib.Analysis.Distribution.SchwartzSpace.Fourier
 import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
 import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
+import Architect
 
 /-!
 # Fourier Transforms for QFT
@@ -325,6 +326,11 @@ lemma ik_sub_ne_zero (μ : ℝ) (hμ : μ ≠ 0) (k : ℝ) : Complex.I * k - (μ
     At +∞: e^{(ik-μ)x} → 0 since Re(ik-μ) = -μ < 0.
     At 0: e^0/(ik-μ) = 1/(ik-μ).
     Result: 0 - 1/(ik-μ) = -1/(ik-μ) = 1/(μ-ik). -/
+@[blueprint "thm:fourier-exp-decay-pos"
+  (title := "Fourier Transform of Exponential Decay (Positive Half-Line)")
+  (statement := /-- The Fourier transform of $e^{-\mu t}$ on $[0, \infty)$ equals $\frac{1}{ik + \mu}$. -/)
+  (latexEnv := "theorem")
+  (latexLabel := "thm:fourier-exp-decay-pos")]
 theorem fourier_exp_decay_positive_halfline (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
     ∫ x : ℝ in Set.Ioi 0, Complex.exp (Complex.I * k * x) * Real.exp (-μ * x) =
       1 / (μ - Complex.I * k) := by
@@ -480,6 +486,11 @@ This is the "forward" direction of the Fourier pair.
     ∫_{-∞}^{∞} e^{ikx} e^{-μ|x|} dx = 2μ/(k² + μ²)
 
     This follows from splitting at x = 0 (see fourier_exponential_decay_split). -/
+@[blueprint "lem:fourier-exp-decay"
+  (title := "Fourier Transform of Exponential Decay")
+  (statement := /-- The Fourier transform of $e^{-\mu|t|}$ equals $\frac{2\mu}{\mu^2 + k^2}$, the Lorentzian. -/)
+  (latexEnv := "lemma")
+  (latexLabel := "lem:fourier-exp-decay")]
 lemma fourier_exponential_decay' (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
     ∫ x : ℝ, Complex.exp (Complex.I * k * x) * Real.exp (-μ * |x|) =
       2 * μ / (k^2 + μ^2) := by
@@ -638,6 +649,13 @@ lemma integrable_fourierIntegral_expDecayFun (μ : ℝ) (hμ : 0 < μ) :
 
     This follows from Mathlib's Fourier inversion theorem applied to the exponential decay function,
     combined with the explicit formula for its Fourier transform and a change of variables. -/
+@[blueprint "thm:fourier-inversion-exp"
+  (title := "Fourier Inversion for Exponential Decay")
+  (statement := /-- Fourier inversion: the inverse Fourier transform of $\frac{2\mu}{\mu^2 + k^2}$ recovers $e^{-\mu|x|}$. -/)
+  (mathlibReady := true)
+  (message := "Clean Fourier inversion result for Lorentzian; useful for Mathlib")
+  (latexEnv := "theorem")
+  (latexLabel := "thm:fourier-inversion-exp")]
 theorem fourier_inversion_exp_decay (μ : ℝ) (hμ : 0 < μ) (x : ℝ) :
     (1 / (2 * π) : ℂ) * ∫ k : ℝ, Complex.exp (Complex.I * k * x) * (2 * μ / (k^2 + μ^2)) =
       (Real.exp (-μ * |x|) : ℂ) := by
@@ -720,6 +738,13 @@ We derive the Lorentzian Fourier transform from the Fourier inversion theorem.
     Multiply both sides by π/μ:
       (1/2π) · (π/μ) · 2μ ∫ e^{ikx} / (k² + μ²) dk = (π/μ) e^{-μ|x|}
       ∫ e^{ikx} / (k² + μ²) dk = (π/μ) e^{-μ|x|} -/
+@[blueprint "thm:fourier-lorentzian-1d"
+  (title := "1D Fourier-Lorentzian Identity")
+  (statement := /-- The 1D Fourier-Lorentzian identity: $\int \frac{e^{ikx}}{\mu^2 + k^2} dk = \frac{\pi}{\mu} e^{-\mu|x|}$. -/)
+  (mathlibReady := true)
+  (message := "Standard integral identity; directly useful in Mathlib special functions")
+  (latexEnv := "theorem")
+  (latexLabel := "thm:fourier-lorentzian-1d")]
 theorem fourier_lorentzian_1d (μ : ℝ) (hμ : 0 < μ) (x : ℝ) :
     ∫ k : ℝ, Complex.exp (Complex.I * k * x) / (k^2 + μ^2) =
       (π / μ) * Real.exp (-μ * |x|) := by

@@ -26,6 +26,7 @@ import OSforGFF.DiscreteSymmetry
 import OSforGFF.Schwinger
 import OSforGFF.FunctionalAnalysis
 import OSforGFF.BesselFunction
+import Architect
 
 /-!
 # Momentum Space Propagator for Gaussian Free Field
@@ -123,6 +124,13 @@ Key point: In Lean, we can use ⟨x, y⟩ for the inner product and ‖x‖ for 
 
 variable {m : ℝ} [Fact (0 < m)]
 
+@[blueprint "def:free-propagator"
+  (title := "Free Propagator (Momentum Space)")
+  (keyDeclaration := true)
+  (statement := /-- The free propagator in momentum space: $\hat{C}(k) = 1/(\|k\|^2 + m^2)$. Fourier transform of the free covariance. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:free-propagator")
+  (misc := "Glimm-Jaffe, Quantum Physics, §6.1")]
 /-- The free propagator in momentum space: 1/(k² + m²)
     This is the Fourier transform of the free covariance -/
 def freePropagatorMomentum (m : ℝ) (k : SpaceTime) : ℝ :=
@@ -215,6 +223,12 @@ lemma integral_exp_neg_mul_Ioi_eq_inv (a : ℝ) (ha : 0 < a) :
   rw [h]
   field_simp
 
+@[blueprint "thm:schwinger-rep"
+  (title := "Schwinger Representation")
+  (statement := /-- $\int_0^\infty e^{-t(\|k\|^2 + m^2)} \, dt = 1/(\|k\|^2 + m^2)$. Valid when $\|k\|^2 + m^2 > 0$. -/)
+  (uses := [schwingerIntegrand, freePropagatorMomentum])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:schwinger-rep")]
 /-- The Schwinger representation: ∫₀^∞ exp(-t(k² + m²)) dt = 1/(k² + m²).
     This is valid when k² + m² > 0. -/
 theorem schwinger_representation (m : ℝ) (hm : 0 < m) (k : SpaceTime) :
@@ -454,6 +468,14 @@ theorem covarianceSchwingerRep_eq_besselFormula (m r : ℝ) (hm : 0 < m) (hr : 0
   rw [h_eq, h_integral]
   ring
 
+@[blueprint "def:free-covariance-bessel"
+  (title := "Free Covariance (Bessel Representation)")
+  (keyDeclaration := true)
+  (statement := /-- $C(x,y) = \frac{m}{4\pi^2 |x-y|} K_1(m|x-y|)$. The massive scalar field propagator in 4D Euclidean space, valid for $x \neq y$. -/)
+  (uses := [besselK1, freePropagatorMomentum])
+  (latexEnv := "definition")
+  (latexLabel := "def:free-covariance-bessel")
+  (misc := "Glimm-Jaffe Eq. 6.1.14")]
 /-- The free covariance in position space via Bessel function representation.
     C(x,y) = (m / (4π² |x-y|)) · K₁(m |x-y|)
 
@@ -1160,6 +1182,12 @@ lemma covarianceSchwingerRep_eq_freeCovarianceBessel (m : ℝ) (hm : 0 < m) (x y
     1. Use `fubini_schwinger_fourier` to convert Fourier → Schwinger
     2. Use `covarianceSchwingerRegulated_tendsto` for the α → 0 limit
     3. Use `covarianceSchwingerRep_eq_freeCovarianceBessel` for Schwinger → Bessel -/
+@[blueprint "thm:regulated-tendsto-bessel"
+  (title := "Regulated Covariance Converges to Bessel Form")
+  (statement := /-- As $\alpha \to 0^+$, the UV-regulated covariance converges to the Bessel representation $C(x,y)$. -/)
+  (uses := [freeCovariance_regulated, freeCovarianceBessel])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:regulated-tendsto-bessel")]
 theorem freeCovariance_regulated_tendsto_bessel (m : ℝ) (hm : 0 < m) (x y : SpaceTime) (hxy : x ≠ y) :
     Filter.Tendsto (fun α => freeCovariance_regulated α m x y)
       (nhdsWithin 0 (Set.Ioi 0))

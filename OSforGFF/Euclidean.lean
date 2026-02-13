@@ -22,6 +22,7 @@ import Mathlib.Topology.MetricSpace.Isometry
 import Mathlib.MeasureTheory.Function.LpSpace.ContinuousCompMeasurePreserving
 
 import OSforGFF.Basic
+import Architect
 
 /-!
 ## Euclidean Group Actions for AQFT
@@ -109,6 +110,12 @@ abbrev O4 : Type :=
   LinearIsometry (RingHom.id ℝ) SpaceTime SpaceTime
 
 /-!  Euclidean group -/
+@[blueprint "def:euclidean-group"
+  (title := "Euclidean Group")
+  (statement := /-- The Euclidean group $E(4) = \mathbb{R}^4 \rtimes O(4)$, consisting of a rotation/reflection $R \in O(4)$ and a translation $t \in \mathbb{R}^4$. -/)
+  (latexEnv := "definition")
+  (latexLabel := "def:euclidean-group")
+  (misc := "Glimm-Jaffe, Quantum Physics, Ch. 3")]
 /-- Euclidean motion = rotation / reflection + translation. E= R^4 x O(4)-/
 structure E where
   R : O4
@@ -289,6 +296,12 @@ This is the inverse law of a group action.-/
 open MeasureTheory
 open MeasureTheory
 
+@[blueprint "lem:measure-preserving-act"
+  (title := "Euclidean Actions Preserve Measure")
+  (statement := /-- For every rigid motion $g \in E(4)$, the map $x \mapsto g \cdot x$ preserves Lebesgue measure. -/)
+  (uses := [E, act])
+  (latexEnv := "lemma")
+  (latexLabel := "lem:measure-preserving-act")]
 /-- For every rigid motion `g : E`, the push‑forward of Lebesgue measure `μ`
     by the map `x ↦ g • x` is again `μ`.  Equivalently, `act g` is
     measure‑preserving. -/
@@ -400,6 +413,12 @@ lemma euclidean_pullback_polynomial_bounds (g : E) :
         ring_nf
         linarith [mul_nonneg h2 h1]
 
+@[blueprint "def:euclidean-action"
+  (title := "Euclidean Action on Test Functions")
+  (statement := /-- For $g \in E(4)$ and $f \in \mathcal{S}(\mathbb{R}^4, \mathbb{C})$, define $(g \cdot f)(x) = f(g^{-1} \cdot x)$ via pullback. -/)
+  (uses := [E])
+  (latexEnv := "definition")
+  (latexLabel := "def:euclidean-action")]
 /-- Action of Euclidean group on test functions via pullback.
     For g ∈ E and f ∈ TestFunctionℂ, define (g • f)(x) = f(g⁻¹ • x).
     This is the standard pullback action: to evaluate the transformed function

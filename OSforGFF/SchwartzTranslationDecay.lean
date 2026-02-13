@@ -13,6 +13,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.MeasureTheory.Group.Integral
 import Mathlib.Analysis.Normed.Operator.Mul -- For ContinuousLinearMap.mul
+import Architect
 
 /-!
 # Schwartz Bilinear Translation Decay
@@ -274,6 +275,13 @@ lemma integrable_tail_small {f : E → ℂ} (hf : Integrable f) (ε : ℝ) (hε 
   rw [Real.norm_eq_abs, abs_of_nonneg h_nonneg] at hN
   exact hN
 
+@[blueprint "thm:conv-vanishes-C0"
+  (title := "L¹ ⋆ C₀ Vanishes at Infinity")
+  (statement := /-- Convolution of an $L^1$ function with a $C_0$ function vanishes at infinity. Fundamental result in harmonic analysis. -/)
+  (latexEnv := "theorem")
+  (latexLabel := "thm:conv-vanishes-C0")
+  (mathlibReady := true)
+  (message := "Pure harmonic analysis; no physics dependence")]
 /-- Convolution of an integrable function with a function vanishing at infinity
 also vanishes at infinity. This is a fundamental result in harmonic analysis. -/
 theorem convolution_vanishes_of_integrable_and_C0
@@ -581,6 +589,12 @@ theorem schwartz_bilinear_prod_integrable
 def schwartzBilinearIntegral (f g : SchwartzMap E ℂ) (K : E → ℝ) (a : E) : ℂ :=
   ∫ x : E, ∫ y : E, f x * (K (x - y) : ℂ) * g (y - a)
 
+@[blueprint "thm:schwartz-bilinear-decay"
+  (title := "Clustering Decay for Schwartz Bilinear Forms")
+  (statement := /-- For Schwartz functions $f, g$ and kernel $K$ with polynomial decay $|K(z)| \leq C/\|z\|^\alpha$, the bilinear integral $\int\!\!\int f(x) K(x-y) g(y-a) \to 0$ as $\|a\| \to \infty$. -/)
+  (uses := [convolution_vanishes_of_integrable_and_C0, schwartzBilinearIntegral, schwartz_bilinear_prod_integrable])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:schwartz-bilinear-decay")]
 /-- **Clustering decay for Schwartz bilinear forms** (proof version)
 
 For Schwartz functions f, g and a kernel K with polynomial decay,

@@ -8,6 +8,7 @@ import OSforGFF.GFFIsGaussian
 import OSforGFF.Covariance
 import OSforGFF.Euclidean
 import OSforGFF.GaussianFreeField
+import Architect
 
 /-!
 # OS2 Euclidean Invariance for the Free Gaussian Field
@@ -148,6 +149,13 @@ theorem freeCovarianceℂ_bilinear_euclidean_invariant (g : E) (f h : TestFuncti
 
 /-- The free GFF measure satisfies the complex covariance Euclidean invariance property.
     This removes the `h_euc` hypothesis from the master theorem. -/
+@[blueprint "thm:gff-os2"
+  (title := "GFF Satisfies OS2")
+  (keyDeclaration := true)
+  (statement := /-- The free GFF covariance is invariant under Euclidean transformations: $S_2(g \cdot f, g \cdot h) = S_2(f, h)$ for all $g \in E(4)$. This implies OS2 for the GFF via `gaussian_satisfies_OS2`. -/)
+  (uses := [CovarianceEuclideanInvariantℂ, gff_two_point_equals_covarianceℂ_free, freeCovarianceℂ_bilinear_euclidean_invariant])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-os2")]
 theorem CovarianceEuclideanInvariantℂ_μ_GFF :
     CovarianceEuclideanInvariantℂ (μ_GFF m) := by
   intro g f h

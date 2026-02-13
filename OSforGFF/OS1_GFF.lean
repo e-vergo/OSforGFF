@@ -26,6 +26,7 @@ import OSforGFF.CovarianceMomentum
 import OSforGFF.CovarianceR
 import OSforGFF.GFFMconstruct
 import OSforGFF.GFFIsGaussian
+import Architect
 
 /-!
 # OS1 Regularity Axiom - Complete Theory
@@ -525,6 +526,13 @@ open MeasureTheory
 
     Note: Named `_revised` because the alternative OS0 proof in `GaussianFreeField.lean`
     uses the same module; both are valid, and `GFFmaster.lean` uses this one. -/
+@[blueprint "thm:gff-os1"
+  (title := "GFF Satisfies OS1")
+  (keyDeclaration := true)
+  (statement := /-- The GFF generating functional satisfies the OS1 regularity bound with $p = 2$ and $c = 1/(2m^2)$: $\|Z[f]\| \le e^{c(\|f\|_1 + \|f\|_2^2)}$, and $S_2(x)$ is locally integrable. -/)
+  (uses := [OS1_Regularity, gaussianFreeField_free])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-os1")]
 theorem gaussianFreeField_satisfies_OS1_revised (m : ℝ) [Fact (0 < m)] :
   OS1_Regularity (gaussianFreeField_free m) := by
   -- Choose parameters p = 2 and c = 1/(2 m^2)

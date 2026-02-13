@@ -28,6 +28,7 @@ import OSforGFF.TimeTranslation
 import OSforGFF.CovarianceMomentum
 import OSforGFF.OS_Axioms
 import OSforGFF.L2TimeIntegral
+import Architect
 import OSforGFF.SchwartzTranslationDecay
 import OSforGFF.OS4_MGF
 import Mathlib.Analysis.Complex.Basic
@@ -1332,6 +1333,13 @@ theorem OS4''_implies_OS4_Ergodicity (m : ℝ) [Fact (0 < m)] :
   intro h_cluster
   exact OS4'_implies_OS4 m (OS4''_implies_OS4' m h_cluster)
 
+@[blueprint "thm:gff-os4-ergodicity"
+  (title := "Polynomial Clustering Implies OS4 Ergodicity")
+  (keyDeclaration := true)
+  (statement := /-- OS4 polynomial clustering with $\alpha = 6$ implies ergodicity for the GFF: time averages of generating functions converge to expectations in $L^2(\mu)$. -/)
+  (uses := [OS4_PolynomialClustering, OS4_Ergodicity, gaussianFreeField_free])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-os4-ergodicity")]
 /-- **Main Theorem**: OS4_PolynomialClustering with α=6 implies OS4_Ergodicity for the GFF.
 
     This is the main result connecting the clustering axiom to ergodicity.

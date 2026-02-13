@@ -15,6 +15,7 @@ import Mathlib.MeasureTheory.Function.LpSeminorm.CompareExp
 import OSforGFF.Basic
 import OSforGFF.Schwinger
 import OSforGFF.GFFMconstruct
+import Architect
 
 /-!
 ## Gaussian Moments and n-Point Integrability
@@ -110,6 +111,12 @@ lemma gaussian_complex_pairing_abs_sq_integrable
 
 end GaussianMoments
 
+@[blueprint "thm:gaussian-2pt-integrable"
+  (title := "Two-Point Pairing Product Integrability")
+  (statement := /-- For the GFF measure, $\langle\omega, \varphi\rangle \cdot \langle\omega, \psi\rangle$ is integrable for any complex test functions $\varphi, \psi$. Uses H\"older's inequality with $L^2 \times L^2 \to L^1$. -/)
+  (uses := [gaussianFreeField_pairing_memLp, gaussianFreeField_free])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gaussian-2pt-integrable")]
 /-- **Foundation**: The original 2-point case implemented directly.
     This provides the base case for the general n-point theorem. -/
 theorem gaussian_pairing_product_integrable_free_2point

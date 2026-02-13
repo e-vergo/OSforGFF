@@ -18,6 +18,7 @@ import OSforGFF.ComplexTestFunction
 import OSforGFF.QuantitativeDecay  -- For schwartz_bilinear_translation_decay_polynomial_proof
 import OSforGFF.TimeTranslation  -- For time translation on distributions
 import OSforGFF.OS4_MGF  -- For shared OS4 infrastructure (no sorries)
+import Architect
 
 /-!
 # OS4 Clustering for Gaussian Free Field
@@ -472,6 +473,13 @@ theorem schwartz_cross_covariance_decay_real (m : ℝ) [Fact (0 < m)]
     3. Cross term decay: S₂(f, T_a g) → 0 as |a| → ∞
     4. Continuity: exp(-z) → exp(0) = 1 as z → 0
     5. For real test functions: |Z[f]| ≤ 1 (positive definite covariance) -/
+@[blueprint "thm:gff-os4-clustering"
+  (title := "GFF Satisfies OS4 Clustering")
+  (keyDeclaration := true)
+  (statement := /-- The GFF satisfies clustering: $Z[f + T_a g] \to Z[f] \cdot Z[g]$ as $\|a\| \to \infty$. Uses Gaussian factorization and cross-covariance decay. -/)
+  (uses := [OS4_Clustering, gaussianFreeField_free, schwartz_cross_covariance_decay_real])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gff-os4-clustering")]
 theorem gaussianFreeField_satisfies_OS4 (m : ℝ) [Fact (0 < m)] :
     OS4_Clustering (gaussianFreeField_free m) := by
   intro f g ε hε

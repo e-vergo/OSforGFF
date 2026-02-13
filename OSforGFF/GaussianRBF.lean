@@ -5,6 +5,7 @@ Authors: Michael R. Douglas, Sarah Hoback, Anna Mei, Ron Nissim
 -/
 import OSforGFF.PositiveDefinite
 import OSforGFF.SchurProduct
+import Architect
 import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.Complex.Basic
@@ -144,6 +145,12 @@ lemma real_valued_PD_kernel_gives_PSD_matrix {α : Type*} (K : α → α → ℂ
     rw [h_eq]
     exact h
 
+@[blueprint "lem:exp-pd-kernel"
+  (title := "Exponential of PD Kernel is PD")
+  (statement := /-- If $K$ is a symmetric real-valued positive definite kernel, then $e^K$ is also a positive definite kernel. Uses Hadamard series machinery. -/)
+  (uses := [posSemidef_entrywiseExp_hadamardSeries_of_posSemidef, real_valued_PD_kernel_gives_PSD_matrix])
+  (latexEnv := "lemma")
+  (latexLabel := "lem:exp-pd-kernel")]
 /-- Step 3b: Exponential of a symmetric real-valued PD kernel is PD.
     Uses the Hadamard series machinery from HadamardExp.lean (same as OS3 proof). -/
 lemma exp_is_pd_kernel {α : Type*} (K : α → α → ℂ) (hK : IsPositiveDefiniteKernel K)
@@ -219,6 +226,14 @@ lemma exp_is_pd_kernel {α : Type*} (K : α → α → ℂ) (hK : IsPositiveDefi
 
 
 
+@[blueprint "thm:gaussian-rbf-pd"
+  (title := "Gaussian RBF Kernel is Positive Definite")
+  (keyDeclaration := true)
+  (statement := /-- The Gaussian RBF kernel $h \mapsto \exp(-\tfrac{1}{2}\|h\|^2)$ is positive definite on any inner product space. Uses polarization identity and exponential PD kernel lemma. -/)
+  (uses := [exp_is_pd_kernel, innerProduct_is_pd_kernel])
+  (latexEnv := "theorem")
+  (latexLabel := "thm:gaussian-rbf-pd")
+  (misc := "Glimm-Jaffe, Quantum Physics, Ch. 6; used in Minlos/GFF construction")]
 /-- The Gaussian RBF kernel is positive definite on any inner product space. -/
 theorem gaussian_rbf_pd_innerProduct_proof :
     IsPositiveDefinite (fun h : H => cexp (-(1/2 : ℂ) * (‖h‖^2 : ℝ))) := by
