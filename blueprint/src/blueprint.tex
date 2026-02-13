@@ -1,0 +1,181 @@
+\input{../../.lake/build/dressed/library/OSforGFF.tex}
+
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{hyperref}
+
+% Theorem environments
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{axiom_env}{Axiom}[section]
+
+% QFT notation macros
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\calS}{\mathcal{S}}
+
+\title{Osterwalder-Schrader Axioms for the Gaussian Free Field}
+\author{Michael R. Douglas, Sarah Hoback, Anna Mei, Ron Nissim}
+
+\begin{document}
+\maketitle
+
+% =============================================================================
+% Chapter 1: General Mathematics
+% =============================================================================
+\chapter{General Mathematics}
+
+% Background mathematical infrastructure needed for the GFF construction.
+
+\section{Functional Analysis}
+\inputleanmodule{OSforGFF.FunctionalAnalysis}
+
+\section{Schwartz Functions and Decay Estimates}
+\inputleanmodule{OSforGFF.QuantitativeDecay}
+\inputleanmodule{OSforGFF.SchwartzTranslationDecay}
+
+\section{Special Functions and Integrals}
+\inputleanmodule{OSforGFF.FourierTransforms}
+\inputleanmodule{OSforGFF.LaplaceIntegral}
+\inputleanmodule{OSforGFF.BesselFunction}
+
+\section{L2 Time Integral Estimates}
+\inputleanmodule{OSforGFF.L2TimeIntegral}
+
+\section{Positive-Definite Kernels and Matrix Theory}
+\inputleanmodule{OSforGFF.FrobeniusPositivity}
+\inputleanmodule{OSforGFF.SchurProduct}
+\inputleanmodule{OSforGFF.HadamardExp}
+\inputleanmodule{OSforGFF.PositiveDefinite}
+\inputleanmodule{OSforGFF.GaussianRBF}
+
+\section{Nuclear Space}
+\inputleanmodule{OSforGFF.NuclearSpace}
+
+% =============================================================================
+% Chapter 2: Basic Definitions
+% =============================================================================
+\chapter{Basic Definitions}
+
+% Core definitions for the Euclidean QFT framework.
+
+\section{Spacetime and Symmetries}
+\inputleanmodule{OSforGFF.Basic}
+\inputleanmodule{OSforGFF.Euclidean}
+\inputleanmodule{OSforGFF.DiscreteSymmetry}
+\inputleanmodule{OSforGFF.SpacetimeDecomp}
+
+\section{Test Function Spaces}
+\inputleanmodule{OSforGFF.ComplexTestFunction}
+\inputleanmodule{OSforGFF.PositiveTimeTestFunction_real}
+\inputleanmodule{OSforGFF.TimeTranslation}
+
+\section{Schwartz Space Integration}
+\inputleanmodule{OSforGFF.SchwartzProdIntegrable}
+\inputleanmodule{OSforGFF.SchwartzTonelli}
+
+\section{Generating Functionals}
+\inputleanmodule{OSforGFF.Schwinger}
+\inputleanmodule{OSforGFF.SchwingerTwoPointFunction}
+
+% =============================================================================
+% Chapter 3: Free Covariance
+% =============================================================================
+\chapter{Free Covariance}
+
+% Construction and properties of the free covariance kernel.
+
+\inputleanmodule{OSforGFF.CovarianceMomentum}
+\inputleanmodule{OSforGFF.Parseval}
+\inputleanmodule{OSforGFF.Covariance}
+\inputleanmodule{OSforGFF.CovarianceR}
+
+% =============================================================================
+% Chapter 4: Gaussian Measure Construction
+% =============================================================================
+\chapter{Gaussian Measure Construction}
+
+% Construction of the Gaussian measure via Minlos' theorem.
+
+\inputleanmodule{OSforGFF.Minlos}
+\inputleanmodule{OSforGFF.MinlosAnalytic}
+\inputleanmodule{OSforGFF.GFFMconstruct}
+\inputleanmodule{OSforGFF.GaussianMoments}
+\inputleanmodule{OSforGFF.GFFIsGaussian}
+\inputleanmodule{OSforGFF.GaussianFreeField}
+
+% =============================================================================
+% Chapter 5: OS Axiom Definitions
+% =============================================================================
+\chapter{OS Axiom Definitions}
+
+% Formal statement of the Osterwalder-Schrader axioms.
+
+\inputleanmodule{OSforGFF.OS_Axioms}
+
+% =============================================================================
+% Chapter 6: OS0 — Analyticity
+% =============================================================================
+\chapter{OS0 --- Analyticity}
+
+% Verification of OS0 (analyticity) for the GFF.
+
+\inputleanmodule{OSforGFF.OS0_GFF}
+
+% =============================================================================
+% Chapter 7: OS1 — Regularity
+% =============================================================================
+\chapter{OS1 --- Regularity}
+
+% Verification of OS1 (regularity) for the GFF.
+
+\inputleanmodule{OSforGFF.OS1_GFF}
+
+% =============================================================================
+% Chapter 8: OS2 — Euclidean Invariance
+% =============================================================================
+\chapter{OS2 --- Euclidean Invariance}
+
+% Verification of OS2 (Euclidean invariance) for the GFF.
+
+\inputleanmodule{OSforGFF.OS2_GFF}
+
+% =============================================================================
+% Chapter 9: OS3 — Reflection Positivity
+% =============================================================================
+\chapter{OS3 --- Reflection Positivity}
+
+% Verification of OS3 (reflection positivity) for the GFF.
+
+\inputleanmodule{OSforGFF.OS3_MixedRepInfra}
+\inputleanmodule{OSforGFF.OS3_MixedRep}
+\inputleanmodule{OSforGFF.OS3_CovarianceRP}
+\inputleanmodule{OSforGFF.OS3_GFF}
+
+% =============================================================================
+% Chapter 10: OS4 — Clustering and Ergodicity
+% =============================================================================
+\chapter{OS4 --- Clustering and Ergodicity}
+
+% Verification of OS4 (clustering/ergodicity) for the GFF.
+
+\inputleanmodule{OSforGFF.OS4_MGF}
+\inputleanmodule{OSforGFF.OS4_Clustering}
+\inputleanmodule{OSforGFF.OS4_Ergodicity}
+
+% =============================================================================
+% Chapter 11: Master Theorem
+% =============================================================================
+\chapter{Master Theorem}
+
+% The GFF satisfies all Osterwalder-Schrader axioms.
+
+\inputleanmodule{OSforGFF.GFFmaster}
+
+\end{document}
