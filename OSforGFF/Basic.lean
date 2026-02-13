@@ -37,7 +37,7 @@ import Mathlib.GroupTheory.GroupAction.Basic
 
 -- Import our functional analysis utilities
 import OSforGFF.FunctionalAnalysis
-import Architect
+import Dress
 
 /-!
 ## AQFT Basic Framework

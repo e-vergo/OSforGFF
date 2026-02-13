@@ -26,7 +26,7 @@ import OSforGFF.CovarianceMomentum
 import OSforGFF.CovarianceR
 import OSforGFF.GFFMconstruct
 import OSforGFF.GFFIsGaussian
-import Architect
+import Dress
 
 /-!
 # OS1 Regularity Axiom - Complete Theory

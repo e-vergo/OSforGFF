@@ -25,7 +25,7 @@ import OSforGFF.Minlos
 import OSforGFF.Covariance
 import OSforGFF.MinlosAnalytic
 import OSforGFF.Schwinger
-import Architect
+import Dress
 
 /-!
 ## Gaussian Free Field — OS0 (Alternative) and OS2

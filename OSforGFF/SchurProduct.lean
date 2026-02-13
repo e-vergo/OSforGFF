@@ -22,7 +22,7 @@ import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Finset.Prod
 import Mathlib.Analysis.SpecialFunctions.Exp
 import OSforGFF.FrobeniusPositivity
-import Architect
+import Dress
 
 set_option linter.unusedSectionVars false
 
@@ -503,7 +503,7 @@ If A B are positive definite matrices over ℝ, then the Hadamard product is pos
   (latexEnv := "theorem")
   (latexLabel := "thm:schur-product")
   (misc := "Horn & Johnson, Matrix Analysis, Thm 5.2.1")]
-@[simp] theorem schur_product_posDef
+theorem schur_product_posDef
   (A B : Matrix ι ι ℝ)
   (hA : A.PosDef) (hB : B.PosDef) :
   (A ∘ₕ B).PosDef := by

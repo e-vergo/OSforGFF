@@ -10,7 +10,7 @@ import Mathlib.Topology.Algebra.Module.Multilinear.Basic
 import Mathlib.Analysis.Complex.OperatorNorm
 
 import OSforGFF.Basic
-import Architect
+import Dress
 
 /-!
 ## Complex Test Function Linearity

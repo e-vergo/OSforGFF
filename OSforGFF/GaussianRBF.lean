@@ -5,7 +5,7 @@ Authors: Michael R. Douglas, Sarah Hoback, Anna Mei, Ron Nissim
 -/
 import OSforGFF.PositiveDefinite
 import OSforGFF.SchurProduct
-import Architect
+import Dress
 import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.Complex.Basic
@@ -150,7 +150,7 @@ lemma real_valued_PD_kernel_gives_PSD_matrix {α : Type*} (K : α → α → ℂ
 @[blueprint "lem:exp-pd-kernel"
   (title := "Exponential of PD Kernel is PD")
   (statement := /-- If $K$ is a symmetric real-valued positive definite kernel, then $e^K$ is also a positive definite kernel. Uses Hadamard series machinery. -/)
-  (uses := [posSemidef_entrywiseExp_hadamardSeries_of_posSemidef, real_valued_PD_kernel_gives_PSD_matrix])
+  (uses := [real_valued_PD_kernel_gives_PSD_matrix])
   (latexEnv := "lemma")
   (latexLabel := "lem:exp-pd-kernel")]
 lemma exp_is_pd_kernel {α : Type*} (K : α → α → ℂ) (hK : IsPositiveDefiniteKernel K)

@@ -13,7 +13,7 @@ import Mathlib.Analysis.Distribution.SchwartzSpace.Deriv
 import Mathlib.Analysis.Distribution.SchwartzSpace.Fourier
 import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
 import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
-import Architect
+import Dress
 
 /-!
 # Fourier Transforms for QFT

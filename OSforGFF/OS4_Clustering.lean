@@ -18,7 +18,7 @@ import OSforGFF.ComplexTestFunction
 import OSforGFF.QuantitativeDecay  -- For schwartz_bilinear_translation_decay_polynomial_proof
 import OSforGFF.TimeTranslation  -- For time translation on distributions
 import OSforGFF.OS4_MGF  -- For shared OS4 infrastructure (no sorries)
-import Architect
+import Dress
 
 /-!
 # OS4 Clustering for Gaussian Free Field

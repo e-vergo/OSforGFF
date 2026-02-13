@@ -28,7 +28,7 @@ import OSforGFF.TimeTranslation
 import OSforGFF.CovarianceMomentum
 import OSforGFF.OS_Axioms
 import OSforGFF.L2TimeIntegral
-import Architect
+import Dress
 import OSforGFF.SchwartzTranslationDecay
 import OSforGFF.OS4_MGF
 import Mathlib.Analysis.Complex.Basic

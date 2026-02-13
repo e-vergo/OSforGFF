@@ -16,7 +16,7 @@ import Mathlib.Analysis.LocallyConvex.Basic
 import Mathlib.Topology.Algebra.Module.WeakDual
 import Mathlib.Analysis.Distribution.SchwartzSpace.Deriv
 import OSforGFF.NuclearSpace
-import Architect
+import Dress
 import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.Analysis.InnerProductSpace.EuclideanDist
@@ -86,8 +86,8 @@ instance : MeasurableSpace (WeakDual ℝ E) := borel _
   (priorityItem := true)
   (blocked := "Requires deep functional analysis infrastructure not in Mathlib: nuclear space theory, Bochner-Minlos duality")
   (potentialIssue := "This is an axiom, not a theorem. Full formalization would require nuclear space characterization theorems.")
-  (discussion := "Gel'fand-Vilenkin Vol. 4; Billingsley. The nuclear hypothesis is essential -- the theorem fails for general locally convex spaces. See schwartz_nuclear in NuclearSpace.lean for the other axiom.")
-  (misc := "Minlos (1959), Gel'fand & Vilenkin Vol. 4 Ch. IV, Billingsley §19")]
+  (discussion := 321)
+  (misc := "Minlos (1959), Gel'fand & Vilenkin Vol. 4 Ch. IV, Billingsley §19. The nuclear hypothesis is essential -- the theorem fails for general locally convex spaces.")]
 axiom minlos_theorem
   [NuclearSpace E]
   (Φ : E → ℂ)

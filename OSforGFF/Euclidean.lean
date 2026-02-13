@@ -22,7 +22,7 @@ import Mathlib.Topology.MetricSpace.Isometry
 import Mathlib.MeasureTheory.Function.LpSpace.ContinuousCompMeasurePreserving
 
 import OSforGFF.Basic
-import Architect
+import Dress
 
 /-!
 ## Euclidean Group Actions for AQFT

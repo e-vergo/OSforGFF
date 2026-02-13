@@ -5,7 +5,7 @@ Authors: Michael R. Douglas, Sarah Hoback, Anna Mei, Ron Nissim
 -/
 import OSforGFF.FourierTransforms
 import OSforGFF.CovarianceMomentum
-import Architect
+import Dress
 
 /-!
 # Parseval Identity for Covariance

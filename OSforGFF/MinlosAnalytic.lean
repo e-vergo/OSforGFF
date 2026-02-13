@@ -18,7 +18,7 @@ import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 
 import OSforGFF.Basic
 import OSforGFF.Minlos
-import Architect
+import Dress
 import Mathlib.MeasureTheory.Measure.Map
 import Mathlib.MeasureTheory.Measure.Typeclasses.Probability
 

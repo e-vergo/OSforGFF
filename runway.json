@@ -1,7 +1,7 @@
 {
   "title": "Osterwalder-Schrader Axioms for the Gaussian Free Field",
   "projectName": "OSforGFF",
-  "githubUrl": "https://github.com/mrdouglasny/OSforGFF",
+  "githubUrl": "https://github.com/e-vergo/OSforGFF",
   "baseUrl": "/OSforGFF/",
   "blueprintTexPath": "blueprint/src/blueprint.tex",
   "assetsDir": "../../toolchain/dress-blueprint-action/assets"

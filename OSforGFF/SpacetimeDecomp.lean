@@ -6,7 +6,7 @@ Authors: Michael R. Douglas, Sarah Hoback, Anna Mei, Ron Nissim
 
 import OSforGFF.Basic
 import OSforGFF.SchwartzProdIntegrable
-import Architect
+import Dress
 
 /-!
 # Spacetime Decomposition

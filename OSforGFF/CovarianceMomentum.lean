@@ -26,7 +26,7 @@ import OSforGFF.DiscreteSymmetry
 import OSforGFF.Schwinger
 import OSforGFF.FunctionalAnalysis
 import OSforGFF.BesselFunction
-import Architect
+import Dress
 
 /-!
 # Momentum Space Propagator for Gaussian Free Field

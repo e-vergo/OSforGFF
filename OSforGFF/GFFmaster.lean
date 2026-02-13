@@ -27,7 +27,7 @@ import OSforGFF.OS1_GFF
 import OSforGFF.OS2_GFF
 import OSforGFF.OS4_Clustering
 import OSforGFF.OS4_Ergodicity
-import Architect
+import Dress
 
 open scoped BigOperators
 
@@ -58,13 +58,9 @@ This is an unconditional theorem with no assumptions beyond m > 0. -/
     OS4 clustering via Gaussian factorization and cross-covariance decay;
     OS4 ergodicity via polynomial clustering ($\alpha = 6$) implies L2 convergence. -/)
   (hasProof := true)
-  (above := "This is the culmination of the entire formalization, assembling all OS axiom proofs.")
-  (below := "Each OS axiom is proved in its own file; this file simply bundles them.")
-  -- Dependency fields (4)
-  (uses := [SatisfiesAllOS, gaussianFreeField_free, gaussianFreeField_satisfies_OS0, gaussianFreeField_satisfies_OS1_revised, gaussian_satisfies_OS2, gaussianFreeField_OS3_real, gaussianFreeField_satisfies_OS4, OS4_PolynomialClustering_implies_OS4_Ergodicity])
-  (excludes := [gaussian_satisfies_OS0])
-  (proofUses := [isGaussianGJ_gaussianFreeField_free, CovarianceEuclideanInvariantℂ_μ_GFF, gaussianFreeField_satisfies_OS4_PolynomialClustering])
-  (proofExcludes := [constructGaussianMeasureMinlos_free])
+  (above := /-- This is the culmination of the entire formalization, assembling all OS axiom proofs. -/)
+  (below := /-- Each OS axiom is proved in its own file; this file simply bundles them. -/)
+  -- Dependencies auto-inferred from proof term
   -- Status fields (3): `ready` is the one we haven't used yet
   (ready := true)
   -- Metadata fields (7)
@@ -76,7 +72,7 @@ This is an unconditional theorem with no assumptions beyond m > 0. -/
   (technicalDebt := "OS0 alternative proof in GaussianFreeField.lean could be unified with the holomorphic integral approach in OS0_GFF.lean")
   (misc := "Glimm-Jaffe Quantum Physics pp. 89-90; Douglas-Hoback-Mei-Nissim 2025")
   -- Discussion field (1)
-  (discussion := "This theorem demonstrates that the Gaussian Free Field with mass m > 0 in d < 4 spacetime dimensions satisfies all five Osterwalder-Schrader axioms, making it a legitimate Euclidean field theory that admits analytic continuation to a relativistic QFT. The three remaining axioms (Schwartz nuclear, Minlos, Goursat-Hartogs) are standard results from functional analysis and complex analysis that are not yet in Mathlib.")
+  (discussion := 316)
   -- LaTeX fields (2)
   (latexEnv := "theorem")
   (latexLabel := "thm:gff-master")

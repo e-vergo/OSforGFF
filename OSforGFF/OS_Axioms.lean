@@ -45,7 +45,7 @@ import OSforGFF.PositiveTimeTestFunction_real
 import OSforGFF.ComplexTestFunction
 import OSforGFF.TimeTranslation
 import OSforGFF.SchwingerTwoPointFunction
-import Architect
+import Dress
 
 /-!
 ## Osterwalder-Schrader Axioms

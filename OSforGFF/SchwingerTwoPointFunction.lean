@@ -12,7 +12,7 @@ import Mathlib.Order.Filter.Basic
 
 import OSforGFF.Basic
 import OSforGFF.Schwinger
-import Architect
+import Dress
 
 /-!
 ## Schwinger Two-Point Function
@@ -121,7 +121,7 @@ noncomputable def standardBumpSequence (n : ℕ) (hn : n ≠ 0) : ContDiffBump (
   (latexEnv := "definition")
   (latexLabel := "def:schwinger-two-point")
   (message := "Limit-based definition replacing DiracDelta approach; regularizes S₂(0) = 0")
-  (discussion := "The old definition used DiracDelta which required sorry since delta functions are distributions, not test functions. The mollifier-limit approach is mathematically rigorous.")]
+  (message := "The old definition used DiracDelta which required sorry since delta functions are distributions, not test functions. The mollifier-limit approach is mathematically rigorous.")]
 noncomputable def SchwingerTwoPointFunction
     (dμ_config : ProbabilityMeasure FieldConfiguration) (x : SpaceTime) : ℝ :=
   -- Regularize at coincident points: S₂(0) = 0
@@ -200,7 +200,7 @@ theorem smearedTwoPoint_tendsto_schwingerTwoPoint
   (uses := [SchwingerTwoPointFunction, smearedTwoPoint_tendsto_schwingerTwoPoint])
   (latexEnv := "theorem")
   (latexLabel := "thm:schwinger-two-point-eq-kernel")
-  (above := "This is the key theorem connecting the distribution-theoretic S₂ to the pointwise kernel.")]
+  (above := /-- This is the key theorem connecting the distribution-theoretic $S_2$ to the pointwise kernel. -/)]
 theorem schwingerTwoPointFunction_eq_kernel
     (dμ_config : ProbabilityMeasure FieldConfiguration) (x : SpaceTime) (hx : x ≠ 0)
     (C : SpaceTime → ℝ)

@@ -13,7 +13,7 @@ import OSforGFF.HadamardExp
 import OSforGFF.CovarianceR
 import OSforGFF.OS3_CovarianceRP
 import OSforGFF.GFFIsGaussian
-import Architect
+import Dress
 
 /-!
 ## Real Reflection Positivity for the Gaussian Free Field

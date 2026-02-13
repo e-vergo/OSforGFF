@@ -36,7 +36,7 @@ import OSforGFF.Covariance
 import OSforGFF.CovarianceR
 import OSforGFF.MinlosAnalytic
 import OSforGFF.ComplexTestFunction
-import Architect
+import Dress
 
 /-!
 ## Gaussian Free Field Construction via Minlos Theorem
@@ -285,7 +285,7 @@ private lemma gff_pushforward_charFun
   (uses := [gaussianFreeField_free, gff_real_characteristic, freeCovarianceFormR_pos])
   (latexEnv := "theorem")
   (latexLabel := "thm:gff-pairing-gaussian")
-  (above := "Key bridge theorem: reduces infinite-dimensional GFF analysis to 1D Gaussian theory")]
+  (above := /-- Key bridge theorem: reduces infinite-dimensional GFF analysis to 1D Gaussian theory. -/)]
 theorem gff_pairing_is_gaussian
   (m : ℝ) [Fact (0 < m)] (φ : TestFunction) :
   (gaussianFreeField_free m).toMeasure.map (distributionPairingCLM φ)
@@ -410,7 +410,7 @@ def freeCovarianceForm (m : ℝ) [Fact (0 < m)] : MinlosAnalytic.CovarianceForm 
 @[blueprint "thm:gff-centered"
   (title := "GFF Has Zero Mean")
   (statement := /-- The GFF measure is centered: $\mathbb{E}[\langle\omega, \varphi\rangle] = 0$ for all test functions $\varphi$. Follows from sign-flip symmetry of the Gaussian CF. -/)
-  (uses := [gaussianFreeField_free, gff_real_characteristic, integral_neg_invariance, moment_zero_from_realCF])
+  (uses := [gaussianFreeField_free, gff_real_characteristic])
   (latexEnv := "theorem")
   (latexLabel := "thm:gff-centered")]
 theorem gaussianFreeField_free_centered (m : ℝ) [Fact (0 < m)] :

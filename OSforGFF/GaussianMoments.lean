@@ -15,7 +15,7 @@ import Mathlib.MeasureTheory.Function.LpSeminorm.CompareExp
 import OSforGFF.Basic
 import OSforGFF.Schwinger
 import OSforGFF.GFFMconstruct
-import Architect
+import Dress
 
 /-!
 ## Gaussian Moments and n-Point Integrability

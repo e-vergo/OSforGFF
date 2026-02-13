@@ -7,7 +7,7 @@ Authors: Michael R. Douglas, Sarah Hoback, Anna Mei, Ron Nissim
 import OSforGFF.Basic
 import OSforGFF.SpacetimeDecomp
 import Mathlib.Analysis.SpecialFunctions.JapaneseBracket
-import Architect
+import Dress
 
 /-!
 # Schwartz Tonelli Factorization

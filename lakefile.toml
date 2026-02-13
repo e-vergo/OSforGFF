@@ -2,14 +2,9 @@ name = "OSforGFF"
 version = "0.1.0"
 defaultTargets = ["OSforGFF"]
 
-[leanOptions]
-"pp.unicode.fun" = true
 
 [[lean_lib]]
 name = "OSforGFF"
-
-[[lean_lib]]
-name = "DependencyExtractor"
 
 [[require]]
 name = "Dress"

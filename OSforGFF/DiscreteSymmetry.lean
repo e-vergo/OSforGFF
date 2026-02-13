@@ -40,7 +40,7 @@ import Mathlib.Analysis.Normed.Module.RCLike.Real
 
 import OSforGFF.Basic
 import OSforGFF.Euclidean
-import Architect
+import Dress
 
 /-!
 ## Discrete Symmetries for AQFT

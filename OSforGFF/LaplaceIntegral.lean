@@ -10,7 +10,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 import Mathlib.Analysis.Calculus.Deriv.Inv
 import Mathlib.MeasureTheory.Function.Jacobian
-import Architect
+import Dress
 
 /-!
 # Proof of the Laplace Integral Identity (Bessel K_{1/2})

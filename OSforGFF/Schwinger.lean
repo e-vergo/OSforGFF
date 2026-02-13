@@ -17,7 +17,7 @@ import Mathlib.Algebra.Order.Group.Unbundled.Abs
 import OSforGFF.Basic
 import OSforGFF.FunctionalAnalysis
 import OSforGFF.ComplexTestFunction
-import Architect
+import Dress
 
 /-!
 ## Schwinger Functions for AQFT

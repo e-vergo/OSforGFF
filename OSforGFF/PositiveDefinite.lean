@@ -8,7 +8,7 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Data.Fintype.Basic
 import Mathlib.Algebra.Module.LinearMap.Defs
-import Architect
+import Dress
 
 /-!
 Positive Definite Functions

@@ -45,7 +45,7 @@ import Mathlib.MeasureTheory.Measure.Haar.Unique
 import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 import Mathlib.MeasureTheory.Integral.IntegrableOn
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
-import Architect
+import Dress
 
 
 open MeasureTheory Set Filter

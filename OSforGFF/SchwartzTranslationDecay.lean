@@ -13,7 +13,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.MeasureTheory.Group.Integral
 import Mathlib.Analysis.Normed.Operator.Mul -- For ContinuousLinearMap.mul
-import Architect
+import Dress
 
 /-!
 # Schwartz Bilinear Translation Decay

@@ -8,7 +8,7 @@ import OSforGFF.GFFIsGaussian
 import OSforGFF.Covariance
 import OSforGFF.Euclidean
 import OSforGFF.GaussianFreeField
-import Architect
+import Dress
 
 /-!
 # OS2 Euclidean Invariance for the Free Gaussian Field

@@ -6,7 +6,7 @@ Authors: Michael R. Douglas, Sarah Hoback, Anna Mei, Ron Nissim
 
 import OSforGFF.OS0_GFF
 import OSforGFF.GaussianMoments
-import Architect
+import Dress
 
 /-!
 ## Complex GFF Results via OS0 Analyticity
@@ -469,8 +469,7 @@ end GFFIsGaussian
   (title := "S₂ = Complex Covariance (GFF)")
   (keyDeclaration := true)
   (statement := /-- For complex test functions, $S_2(\mu_m, f, g) = C_m^{\mathbb{C}}(f, g)$. Extends the real polarization identity to complex test functions by bilinearity. -/)
-  (uses := [schwinger_eq_covariance_real, schwinger_eq_covarianceℂ_on_reals, covariance_bilinear_from_general])
-  (proofUses := [gff_second_moment_eq_covariance, freeCovarianceℂ_bilinear_agrees_on_reals])
+  (uses := [covariance_bilinear_from_general])
   (latexEnv := "theorem")
   (latexLabel := "thm:gff-two-point-eq-covariance")]
 theorem gff_two_point_equals_covarianceℂ_free (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) :

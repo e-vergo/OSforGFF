@@ -12,7 +12,7 @@ import Mathlib.Analysis.SpecialFunctions.JapaneseBracket
 import Mathlib.Topology.MetricSpace.Bounded
 import Mathlib.Probability.Moments.IntegrableExpMul
 import OSforGFF.SchwartzTranslationDecay
-import Architect
+import Dress
 
 /-!
 # Quantitative Decay for Schwartz Bilinear Forms

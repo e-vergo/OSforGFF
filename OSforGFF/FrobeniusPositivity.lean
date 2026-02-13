@@ -13,7 +13,7 @@ We work over ℝ with finite index type ι.
 import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Spectrum
-import Architect
+import Dress
 import Mathlib.Data.Finset.Basic
 import Mathlib.LinearAlgebra.Matrix.Diagonal
 import Mathlib.LinearAlgebra.Matrix.Orthogonal

@@ -11,7 +11,7 @@ import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import Mathlib.Tactic
 
 import OSforGFF.Basic
-import Architect
+import Dress
 
 /-!
 # Time Translation Operators

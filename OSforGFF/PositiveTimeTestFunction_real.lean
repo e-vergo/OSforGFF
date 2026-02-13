@@ -13,7 +13,7 @@ import Mathlib.LinearAlgebra.TensorAlgebra.Basic
 
 import OSforGFF.Basic
 import OSforGFF.DiscreteSymmetry
-import Architect
+import Dress
 
 /-!
 # Positive Time Test Functions and Star Operations

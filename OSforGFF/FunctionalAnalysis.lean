@@ -53,7 +53,7 @@ import Mathlib.Analysis.SpecialFunctions.Integrability.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 import Mathlib.MeasureTheory.Function.LpSeminorm.CompareExp
 import Mathlib.MeasureTheory.Constructions.HaarToSphere
-import Architect
+import Dress
 
 /-!
 ## Functional Analysis for AQFT

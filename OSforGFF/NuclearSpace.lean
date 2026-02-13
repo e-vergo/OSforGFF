@@ -29,7 +29,7 @@ and suffices for the GFF construction via the Minlos theorem.
 
 import Mathlib.Analysis.LocallyConvex.WithSeminorms
 import Mathlib.Analysis.Distribution.SchwartzSpace.Deriv
-import Architect
+import Dress
 
 open scoped BigOperators
 

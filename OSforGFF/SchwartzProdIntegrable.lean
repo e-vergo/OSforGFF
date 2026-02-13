@@ -13,7 +13,7 @@ import Mathlib.Analysis.Calculus.MeanValue
 import Mathlib.Analysis.Calculus.Deriv.Basic
 import OSforGFF.FunctionalAnalysis
 import OSforGFF.Basic
-import Architect
+import Dress
 
 
 open MeasureTheory SchwartzMap Real Set Metric

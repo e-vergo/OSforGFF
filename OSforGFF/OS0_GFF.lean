@@ -22,7 +22,7 @@ import OSforGFF.Schwinger
 import OSforGFF.OS_Axioms
 import OSforGFF.GFFMconstruct
 import OSforGFF.ComplexTestFunction
-import Architect
+import Dress
 import Mathlib.MeasureTheory.Measure.Complex
 import Mathlib.Analysis.Complex.CauchyIntegral
 import Mathlib.Analysis.Complex.HasPrimitives
@@ -91,7 +91,7 @@ so analyticity is equivalent to being everywhere ℂ-differentiable. -/
   (latexEnv := "axiom")
   (latexLabel := "axiom:goursat-hartogs")
   (blocked := "Requires Hartogs' theorem formalization not in Mathlib; classical complex analysis result")
-  (below := "Used as key ingredient in OS0 analyticity proof")]
+  (below := /-- Used as key ingredient in OS0 analyticity proof. -/)]
 axiom differentiable_analyticAt_finDim
     {n : ℕ}
     (f : (Fin n → ℂ) → ℂ)

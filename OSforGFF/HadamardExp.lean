@@ -12,7 +12,7 @@ the entrywise exponential preserves positive definiteness via Hadamard series.
 
 import OSforGFF.SchurProduct
 import Mathlib.Analysis.SpecialFunctions.Exp
-import Architect
+import Dress
 import Mathlib.Analysis.Normed.Algebra.Exponential
 import Mathlib.Analysis.Complex.TaylorSeries
 import Mathlib.Analysis.SpecialFunctions.ExpDeriv

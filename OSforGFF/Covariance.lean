@@ -24,7 +24,7 @@ import OSforGFF.FunctionalAnalysis
 import OSforGFF.CovarianceMomentum
 import OSforGFF.FourierTransforms
 import OSforGFF.Parseval
-import Architect
+import Dress
 
 /-!
 # Free Covariance for Gaussian Free Field

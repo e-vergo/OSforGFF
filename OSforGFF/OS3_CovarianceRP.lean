@@ -12,7 +12,7 @@ import OSforGFF.OS3_MixedRep
 import OSforGFF.OS3_MixedRepInfra
 import OSforGFF.Parseval
 import OSforGFF.Covariance
-import Architect
+import Dress
 import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 
 /-!
