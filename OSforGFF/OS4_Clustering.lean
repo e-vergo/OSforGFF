@@ -69,6 +69,9 @@ namespace QFT
                  = S₂(f,f) + 2·S₂(f,g) + S₂(g,g)  (by symmetry)
 
     This uses the bilinearity from CovarianceBilinear proved in GFFIsGaussian. -/
+@[blueprint "lem:schwinger2-sum-expansion"
+  (title := "Bilinearity Expansion of the Schwinger 2-Point Function")
+  (statement := /-- $S_2(f+g, f+g) = S_2(f,f) + 2\,S_2(f,g) + S_2(g,g)$ by bilinearity and symmetry of the covariance. -/)]
 lemma schwinger2_sum_expansion (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) :
     SchwingerFunctionℂ₂ (gaussianFreeField_free m) (f + g) (f + g) =
       SchwingerFunctionℂ₂ (gaussianFreeField_free m) f f +
@@ -102,6 +105,9 @@ lemma schwinger2_sum_expansion (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) 
 
     Compare with `gaussianFreeField_real_entry_factor` in OS3_GFF.lean which
     proves the analogous factorization for real test functions. -/
+@[blueprint "lem:gff-generating-sum-factorization"
+  (title := "Gaussian Generating Functional Factorisation")
+  (statement := /-- $Z[f+g] = Z[f]\cdot Z[g]\cdot \exp\!\bigl(-S_2(f,g)\bigr)$ for the Gaussian free field. -/)]
 lemma gff_generating_sum_factorization (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) :
     GJGeneratingFunctionalℂ (gaussianFreeField_free m) (f + g) =
       GJGeneratingFunctionalℂ (gaussianFreeField_free m) f *
@@ -127,6 +133,7 @@ lemma gff_generating_sum_factorization (m : ℝ) [Fact (0 < m)] (f g : TestFunct
 /-! ## Translation as Euclidean Action -/
 
 /-- The inverse of the identity linear isometry is itself. -/
+@[blueprint "lem:linear-isometry-inv-one"]
 lemma LinearIsometry_inv_one : LinearIsometry.inv (1 : O4) = 1 := by
   -- Use comp_inv: R.comp (inv R) = 1
   -- For R = 1: 1.comp (inv 1) = 1, so inv 1 = 1 (since 1.comp x = x)
@@ -137,6 +144,7 @@ lemma LinearIsometry_inv_one : LinearIsometry.inv (1 : O4) = 1 := by
 /-! ## Translation Invariance from OS2 -/
 
 /-- For OS2-invariant measures, Z[euclidean_action g f] = Z[f] for any g ∈ E. -/
+@[blueprint "lem:generating-euclidean-invariant"]
 lemma generating_euclidean_invariant
     (dμ_config : ProbabilityMeasure FieldConfiguration)
     (h_inv : OS2_EuclideanInvariance dμ_config)
@@ -159,6 +167,9 @@ lemma generating_euclidean_invariant
     Re C_bilin(f,f) = C(fRe,fRe) - C(fIm,fIm), which can be negative!
     The bound |Z[f]| ≤ 1 does NOT hold for general complex f.
     Instead, use gff_generating_L2_bound from OS1_GFF.lean for the general case. -/
+@[blueprint "lem:gff-generating-norm-le-one-real"
+  (title := "GFF Generating Functional Norm Bound")
+  (statement := /-- $\|Z[f]\| \le 1$ for real test functions $f$, since the covariance is positive definite on real functions. -/)]
 lemma gff_generating_norm_le_one_real (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
     ‖GJGeneratingFunctionalℂ (gaussianFreeField_free m) (toComplex f)‖ ≤ 1 := by
   rw [gff_complex_generating m (toComplex f)]
@@ -195,6 +206,9 @@ lemma gff_generating_norm_le_one_real (m : ℝ) [Fact (0 < m)] (f : TestFunction
     - Therefore: Z[f + T_a g] - Z[f]·Z[g] = Z[f]·Z[g]·(exp(-S₂(f, T_a g)) - 1)
     - Real test function bound: |Z[f]| ≤ 1 for real f (positive definite covariance)
     - Exponential estimate: |exp(-z) - 1| ≤ 2|z| for |z| ≤ 1 -/
+@[blueprint "lem:gff-os4-from-small-decay-real"
+  (title := "OS4 Bound from Cross-Term Decay")
+  (statement := /-- If $\|S_2(f, T_a g)\| < \delta$ with $\delta \le 1$, then $\|Z[f + T_a g] - Z[f]\cdot Z[g]\| < 2\delta$ for real test functions. -/)]
 lemma GFF_OS4_from_small_decay_real (m : ℝ) [Fact (0 < m)]
     (f g : TestFunction) (a : SpaceTime) (δ : ℝ) (_hδ_pos : δ > 0) (hδ_small : δ ≤ 1)
     (h_decay : ‖SchwingerFunction₂ (gaussianFreeField_free m) f (g.translate a)‖ < δ) :
@@ -334,6 +348,9 @@ lemma GFF_OS4_from_small_decay_real (m : ℝ) [Fact (0 < m)]
 
     Uses the covariance representation:
     S₂(f, T_a g) = ∫∫ f(x) · C(x-y) · g(y-a) dx dy -/
+@[blueprint "thm:schwartz-cross-covariance-decay-real"
+  (title := "Cross-Covariance Decay for Schwartz Functions")
+  (statement := /-- For Schwartz functions $f, g$, the 2-point function $S_2(f, T_a g) \to 0$ as $\|a\| \to \infty$, using kernel decay and Schwartz integrability. -/)]
 theorem schwartz_cross_covariance_decay_real (m : ℝ) [Fact (0 < m)]
     (f g : TestFunction) (ε : ℝ) (hε : ε > 0) :
     ∃ R > 0, ∀ a : SpaceTime, ‖a‖ > R →
@@ -523,12 +540,14 @@ These are not used in the main OS4 proof path (which goes through `OS4_Polynomia
 but kept as an alternative qualitative formulation of clustering. -/
 
 /-- Covariance clustering property: the 2-point function decays at large separations. -/
+@[blueprint "def:covariance-clustering-real"]
 def CovarianceClustering_real (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (f g : TestFunction) (ε : ℝ), ε > 0 →
     ∃ R > 0, ∀ a : SpaceTime, ‖a‖ > R →
       ‖SchwingerFunction₂ dμ_config f (g.translate a)‖ < ε
 
 /-- The free covariance has the clustering property. -/
+@[blueprint "thm:free-covariance-clustering-real"]
 theorem freeCovarianceClustering_real (m : ℝ) [Fact (0 < m)] :
     CovarianceClustering_real (gaussianFreeField_free m) := by
   intro f g ε hε
@@ -555,6 +574,7 @@ This connects time translation of distributions to translation of test functions
 
 /-- Time translation vector: shifts only the time coordinate by s.
     timeVector s = (s, 0, 0, 0) in coordinates. -/
+@[blueprint "def:time-vector"]
 def timeVector (s : ℝ) : SpaceTime :=
   EuclideanSpace.equiv (Fin STDimension) ℝ |>.symm
     (fun i => if i = 0 then s else 0)
@@ -569,6 +589,7 @@ def timeVector (s : ℝ) : SpaceTime :=
     The proof follows from:
     1. timeTranslationDistribution_apply: (T_s ω)(f) = ω(T_{-s} f) for real test functions
     2. Time translation commutes with taking real/imaginary parts of complex Schwartz functions -/
+@[blueprint "lem:time-translation-pairing-duality"]
 lemma time_translation_pairing_duality (s : ℝ) (ω : FieldConfiguration) (g : TestFunctionℂ) :
     distributionPairingℂ_real (TimeTranslation.timeTranslationDistribution s ω) g =
     distributionPairingℂ_real ω (TimeTranslation.timeTranslationSchwartzℂ (-s) g) := by
@@ -578,6 +599,7 @@ lemma time_translation_pairing_duality (s : ℝ) (ω : FieldConfiguration) (g : 
 /-! ### Key Lemmas for Connecting Bilinear Decay to Schwinger Function -/
 
 /-- The time shift constant vector (s, 0, 0, 0) has norm |s|. -/
+@[blueprint "lem:time-shift-const-norm"]
 lemma timeShiftConst_norm (s : ℝ) : ‖TimeTranslation.timeShiftConst s‖ = |s| := by
   simp only [TimeTranslation.timeShiftConst, EuclideanSpace.norm_eq, STDimension, Fin.sum_univ_four,
     (by decide : (0 : Fin 4).val = 0), (by decide : (1 : Fin 4).val ≠ 0),
@@ -585,16 +607,19 @@ lemma timeShiftConst_norm (s : ℝ) : ‖TimeTranslation.timeShiftConst s‖ = |
     Real.norm_eq_abs, sq_abs, zero_pow (by norm_num : 2 ≠ 0), add_zero, Real.sqrt_sq_eq_abs]
 
 /-- Time translation of Schwartz function at a point equals function evaluated at shifted point. -/
+@[blueprint "lem:time-translation-schwartz"]
 lemma timeTranslationSchwartzℂ_at_point (s : ℝ) (g : TestFunctionℂ) (y : SpaceTime) :
     TimeTranslation.timeTranslationSchwartzℂ s g y = g (TimeTranslation.timeShift s y) := by
   rfl
 
 /-- Time shift by s equals adding the time shift constant. -/
+@[blueprint "lem:time-shift-eq-add"]
 lemma timeShift_eq_add (s : ℝ) (y : SpaceTime) :
     TimeTranslation.timeShift s y = y + TimeTranslation.timeShiftConst s := by
   exact TimeTranslation.timeShift_eq_add_const s y
 
 /-- Time translation by -s gives g(y - timeShiftConst(s)). -/
+@[blueprint "lem:time-translation-schwartz-2"]
 lemma timeTranslationSchwartzℂ_neg_eq_sub (s : ℝ) (g : TestFunctionℂ) (y : SpaceTime) :
     TimeTranslation.timeTranslationSchwartzℂ (-s) g y = g (y - TimeTranslation.timeShiftConst s) := by
   rw [timeTranslationSchwartzℂ_at_point, timeShift_eq_add]
@@ -606,6 +631,7 @@ lemma timeTranslationSchwartzℂ_neg_eq_sub (s : ℝ) (g : TestFunctionℂ) (y :
   split_ifs <;> ring
 
 /-- freeCovariance is translation-invariant: C(x,y) = C(0, x-y) = freeCovarianceKernel(x-y). -/
+@[blueprint "lem:free-covariance-eq-kernel"]
 lemma freeCovariance_eq_kernel (m : ℝ) (x y : SpaceTime) :
     freeCovariance m x y = freeCovarianceKernel m (x - y) := by
   -- freeCovariance m x y = freeCovarianceBessel m x y = (m / (4π²r)) K₁(mr) where r = ‖x - y‖
@@ -618,6 +644,7 @@ lemma freeCovariance_eq_kernel (m : ℝ) (x y : SpaceTime) :
 
 /-- The Schwinger 2-point function for time-translated test function equals
     the bilinear integral with translated argument. -/
+@[blueprint "lem:schwinger2-time-translated-eq-bilinear"]
 lemma schwinger2_time_translated_eq_bilinear (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) (s : ℝ) :
     SchwingerFunctionℂ₂ (gaussianFreeField_free m) f (TimeTranslation.timeTranslationSchwartzℂ (-s) g) =
     ∫ x : SpaceTime, ∫ y : SpaceTime,
@@ -641,6 +668,9 @@ lemma schwinger2_time_translated_eq_bilinear (m : ℝ) [Fact (0 < m)] (f g : Tes
 
     The mass gap m > 0 ensures exponential decay, which is stronger than any polynomial.
     Therefore the GFF satisfies OS4_PolynomialClustering for all α > 0. -/
+@[blueprint "thm:gaussian-free-field-satisfies-os4-polynomial-clustering"
+  (title := "GFF Satisfies Polynomial Clustering")
+  (statement := /-- The GFF satisfies OS4 polynomial clustering for any $\alpha > 0$: $\|E[e^{\langle\omega,f\rangle + \langle T_s\omega,g\rangle}] - E[e^{\langle\omega,f\rangle}]\cdot E[e^{\langle\omega,g\rangle}]\| \le c\,(1+s)^{-\alpha}$. -/)]
 theorem gaussianFreeField_satisfies_OS4_PolynomialClustering (m : ℝ) [Fact (0 < m)]
     (α : ℝ) (hα : α > 0) :
     OS4_PolynomialClustering (gaussianFreeField_free m) α hα := by

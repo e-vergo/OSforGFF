@@ -138,6 +138,7 @@ variable {𝕜 : Type} [RCLike 𝕜]
 variable {E : Type} [NormedAddCommGroup E] [NormedSpace ℂ E]
 
 -- General version that works for any normed space over ℝ
+@[blueprint "lem:has-temperate-growth-general"]
 lemma SchwartzMap.hasTemperateGrowth_general
     {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
@@ -180,6 +181,7 @@ lemma Complex.ofRealCLM_isometry : Isometry (Complex.ofRealCLM : ℝ →L[ℝ] �
   convert Complex.ofRealLI.isometry
 
 -- Use this to prove our specific case
+@[blueprint "lem:of-real-clm-continuous-comp-lp"]
 lemma Complex.ofRealCLM_continuous_compLp {α : Type*} [MeasurableSpace α] {μ : Measure α} :
   Continuous (fun φ : Lp ℝ 2 μ => Complex.ofRealCLM.compLp φ : Lp ℝ 2 μ → Lp ℂ 2 μ) := by
   -- The function φ ↦ L.compLp φ is the application of the continuous linear map
@@ -190,6 +192,7 @@ lemma Complex.ofRealCLM_continuous_compLp {α : Type*} [MeasurableSpace α] {μ 
 Compose an Lp function with a continuous linear map.
 This should be the canonical way to lift real Lp functions to complex Lp functions.
 -/
+@[blueprint "def:composed-function"]
 noncomputable def composed_function {α : Type*} [MeasurableSpace α] {μ : Measure α}
     (f : Lp ℝ 2 μ) (A : ℝ →L[ℝ] ℂ): Lp ℂ 2 μ :=
   A.compLp f
@@ -202,6 +205,7 @@ example {α : Type*} [MeasurableSpace α] {μ : Measure α}
 /--
 Embedding from real Lp functions to complex Lp functions using the canonical embedding ℝ → ℂ.
 -/
+@[blueprint "def:embedding-real-to-complex"]
 noncomputable def embedding_real_to_complex {α : Type*} [MeasurableSpace α] {μ : Measure α}
     (φ : Lp ℝ 2 μ) : Lp ℂ 2 μ :=
   composed_function φ (Complex.ofRealCLM)
@@ -213,6 +217,7 @@ section LiftMeasure
   Lifts a probability measure from the space of real Lp functions to the space of
   complex Lp functions, with support on the real subspace.
   -/
+  @[blueprint "def:lift-measure-real-to-complex"]
   noncomputable def liftMeasure_real_to_complex
       (dμ_real : ProbabilityMeasure (Lp ℝ 2 μ)) :
       ProbabilityMeasure (Lp ℂ 2 μ) :=
@@ -249,8 +254,11 @@ This construction gives a unitary operator ℱ : L²(ℝᵈ) ≃ₗᵢ[ℂ] L²(
 variable {d : ℕ} [NeZero d] [Fintype (Fin d)]
 
 -- Type abbreviations for clarity
+@[blueprint "def:euclidean-rd"]
 abbrev EuclideanRd (d : ℕ) := EuclideanSpace ℝ (Fin d)
+@[blueprint "def:schwartz-rd"]
 abbrev SchwartzRd (d : ℕ) := SchwartzMap (EuclideanRd d) ℂ
+@[blueprint "def:l2-complex"]
 abbrev L2Complex (d : ℕ) := Lp ℂ 2 (volume : Measure (EuclideanRd d))
 
 /-! ### Core construction components (using Mathlib APIs) -/
@@ -295,6 +303,7 @@ These theorems are used to construct specific multiplication operators
 -/
 
 /-- Helper lemma for the norm bound of the multiplication operator. -/
+@[blueprint "lem:linfty-mul-l2-bound-aux"]
 lemma linfty_mul_L2_bound_aux {μ : Measure α}
     (g : α → ℂ) (_hg_meas : Measurable g) (C : ℝ) (_hC : 0 < C)
     (hg_bound : ∀ᵐ x ∂μ, ‖g x‖ ≤ C)
@@ -356,6 +365,7 @@ noncomputable def linfty_mul_L2_CLM {μ : Measure α}
     )
 
 /-- The multiplication operator acts pointwise almost everywhere on `L²`. -/
+@[blueprint "lem:linfty-mul-l2-clm-spec"]
 lemma linfty_mul_L2_CLM_spec {μ : Measure α}
     (g : α → ℂ) (hg_meas : Measurable g) (C : ℝ) (hC : 0 < C)
     (hg_bound : ∀ᵐ x ∂μ, ‖g x‖ ≤ C)
@@ -400,6 +410,7 @@ open Set Metric in
     - Define g := indicator (Iio r) f, so g(y) = f(y) for y < r, else 0
     - Then indicator (ball 0 r) (f ∘ ‖·‖) = g ∘ ‖·‖
     - Apply global lemma to g -/
+@[blueprint "lem:integrable-on-ball-of-radial"]
 lemma integrableOn_ball_of_radial {E F : Type*}
     [NormedAddCommGroup E] [NormedSpace ℝ E] [Nontrivial E]
     [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
@@ -435,6 +446,7 @@ lemma integrableOn_ball_of_radial {E F : Type*}
 open Set Metric in
 /-- Integrability on balls for power-law decay functions.
     If |f(x)| ≤ C‖x‖^{-α} with α < d, then f is integrable on any ball centered at 0. -/
+@[blueprint "lem:integrable-on-ball-of-rpow-decay"]
 lemma integrableOn_ball_of_rpow_decay {d : ℕ} (hd : d ≥ 1)
     {f : EuclideanSpace ℝ (Fin d) → ℝ} {C α r : ℝ}
     (_hC : 0 < C) (hα : α < d) (hr : 0 < r)
@@ -482,6 +494,7 @@ lemma integrableOn_ball_of_rpow_decay {d : ℕ} (hd : d ≥ 1)
   exact h_decay x
 
 /-- Integrability away from the origin for bounded functions on compact sets. -/
+@[blueprint "lem:integrable-on-compact-diff-ball"]
 lemma integrableOn_compact_diff_ball {d : ℕ}
     {f : EuclideanSpace ℝ (Fin d) → ℝ} {C α δ : ℝ} {K : Set (EuclideanSpace ℝ (Fin d))}
     (hK : IsCompact K) (hC : 0 < C) (hδ : 0 < δ)
@@ -587,6 +600,7 @@ theorem locallyIntegrable_of_rpow_decay_real {d : ℕ} (hd : d ≥ 3)
     **Used by**: `spatialNormIntegral_linear_bound` and `F_norm_bound_via_linear_vanishing`
     to show that spatial integrals of Schwartz functions with linear time vanishing
     are bounded by C·t. -/
+@[blueprint "lem:polynomial-decay-integrable-3d"]
 lemma polynomial_decay_integrable_3d :
     Integrable (fun x : EuclideanSpace ℝ (Fin 3) => 1 / (1 + ‖x‖)^4) volume := by
   -- Use integrable_one_add_norm: (1 + ‖x‖)^(-r) is integrable when r > dim
@@ -759,6 +773,7 @@ lemma SchwartzMap.integrable_mul_bounded (f : SchwartzMap E ℂ) (g : E → ℂ)
   ext x; ring
 
 /-- The conjugate of a Schwartz function is integrable. -/
+@[blueprint "lem:integrable-conj"]
 lemma SchwartzMap.integrable_conj (f : SchwartzMap E ℂ) :
     Integrable (fun y => starRingEnd ℂ (f y)) μ := by
   have hf_int : Integrable f μ := f.integrable
@@ -777,12 +792,14 @@ Lemmas about complex exponentials of pure imaginary arguments, used in Fourier a
 -/
 
 /-- Complex exponential of pure imaginary argument has norm 1. -/
+@[blueprint "lem:norm-exp-i-mul-real"]
 lemma norm_exp_I_mul_real (r : ℝ) : ‖Complex.exp (Complex.I * r)‖ = 1 := by
   rw [Complex.norm_exp]
   simp only [Complex.mul_re, Complex.I_re, Complex.ofReal_re, zero_mul,
     Complex.I_im, Complex.ofReal_im, mul_zero, sub_zero, Real.exp_zero]
 
 /-- Complex exponential of negative pure imaginary argument has norm 1. -/
+@[blueprint "lem:norm-exp-neg-i-mul-real"]
 lemma norm_exp_neg_I_mul_real (r : ℝ) : ‖Complex.exp (-Complex.I * r)‖ = 1 := by
   rw [Complex.norm_exp]
   simp only [neg_mul, Complex.neg_re, Complex.mul_re, Complex.I_re, Complex.ofReal_re,
@@ -896,10 +913,12 @@ fact in harmonic analysis: if f ∈ 𝒮(ℝⁿ), then f(· - a) ∈ 𝒮(ℝⁿ
 -/
 
 /-- Translation `x ↦ x - a` has temperate growth. -/
+@[blueprint "lem:sub-const-has-temperate-growth"]
 lemma sub_const_hasTemperateGrowth {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] (a : E) :
     Function.HasTemperateGrowth (fun x : E => x - a) := by fun_prop
 
 /-- Translation `x ↦ x - a` is antilipschitz (actually an isometry). -/
+@[blueprint "lem:sub-const-antilipschitz"]
 lemma sub_const_antilipschitz {E : Type*} [NormedAddCommGroup E] (a : E) :
     AntilipschitzWith 1 (fun x : E => x - a) := by
   intro x y
@@ -1025,11 +1044,13 @@ open scoped Pointwise BigOperators
 variable {E}
 
 /-- The self-convolution of a normalized bump function. -/
+@[blueprint "def:bump-self-conv"]
 noncomputable def bumpSelfConv (φ : ContDiffBump (0 : E)) : E → ℝ :=
   (φ.normed volume) ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume] (φ.normed volume)
 
 set_option linter.unusedSectionVars false in
 /-- Self-convolution is nonnegative. -/
+@[blueprint "lem:bump-self-conv-nonneg"]
 lemma bumpSelfConv_nonneg (φ : ContDiffBump (0 : E)) (x : E) : 0 ≤ bumpSelfConv φ x := by
   unfold bumpSelfConv convolution
   apply integral_nonneg
@@ -1039,6 +1060,7 @@ lemma bumpSelfConv_nonneg (φ : ContDiffBump (0 : E)) (x : E) : 0 ≤ bumpSelfCo
 
 set_option linter.unusedSectionVars false in
 /-- Self-convolution has mass 1: ∫(φ ⋆ φ) = (∫φ)(∫φ) = 1·1 = 1. -/
+@[blueprint "lem:bump-self-conv-integral"]
 lemma bumpSelfConv_integral (φ : ContDiffBump (0 : E)) :
     ∫ x, bumpSelfConv φ x = 1 := by
   unfold bumpSelfConv
@@ -1052,6 +1074,7 @@ lemma bumpSelfConv_integral (φ : ContDiffBump (0 : E)) :
 
 set_option linter.unusedSectionVars false in
 /-- Support of self-convolution is contained in ball of radius 2*rOut. -/
+@[blueprint "lem:bump-self-conv-support-subset"]
 lemma bumpSelfConv_support_subset (φ : ContDiffBump (0 : E)) :
     support (bumpSelfConv φ) ⊆ Metric.ball 0 (2 * φ.rOut) := by
   unfold bumpSelfConv
@@ -1078,6 +1101,7 @@ lemma bumpSelfConv_support_subset (φ : ContDiffBump (0 : E)) :
     _ = 2 * φ.rOut := by ring
 
 /-- Self-convolution support shrinks to {0} as rOut → 0. -/
+@[blueprint "lem:bump-self-conv-support-tendsto"]
 lemma bumpSelfConv_support_tendsto {ι : Type*} {l : Filter ι} [l.NeBot]
     (φ : ι → ContDiffBump (0 : E)) (hφ : Tendsto (fun i => (φ i).rOut) l (nhds 0)) :
     Tendsto (fun i => support (bumpSelfConv (φ i))) l (𝓝 (0 : E)).smallSets := by

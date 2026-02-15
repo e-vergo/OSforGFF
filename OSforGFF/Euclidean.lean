@@ -106,6 +106,7 @@ namespace QFT
 
 /-- Orthogonal linear isometries of ℝ⁴ (the group O(4)).
 LinearIsometry is an orthogonal linear map, ie an element of O(4)-/
+@[blueprint "def:o4"]
 abbrev O4 : Type :=
   LinearIsometry (RingHom.id ℝ) SpaceTime SpaceTime
 
@@ -147,6 +148,7 @@ open LinearIsometryEquiv
 namespace LinearIsometry
 /-- Inverse of a linear isometry : we turn the canonical equivalence
     (available in finite dimension) back into a `LinearIsometry`. -/
+@[blueprint "def:inv"]
 noncomputable def inv (g : O4) : O4 :=
   ((g.toLinearIsometryEquiv rfl).symm).toLinearIsometry
 
@@ -380,9 +382,11 @@ private def act_inv_poly_bound (g : E) :
 /-- The fundamental pullback map for Euclidean actions.
     This is the geometric transformation x ↦ g⁻¹ • x that underlies
     all Euclidean actions on function spaces. -/
+@[blueprint "def:euclidean-pullback"]
 noncomputable def euclidean_pullback (g : E) : SpaceTime → SpaceTime := act g⁻¹
 
 /-- The Euclidean pullback map has temperate growth (needed for Schwartz space actions). -/
+@[blueprint "lem:euclidean-pullback-temperate-growth"]
 lemma euclidean_pullback_temperate_growth (g : E) :
     Function.HasTemperateGrowth (euclidean_pullback g) := by
   -- The map x ↦ g⁻¹.R x + g⁻¹.t is affine (linear isometry + translation)
@@ -395,6 +399,7 @@ lemma euclidean_pullback_temperate_growth (g : E) :
     hbound
 
 /-- The Euclidean pullback map satisfies polynomial growth bounds. -/
+@[blueprint "lem:euclidean-pullback-polynomial-bounds"]
 lemma euclidean_pullback_polynomial_bounds (g : E) :
     ∃ (k : ℕ) (C : ℝ), ∀ (x : SpaceTime), ‖x‖ ≤ C * (1 + ‖euclidean_pullback g x‖) ^ k := by
   -- Since euclidean_pullback g x = g⁻¹.R x + g⁻¹.t and g⁻¹.R is an isometry:
@@ -438,6 +443,7 @@ noncomputable def euclidean_action_real (g : E) (f : TestFunction) : TestFunctio
 
 /-- The measure preservation result enables both test function and L² actions.
     This is the key unifying lemma that works specifically for the spacetime measure μ. -/
+@[blueprint "lem:euclidean-action-unified-basis"]
 lemma euclidean_action_unified_basis (g : E) :
     MeasurePreserving (euclidean_pullback g) (μ : Measure SpaceTime) μ := by
   -- This is just measurePreserving_act applied to g⁻¹
@@ -449,6 +455,7 @@ lemma euclidean_action_unified_basis (g : E) :
     This uses the same fundamental pullback transformation as the test function action,
     but leverages measure preservation instead of temperate growth bounds.
     Specialized for SpaceTime with Lebesgue measure. -/
+@[blueprint "def:euclidean-action-l2"]
 noncomputable def euclidean_action_L2 (g : E)
     (f : Lp ℂ 2 (μ : Measure SpaceTime)) : Lp ℂ 2 μ :=
   -- Use Lp.compMeasurePreserving for measure-preserving transformations
@@ -458,12 +465,14 @@ noncomputable def euclidean_action_L2 (g : E)
 
 /-- The Euclidean action as a continuous linear map on test functions.
     This leverages the Schwartz space structure and temperate growth bounds. -/
+@[blueprint "def:euclidean-action-clm"]
 noncomputable def euclidean_action_CLM (g : E) : TestFunctionℂ →L[ℂ] TestFunctionℂ :=
   SchwartzMap.compCLM (𝕜 := ℂ)
     (hg := euclidean_pullback_temperate_growth g)
     (hg_upper := euclidean_pullback_polynomial_bounds g)
 
 /-- Both actions are instances of the same abstract pattern. -/
+@[blueprint "lem:euclidean-actions-unified"]
 lemma euclidean_actions_unified (g : E) :
     (∃ (T_test : TestFunctionℂ →L[ℂ] TestFunctionℂ),
        ∀ f, euclidean_action g f = T_test f) ∧

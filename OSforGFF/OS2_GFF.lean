@@ -44,6 +44,7 @@ variable (m : ℝ) [Fact (0 < m)]
 /-! ## Euclidean action on test functions -/
 
 /-- The Euclidean action satisfies (g • f)(x) = f(g⁻¹ • x). -/
+@[blueprint "lem:euclidean-action-apply"]
 lemma euclidean_action_apply (g : E) (f : TestFunctionℂ) (x : SpaceTime) :
     euclidean_action g f x = f (euclidean_pullback g x) := by
   unfold euclidean_action
@@ -51,15 +52,18 @@ lemma euclidean_action_apply (g : E) (f : TestFunctionℂ) (x : SpaceTime) :
   rfl
 
 /-- The Euclidean pullback satisfies euclidean_pullback g x = g⁻¹ • x = act g⁻¹ x. -/
+@[blueprint "lem:euclidean-pullback-eq-inv-act"]
 lemma euclidean_pullback_eq_inv_act (g : E) (x : SpaceTime) :
     euclidean_pullback g x = act g⁻¹ x := rfl
 
 /-- Composing pullbacks: euclidean_pullback g (act g y) = y. -/
+@[blueprint "lem:euclidean-pullback-act"]
 lemma euclidean_pullback_act (g : E) (y : SpaceTime) :
     euclidean_pullback g (act g y) = y := by
   simp only [euclidean_pullback_eq_inv_act, act_inv_general]
 
 /-- The forward composition: act g (euclidean_pullback g x) = x. -/
+@[blueprint "lem:act-euclidean-pullback"]
 lemma act_euclidean_pullback (g : E) (x : SpaceTime) :
     act g (euclidean_pullback g x) = x := by
   simp only [euclidean_pullback_eq_inv_act]
@@ -68,6 +72,9 @@ lemma act_euclidean_pullback (g : E) (x : SpaceTime) :
 /-! ## Change of variables for the bilinear form -/
 
 /-- The Euclidean action as a measurable equivalence. -/
+@[blueprint "def:act-equiv"
+  (title := "Euclidean Action as Measurable Equivalence")
+  (statement := /-- The Euclidean group element $g$ acts on spacetime as a measurable equivalence $\mathbb{R}^4 \simeq \mathbb{R}^4$ with inverse $g^{-1}$. -/)]
 noncomputable def actEquiv (g : E) : SpaceTime ≃ᵐ SpaceTime where
   toFun := act g
   invFun := act g⁻¹
@@ -77,6 +84,7 @@ noncomputable def actEquiv (g : E) : SpaceTime ≃ᵐ SpaceTime where
   measurable_invFun := (measurePreserving_act g⁻¹).measurable
 
 /-- Measure-preserving property of actEquiv. -/
+@[blueprint "lem:measure-preserving-act-equiv"]
 lemma measurePreserving_actEquiv (g : E) :
     MeasurePreserving (actEquiv g) volume volume :=
   measurePreserving_act g
@@ -109,6 +117,9 @@ set_option linter.unusedSectionVars false in
     for the product integral ∫ F(e p.1, e p.2) d(p) where e = actEquiv g⁻¹.
 
     Need to carefully apply integral_prod and MeasurePreserving.prod to complete. -/
+@[blueprint "thm:free-covariance-10"
+  (title := "Bilinear Covariance Euclidean Invariance")
+  (statement := /-- $C(g \cdot f,\, g \cdot h) = C(f, h)$ for all $g \in E(4)$. The covariance kernel $C(x, y)$ depends only on $\|x - y\|$, and Euclidean transformations preserve both this distance and Lebesgue measure, so a change of variables yields the result. -/)]
 theorem freeCovarianceℂ_bilinear_euclidean_invariant (g : E) (f h : TestFunctionℂ) :
     freeCovarianceℂ_bilinear m (euclidean_action g f) (euclidean_action g h) =
     freeCovarianceℂ_bilinear m f h := by

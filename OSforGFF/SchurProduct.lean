@@ -45,6 +45,7 @@ argument: only the diagonal entries are nonzero and equal to `x`. -/
 @[simp] lemma diagEmbed_diag (x : ι → ℝ) (i : ι) : diagEmbed (ι:=ι) x (i, i) = x i := by
   simp [diagEmbed]
 
+@[blueprint "lem:diag-embed-ne-zero-of-ne-zero"]
 lemma diagEmbed_ne_zero_of_ne_zero {x : ι → ℝ} (hx : x ≠ 0) : diagEmbed (ι:=ι) x ≠ 0 := by
   classical
   -- If diagEmbed x = 0 then all diagonal entries vanish, hence x = 0, contradiction.
@@ -62,6 +63,7 @@ lemma diagEmbed_ne_zero_of_ne_zero {x : ι → ℝ} (hx : x ≠ 0) : diagEmbed (
 @[simp] def colSlice (y : ι × ι → ℝ) (j : ι) : ι → ℝ := fun i => y (i, j)
 
 /-- Finite sum over pairs equals iterated double sum over coordinates (binderless sums). -/
+@[blueprint "lem:sum-pairs-eq-double"]
 lemma sum_pairs_eq_double (g : ι × ι → ℝ) :
   (∑ p, g p) = ∑ i, ∑ j, g (i, j) := by
   classical
@@ -81,6 +83,7 @@ lemma sum_pairs_eq_double (g : ι × ι → ℝ) :
       congr
 
 /-- Compute (kronLike A B).mulVec y at a pair (i,j) as a double sum (binderless sums). -/
+@[blueprint "lem:kron-like-mul-vec"]
 lemma kronLike_mulVec
   (A B : Matrix ι ι ℝ) (y : ι × ι → ℝ) (i j : ι) :
   ((kronLike (ι:=ι) A B).mulVec y) (i, j)
@@ -93,6 +96,7 @@ lemma kronLike_mulVec
   simpa [Matrix.mulVec, kronLike] using this
 
 /-- Helper: swap sums and factor the `B` term in the Kronecker quadratic expansion. -/
+@[blueprint "lem:swap-sums-factor-b"]
 lemma swap_sums_factor_B
   (A B : Matrix ι ι ℝ) (y : ι × ι → ℝ) :
   (∑ i, ∑ j, y (i, j) * (∑ k, ∑ l, (A i k * B j l) * y (k, l)))
@@ -152,6 +156,7 @@ lemma swap_sums_factor_B
   exact h1.trans (h2.trans (h2a.trans (h2b.trans h4)))
 
 /-- Helper: identify the inner expression with `colSlice` and `A.mulVec`. -/
+@[blueprint "lem:inner-sum-col-slice-mul-vec"]
 lemma inner_sum_colSlice_mulVec
   (A : Matrix ι ι ℝ) (y : ι × ι → ℝ) (j l : ι) :
   (∑ i, y (i, j) * (∑ k, A i k * y (k, l)))
@@ -160,6 +165,7 @@ lemma inner_sum_colSlice_mulVec
   simp [colSlice, Matrix.mulVec, dotProduct, Finset.mul_sum]
 
 /-- Quadratic form via sums: binderless version. -/
+@[blueprint "lem:kron-like-quadratic-sum"]
 lemma kronLike_quadratic_sum
   (A B : Matrix ι ι ℝ) (y : ι × ι → ℝ) :
   (∑ p, y p * ((kronLike (ι:=ι) A B).mulVec y) p)
@@ -198,6 +204,7 @@ lemma kronLike_quadratic_sum
 /-- Frobenius positivity for a nonzero PSD matrix against a PD matrix.
 If `G` is positive semidefinite and nonzero, and `B` is positive definite,
 then the Frobenius inner product `∑ j, ∑ l, G j l * B j l` is strictly positive. -/
+@[blueprint "lem:frobenius-pos-of-psd-posdef"]
 lemma frobenius_pos_of_psd_posdef
   (G B : Matrix ι ι ℝ) (hG_psd : G.PosSemidef) (hG_ne_zero : G ≠ 0) (hB : B.PosDef) :
   0 < ∑ j, ∑ l, G j l * B j l := by
@@ -206,6 +213,7 @@ lemma frobenius_pos_of_psd_posdef
 
 /-- Gram-type PSD: if `A` is positive definite, then the matrix
 `G j l = ∑ i, (colSlice y j) i * (A * colSlice y l)_i` is positive semidefinite. -/
+@[blueprint "lem:gram-psd-from-a-posdef"]
 lemma gram_psd_from_A_posdef
   (A : Matrix ι ι ℝ) (hA : A.PosDef) (y : ι × ι → ℝ) :
   Matrix.PosSemidef (fun j l : ι => ∑ i, (colSlice (ι:=ι) y j) i * (A.mulVec (colSlice (ι:=ι) y l)) i) := by

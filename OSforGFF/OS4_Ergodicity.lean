@@ -80,6 +80,7 @@ We define intermediate formulations of OS4 that are easier to prove directly.
 /-- OS4' (Ergodicity on generating functions): For any f ∈ S(ℝ × ℝ³),
     lim_{t→∞} (1/t) ∫₀ᵗ e^{⟨T_s φ, f⟩} ds → 𝔼_μ[e^{⟨φ,f⟩}] in L²(μ_GFF)
 -/
+@[blueprint "def:os4'-ergodicity-generating"]
 def OS4'_Ergodicity_generating (m : ℝ) [Fact (0 < m)] : Prop :=
   ∀ (f : TestFunctionℂ),
     let μ := (gaussianFreeField_free m).toMeasure
@@ -93,12 +94,14 @@ def OS4'_Ergodicity_generating (m : ℝ) [Fact (0 < m)] : Prop :=
 
 /-- OS4'' (Polynomial Clustering): This is exactly OS4_PolynomialClustering
     specialized to the GFF with decay exponent α = 6. -/
+@[blueprint "def:os4''-clustering"]
 def OS4''_Clustering (m : ℝ) [Fact (0 < m)] : Prop :=
   OS4_PolynomialClustering (gaussianFreeField_free m) 6 (by norm_num)
 
 /-! ## GFF Integrability Lemmas -/
 
 /-- The GFF exponential is integrable with respect to the GFF measure. -/
+@[blueprint "lem:gff-exp-pairing-integrable"]
 lemma gff_exp_pairing_integrable (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     Integrable (fun ω => Complex.exp (distributionPairingℂ_real ω f))
       (gaussianFreeField_free m).toMeasure := by
@@ -123,6 +126,7 @@ lemma gff_exp_pairing_integrable (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) 
 /-- Time-translated complex exponential is in L² under the GFF measure.
     This follows from |exp(z)|² = exp(2 Re z) ≤ exp(2|Re z|) which is integrable.
     (Copied from OS4Ron.lean - needed for integrability proofs) -/
+@[blueprint "lem:gff-exp-time-translated-mem-lp-two"]
 lemma gff_exp_time_translated_memLp_two (m : ℝ) [Fact (0 < m)] (s : ℝ) (f : TestFunctionℂ) :
     MemLp (fun ω : FieldConfiguration =>
         Complex.exp (distributionPairingℂ_real (timeTranslationDistribution s ω) f))
@@ -177,6 +181,7 @@ lemma gff_exp_time_translated_memLp_two (m : ℝ) [Fact (0 < m)] (s : ℝ) (f : 
 /-! ## GFF Time Translation Invariance -/
 
 /-- Time translation commutes with pointwise conjugation. -/
+@[blueprint "lem:time-translation-schwartz-3"]
 lemma timeTranslationSchwartzℂ_conj_comm (t : ℝ) (f : TestFunctionℂ) :
     timeTranslationSchwartzℂ t (conjSchwartz f) = conjSchwartz (timeTranslationSchwartzℂ t f) := by
   ext x
@@ -184,6 +189,7 @@ lemma timeTranslationSchwartzℂ_conj_comm (t : ℝ) (f : TestFunctionℂ) :
 
 /-- The product exp(⟨ω, T_t g₁⟩) · conj(exp(⟨ω, T_t g₂⟩)) integral is time-shift invariant.
     This follows from the GFF characteristic function and covariance time-translation invariance. -/
+@[blueprint "lem:gff-exp-product-time-shift-invariant"]
 lemma gff_exp_product_time_shift_invariant (m : ℝ) [Fact (0 < m)] (g₁ g₂ : TestFunctionℂ) (t : ℝ) :
     let μ := (gaussianFreeField_free m).toMeasure
     ∫ ω, Complex.exp (distributionPairingℂ_real ω (timeTranslationSchwartzℂ t g₁)) *
@@ -217,6 +223,7 @@ lemma gff_exp_product_time_shift_invariant (m : ℝ) [Fact (0 < m)] (g₁ g₂ :
 
 /-- The L² norm of A_s is constant in s by stationarity.
     Proof: Uses OS2 → gff_exp_product_time_shift_invariant → this result. -/
+@[blueprint "lem:gff-exp-l2-norm-constant"]
 lemma gff_exp_L2_norm_constant (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) (s : ℝ) :
     ∫ ω, ‖Complex.exp (distributionPairingℂ_real (timeTranslationDistribution s ω) f)‖^2
       ∂(gaussianFreeField_free m).toMeasure =
@@ -265,6 +272,7 @@ lemma gff_exp_L2_norm_constant (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) (s
   rw [h_int_re_eq (timeTranslationSchwartzℂ (-s) f), h_int_re_eq f, h_product_eq]
 
 /-- The time average (1/T)∫A_s ds is in L²(μ). -/
+@[blueprint "lem:time-average-mem-lp-two"]
 lemma time_average_memLp_two (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) (T : ℝ) (hT : T > 0) :
     MemLp (fun ω => (1/T : ℂ) * ∫ s in Set.Icc (0 : ℝ) T,
         Complex.exp (distributionPairingℂ_real (timeTranslationDistribution s ω) f))
@@ -310,6 +318,7 @@ lemma time_average_memLp_two (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) (T :
   exact OSforGFF.time_average_memLp_two μ A T hT h_As_L2 h_uniform h_joint_meas h_avg_meas
 
 /-- The error term squared is integrable (for T > 0). -/
+@[blueprint "lem:gff-err-sq-integrable"]
 lemma gff_err_sq_integrable (m : ℝ) [Fact (0 < m)] (T : ℝ) (hT : T > 0) (f : TestFunctionℂ) :
     Integrable (fun ω =>
       ‖((1 : ℝ) / T) • (∫ s in Set.Icc (0 : ℝ) T,
@@ -359,6 +368,7 @@ lemma gff_err_sq_integrable (m : ℝ) [Fact (0 < m)] (T : ℝ) (hT : T > 0) (f :
 /-! ## Decay Integral Bounds -/
 
 /-- Double integral bound: ∫∫_{[0,T]²} (1+|s-u|)^{-3} ≤ 2T·C for some constant C. -/
+@[blueprint "lem:double-integral-decay-bound"]
 lemma double_integral_decay_bound :
     ∃ C : ℝ, C > 0 ∧ ∀ T : ℝ, T > 0 →
       ∫ s in Set.Icc (0 : ℝ) T, ∫ u in Set.Icc (0 : ℝ) T,
@@ -372,6 +382,7 @@ lemma double_integral_decay_bound :
     _ ≤ 2 * T * C₀ := by nlinarith
 
 /-- Product expectation stationarity. -/
+@[blueprint "lem:gff-product-expectation-stationarity"]
 lemma gff_product_expectation_stationarity (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ)
     (s u : ℝ) :
     let μ := (gaussianFreeField_free m).toMeasure
@@ -412,6 +423,7 @@ lemma gff_product_expectation_stationarity (m : ℝ) [Fact (0 < m)] (f : TestFun
 /-- The Schwinger two-point function (covariance) is continuous under time translation.
     s ↦ C(T_s f, g) is continuous.
     (Proved via dominated convergence, copied from GFFCovarianceContinuity.) -/
+@[blueprint "lem:gff-covariance-time-translation-continuous"]
 lemma gff_covariance_timeTranslation_continuous (m : ℝ) [Fact (0 < m)]
     (f g : TestFunctionℂ) :
     Continuous (fun s => SchwingerFunctionℂ₂ (gaussianFreeField_free m)
@@ -495,6 +507,7 @@ lemma gff_covariance_timeTranslation_continuous (m : ℝ) [Fact (0 < m)]
     2. By Gaussian MGF formula, g(t) = EA·conj(EA)·(exp(C(T_{-t}f, conj(f))) - 1)
     3. C(T_s f, g) is continuous in s by dominated convergence
     4. Compose with exp and subtraction -/
+@[blueprint "lem:gff-covariance-continuous"]
 lemma gff_covariance_continuous (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     let μ := (gaussianFreeField_free m).toMeasure
     let A := fun t ω => Complex.exp (distributionPairingℂ_real (timeTranslationDistribution t ω) f)
@@ -575,6 +588,9 @@ lemma gff_covariance_continuous (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
 
     This combines the textbook axiom (which gives ‖∫∫ Cov‖) with triangle inequality
     to get the bound in terms of ∫∫ ‖Cov‖ which is what we need for decay estimates. -/
+@[blueprint "lem:l2-time-average-variance-bound"
+  (title := "L2 Variance Bound via Double Integral")
+  (statement := /-- The $L^2$ variance of the time average is bounded by $(1/T^2)\int_0^T\!\int_0^T \|\mathrm{Cov}(s,u)\|\,ds\,du$. -/)]
 lemma L2_time_average_variance_bound (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) (T : ℝ) (hT : T > 0) :
     let μ := (gaussianFreeField_free m).toMeasure
     let A := fun s ω => Complex.exp (distributionPairingℂ_real (timeTranslationDistribution s ω) f)
@@ -720,6 +736,9 @@ lemma L2_time_average_variance_bound (m : ℝ) [Fact (0 < m)] (f : TestFunction�
 /-! ## Clustering Implies Covariance Decay -/
 
 /-- OS4'' clustering implies covariance decay with exponent -3. -/
+@[blueprint "lem:clustering-implies-covariance-decay"
+  (title := "Clustering Implies Covariance Decay")
+  (statement := /-- OS4'' clustering with $\alpha = 6$ implies $\|\mathrm{Cov}(s,u)\| \le c\,(1+|s-u|)^{-3}$ for the GFF covariance. -/)]
 lemma clustering_implies_covariance_decay (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ)
     (h_cluster : OS4''_Clustering m) :
     ∃ (c : ℝ), c ≥ 0 ∧ ∀ s u : ℝ, s ≥ 0 → u ≥ 0 →
@@ -868,6 +887,7 @@ lemma clustering_implies_covariance_decay (m : ℝ) [Fact (0 < m)] (f : TestFunc
 
 /-- The norm of the GFF covariance is integrable on [0,T] for each fixed first argument.
     Uses gff_covariance_norm_integrableOn_slice_axiom to avoid expensive type unification. -/
+@[blueprint "lem:gff-covariance-norm-integrable-on-slice"]
 lemma gff_covariance_norm_integrableOn_slice (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ)
     (s : ℝ) (T : ℝ) :
     let μ := (gaussianFreeField_free m).toMeasure
@@ -884,6 +904,9 @@ lemma gff_covariance_norm_integrableOn_slice (m : ℝ) [Fact (0 < m)] (f : TestF
 /-! ## Variance Decay from Clustering -/
 
 /-- Covariance decay implies variance tends to zero. -/
+@[blueprint "lem:variance-decay-from-clustering"
+  (title := "Variance Decay from Covariance Decay")
+  (statement := /-- If $\|\mathrm{Cov}(s,u)\| \le c\,(1+|s-u|)^{-3}$, then the $L^2$ variance of the time average tends to zero as $T \to \infty$. -/)]
 lemma variance_decay_from_clustering (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ)
     (c : ℝ) (hc : c ≥ 0)
     (h_cov_decay : ∀ s u : ℝ, s ≥ 0 → u ≥ 0 →
@@ -1052,6 +1075,7 @@ lemma variance_decay_from_clustering (m : ℝ) [Fact (0 < m)] (f : TestFunction�
 /-! ## Main Theorem Chain -/
 
 /-- Bound for norm squared of weighted sum using Cauchy-Schwarz. -/
+@[blueprint "lem:norm-sq-weighted-sum-le"]
 lemma norm_sq_weighted_sum_le {n : ℕ} (w : Fin n → ℂ) (a : Fin n → ℂ) :
     ‖∑ j, w j * a j‖^2 ≤ (∑ j, ‖w j‖^2) * (∑ j, ‖a j‖^2) := by
   have h1 : ‖∑ j, w j * a j‖ ≤ ∑ j, ‖w j‖ * ‖a j‖ := by
@@ -1068,6 +1092,9 @@ lemma norm_sq_weighted_sum_le {n : ℕ} (w : Fin n → ℂ) (a : Fin n → ℂ) 
 
     The proof uses Cauchy-Schwarz to bound the variance of ∑ⱼ zⱼ exp(⟨ω, fⱼ⟩)
     by the sum of individual variances, then applies OS4' to each term. -/
+@[blueprint "thm:os4'-implies-os4"
+  (title := "Generating Function Ergodicity Implies Full Ergodicity")
+  (statement := /-- OS4' (ergodicity for individual generating functions) implies OS4 (ergodicity for linear combinations $\sum_j z_j e^{\langle\omega, f_j\rangle}$), via Cauchy--Schwarz. -/)]
 theorem OS4'_implies_OS4 (m : ℝ) [Fact (0 < m)] :
     OS4'_Ergodicity_generating m → OS4_Ergodicity (gaussianFreeField_free m) := by
   intro h_erg n z f
@@ -1316,6 +1343,9 @@ theorem OS4'_implies_OS4 (m : ℝ) [Fact (0 < m)] :
   · filter_upwards [Filter.eventually_gt_atTop 0] with T hT; exact h_upper T hT
 
 /-- OS4'' → OS4': Polynomial clustering implies generating function ergodicity. -/
+@[blueprint "thm:os4''-implies-os4"
+  (title := "Polynomial Clustering Implies Generating Function Ergodicity")
+  (statement := /-- OS4'' (polynomial clustering with $\alpha = 6$) implies OS4' (generating function ergodicity), via covariance decay and variance bounds. -/)]
 theorem OS4''_implies_OS4' (m : ℝ) [Fact (0 < m)] :
     OS4''_Clustering m → OS4'_Ergodicity_generating m := by
   intro h_cluster f
@@ -1328,6 +1358,9 @@ theorem OS4''_implies_OS4' (m : ℝ) [Fact (0 < m)] :
   exact variance_decay_from_clustering m f c hc_nonneg hc_bound
 
 /-- OS4'' → OS4: The full chain from clustering to ergodicity. -/
+@[blueprint "thm:os4''-implies-os4-ergodicity"
+  (title := "Clustering Implies Ergodicity (Full Chain)")
+  (statement := /-- The full chain: OS4'' clustering $\Rightarrow$ OS4' generating function ergodicity $\Rightarrow$ OS4 full ergodicity. -/)]
 theorem OS4''_implies_OS4_Ergodicity (m : ℝ) [Fact (0 < m)] :
     OS4''_Clustering m → OS4_Ergodicity (gaussianFreeField_free m) := by
   intro h_cluster

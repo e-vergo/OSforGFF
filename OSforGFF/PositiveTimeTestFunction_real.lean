@@ -40,12 +40,15 @@ noncomputable section
 open TopologicalSpace Function SchwartzMap QFT
 
 /-- A spacetime point has positive time if its time component is positive -/
+@[blueprint "def:has-positive-time"]
 def HasPositiveTime (x : SpaceTime) : Prop := getTimeComponent x > 0
 
 /-- The set of all spacetime points with positive time -/
+@[blueprint "def:positive-time-set"]
 def positiveTimeSet : Set SpaceTime := {x | HasPositiveTime x}
 
 /-- The positive time set is open -/
+@[blueprint "lem:is-open-positive-time-set"]
 lemma is_open_positiveTimeSet : IsOpen positiveTimeSet :=
   isOpen_lt continuous_const (PiLp.continuous_apply 2 (fun _ => ℝ) (0 : Fin STDimension))
 
@@ -70,12 +73,14 @@ def PositiveTimeTestFunctions.submodule : Submodule ℝ TestFunction where
     refine (tsupport_smul_subset_right (fun _ : SpaceTime => c) f).trans hf
 
 /-- Type of real-valued test functions supported in the positive time region -/
+@[blueprint "def:positive-time-test-function"]
 abbrev PositiveTimeTestFunction : Type := PositiveTimeTestFunctions.submodule
 
 instance : AddCommMonoid PositiveTimeTestFunction := by infer_instance
 instance : AddCommGroup PositiveTimeTestFunction := by infer_instance
 
 /-- Linear combinations of positive-time test functions are positive-time test functions. -/
+@[blueprint "lem:sum-smul-mem"]
 lemma PositiveTimeTestFunction.sum_smul_mem
     {n : ℕ} (f : Fin n → PositiveTimeTestFunction) (c : Fin n → ℝ) :
     ∃ g : PositiveTimeTestFunction, g.val = ∑ i, c i • (f i).val := by
@@ -86,6 +91,7 @@ lemma PositiveTimeTestFunction.sum_smul_mem
 
 
 /-- Helper lemma: starRingEnd ℂ commutes through derivatives and preserves norms -/
+@[blueprint "lem:star-ring-end-iterated-f-deriv-norm-eq"]
 lemma starRingEnd_iteratedFDeriv_norm_eq (g : TestFunctionℂ) (n : ℕ) (x : SpaceTime) :
   ‖iteratedFDeriv ℝ n (fun x => starRingEnd ℂ (g x)) x‖ = ‖iteratedFDeriv ℝ n g x‖ := by
   -- Use the fact that starRingEnd ℂ = Complex.conjLIE (as functions)
@@ -99,6 +105,7 @@ lemma starRingEnd_iteratedFDeriv_norm_eq (g : TestFunctionℂ) (n : ℕ) (x : Sp
   exact LinearIsometryEquiv.norm_iteratedFDeriv_comp_left Complex.conjLIE g x n
 
 /-- Star operation on test functions: time reflection followed by complex conjugation -/
+@[blueprint "def:star-test-function"]
 noncomputable def starTestFunction (f : TestFunctionℂ) : TestFunctionℂ :=
   -- Apply time reflection then complex conjugation pointwise
   let f_reflected := compTimeReflection f
@@ -129,6 +136,7 @@ noncomputable def starTestFunction (f : TestFunctionℂ) : TestFunctionℂ :=
 /-- Star instance for complex test functions -/
 noncomputable instance : Star TestFunctionℂ where
   star f := starTestFunction f
+@[blueprint "lem:zero-on-nonpositive"]
 
 lemma PositiveTimeTestFunction.zero_on_nonpositive
     (f : PositiveTimeTestFunction) {x : SpaceTime}

@@ -100,6 +100,8 @@ axiom minlos_theorem
 /-- Derived uniqueness: two probability measures whose characteristic functionals both
     equal a continuous, positive definite, normalized Φ must be equal.
     Used for Gaussian measure symmetry and sign-flip invariance. -/
+@[blueprint "thm:minlos-uniqueness"
+  (title := "Minlos Uniqueness")]
 theorem minlos_uniqueness
   [NuclearSpace E]
   {Φ : E → ℂ} (hΦ_cont : Continuous Φ)
@@ -115,6 +117,8 @@ theorem minlos_uniqueness
 
 /-- For Gaussian measures, the characteristic functional has the special form
     Φ(f) = exp(-½⟨f, Cf⟩) where C is a nuclear covariance operator. -/
+@[blueprint "def:gaussian-characteristic-functional"
+  (title := "Gaussian Characteristic Functional")]
 def gaussian_characteristic_functional
   (covariance_form : E → E → ℝ) (f : E) : ℂ :=
   Complex.exp (-(1/2 : ℂ) * (covariance_form f f))
@@ -140,6 +144,8 @@ def gaussian_characteristic_functional
     - The inner product kernel is PD
     - Exponential preserves PD (via Hadamard series and Schur product theorem)
     - Factorization: exp(-½|x-y|²) = exp(-½|x|²)·exp(-½|y|²)·exp(⟨x,y⟩) -/
+@[blueprint "thm:gaussian-rbf-pd-inner-product"
+  (title := "Gaussian RBF is Positive Definite")]
 theorem gaussian_rbf_pd_innerProduct
   {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] :
   IsPositiveDefinite (fun h : H => Complex.exp (-(1/2 : ℂ) * (‖h‖^2 : ℝ))) :=
@@ -152,6 +158,8 @@ theorem gaussian_rbf_pd_innerProduct
     **Note**: We require H to be an inner product space (not just normed space)
     because the Gaussian RBF kernel is only guaranteed positive definite for
     Hilbert spaces, not general Banach spaces. -/
+@[blueprint "lem:gaussian-positive-definite-via-embedding"
+  (title := "Positive Definiteness via Hilbert Embedding")]
 lemma gaussian_positive_definite_via_embedding
   {E H : Type*} [AddCommGroup E] [Module ℝ E]
   [NormedAddCommGroup H] [InnerProductSpace ℝ H]
@@ -239,6 +247,8 @@ theorem minlos_gaussian_construction
     to the concrete Gaussian generating functional used in quantum field theory.
 
     **Note**: Requires H to be an inner product space for the Gaussian RBF positivity. -/
+@[blueprint "thm:gaussian-measure-characteristic-functional"
+  (title := "Gaussian Measure Characteristic Functional")]
 theorem gaussian_measure_characteristic_functional
   [NuclearSpace E]
   {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]

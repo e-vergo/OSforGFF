@@ -58,6 +58,8 @@ open scoped MeasureTheory ComplexConjugate Real InnerProductSpace BigOperators
 variable {d : ℕ} [NeZero d]
 
 /-- Normalization constant for the Fourier transform. -/
+@[blueprint "def:fourier-normalization"
+  (title := "Fourier Normalization Constant")]
 noncomputable def fourierNormalization (d : ℕ) : ℝ := (2 * Real.pi) ^ d
 
 /-! ### Bridge Lemmas
@@ -104,6 +106,8 @@ The axiom `parseval_covariance_schwartz` in Covariance.lean now correctly uses
 
 /-- The relationship between physics and Mathlib propagators under rescaling.
     `freePropagatorMomentum_mathlib` is defined in CovarianceMomentum.lean. -/
+@[blueprint "lem:free-propagator-momentum-rescale"
+  (title := "Propagator Rescaling under Momentum Change of Variables")]
 lemma freePropagatorMomentum_rescale (m : ℝ) (k : SpaceTime) :
     freePropagatorMomentum m ((2 * Real.pi) • k) = freePropagatorMomentum_mathlib m k := by
   simp only [freePropagatorMomentum, freePropagatorMomentum_mathlib]
@@ -113,17 +117,22 @@ lemma freePropagatorMomentum_rescale (m : ℝ) (k : SpaceTime) :
 
 
 /-- The scaling factor for momentum integration change of variables. -/
+@[blueprint "def:momentum-scale-factor"]
 noncomputable def momentumScaleFactor : ℝ := 2 * Real.pi
+@[blueprint "lem:momentum-scale-factor-pos"]
 
 lemma momentumScaleFactor_pos : 0 < momentumScaleFactor := Real.two_pi_pos
+@[blueprint "lem:momentum-scale-factor-ne-zero"]
 
 lemma momentumScaleFactor_ne_zero : momentumScaleFactor ≠ 0 := momentumScaleFactor_pos.ne'
 
 /-- The scaling map on momentum space: k ↦ 2πk -/
+@[blueprint "def:momentum-scale"]
 noncomputable def momentumScale : SpaceTime →ₗ[ℝ] SpaceTime :=
   momentumScaleFactor • LinearMap.id
 
 /-- The momentum scaling as a linear equivalence. -/
+@[blueprint "def:momentum-scale-equiv"]
 noncomputable def momentumScaleEquiv : SpaceTime ≃ₗ[ℝ] SpaceTime :=
   LinearEquiv.smulOfUnit (Units.mk0 momentumScaleFactor momentumScaleFactor_ne_zero)
 
@@ -186,6 +195,7 @@ replacing the previous axiom. The proof uses:
 -/
 
 /-- The phase factor exp(-i⟨k,x-y⟩) is bounded by 1 in norm. -/
+@[blueprint "lem:phase-bound"]
 lemma phase_bound (k x y : SpaceTime) :
     ‖Complex.exp (-Complex.I * Complex.ofReal ⟪k, x - y⟫_ℝ)‖ ≤ 1 := by
   have h : -Complex.I * Complex.ofReal ⟪k, x - y⟫_ℝ = Complex.ofReal (-⟪k, x - y⟫_ℝ) * Complex.I := by
@@ -194,6 +204,7 @@ lemma phase_bound (k x y : SpaceTime) :
   rw [h, Complex.norm_exp_ofReal_mul_I]
 
 /-- The free propagator is bounded by 1/m². -/
+@[blueprint "lem:free-propagator-momentum-le-inv-sq"]
 lemma freePropagatorMomentum_le_inv_sq (m : ℝ) [Fact (0 < m)] (k : SpaceTime) :
     freePropagatorMomentum m k ≤ 1 / m^2 := by
   simp only [freePropagatorMomentum]
@@ -202,6 +213,7 @@ lemma freePropagatorMomentum_le_inv_sq (m : ℝ) [Fact (0 < m)] (k : SpaceTime) 
   · linarith [sq_nonneg ‖k‖]
 
 /-- The free propagator is strictly positive. -/
+@[blueprint "lem:free-propagator-momentum-pos"]
 lemma freePropagatorMomentum_pos' (m : ℝ) [Fact (0 < m)] (k : SpaceTime) :
     0 < freePropagatorMomentum m k := by
   simp only [freePropagatorMomentum]
@@ -210,6 +222,7 @@ lemma freePropagatorMomentum_pos' (m : ℝ) [Fact (0 < m)] (k : SpaceTime) :
   exact pow_pos (Fact.out : 0 < m) 2
 
 /-- The Gaussian regulator exp(-α‖k‖²) is integrable for α > 0. -/
+@[blueprint "lem:gaussian-regulator-integrable-2"]
 lemma gaussian_regulator_integrable (α : ℝ) (hα : 0 < α) :
     Integrable (fun k : SpaceTime => Real.exp (-α * ‖k‖^2)) volume := by
   have hα_re : (0 : ℝ) < (α : ℂ).re := by simp [hα]
@@ -224,6 +237,7 @@ lemma gaussian_regulator_integrable (α : ℝ) (hα : 0 < α) :
   exact h'.re
 
 /-- The Gaussian regulator is continuous. -/
+@[blueprint "lem:gaussian-regulator-continuous"]
 lemma gaussian_regulator_continuous (α : ℝ) :
     Continuous (fun k : SpaceTime => Real.exp (-α * ‖k‖^2)) := by
   refine Real.continuous_exp.comp ?_
@@ -232,6 +246,7 @@ lemma gaussian_regulator_continuous (α : ℝ) :
   ext k; ring
 
 /-- The norm of the regulated propagator as a complex number. -/
+@[blueprint "lem:regulated-propagator-norm"]
 lemma regulated_propagator_norm (α : ℝ) (m : ℝ) [Fact (0 < m)] (k : SpaceTime) :
     ‖(Real.exp (-α * ‖k‖^2) * freePropagatorMomentum m k / (2 * Real.pi) ^ STDimension : ℂ)‖ =
     Real.exp (-α * ‖k‖^2) * freePropagatorMomentum m k / (2 * Real.pi) ^ STDimension := by
@@ -245,10 +260,12 @@ lemma regulated_propagator_norm (α : ℝ) (m : ℝ) [Fact (0 < m)] (k : SpaceTi
   rw [h, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hval_nonneg]
 
 /-- The inner product function is measurable. -/
+@[blueprint "lem:measurable-inner-fixed"]
 lemma measurable_inner_fixed (k : SpaceTime) : Measurable (fun x : SpaceTime => ⟪k, x⟫_ℝ) :=
   measurable_const.inner measurable_id
 
 /-- The phase exponential exp(-i⟨k,x⟩) is measurable. -/
+@[blueprint "lem:measurable-phase-exp"]
 lemma measurable_phase_exp (k : SpaceTime) :
     Measurable (fun x : SpaceTime => Complex.exp (-Complex.I * Complex.ofReal ⟪k, x⟫_ℝ)) := by
   apply Complex.measurable_exp.comp
@@ -256,6 +273,7 @@ lemma measurable_phase_exp (k : SpaceTime) :
   exact Complex.measurable_ofReal.comp (measurable_inner_fixed k)
 
 /-- The conjugate phase exponential exp(i⟨k,x⟩) is measurable. -/
+@[blueprint "lem:measurable-phase-exp-conj"]
 lemma measurable_phase_exp_conj (k : SpaceTime) :
     Measurable (fun x : SpaceTime => Complex.exp (Complex.I * Complex.ofReal ⟪k, x⟫_ℝ)) := by
   apply Complex.measurable_exp.comp
@@ -263,6 +281,7 @@ lemma measurable_phase_exp_conj (k : SpaceTime) :
   exact Complex.measurable_ofReal.comp (measurable_inner_fixed k)
 
 /-- A Schwartz function times the phase exp(-i⟨k,x⟩) is integrable. -/
+@[blueprint "lem:schwartz-mul-phase-integrable"]
 lemma schwartz_mul_phase_integrable (f : TestFunctionℂ) (k : SpaceTime) :
     Integrable (fun x => f x * Complex.exp (-Complex.I * Complex.ofReal ⟪k, x⟫_ℝ)) volume := by
   apply SchwartzMap.integrable_mul_bounded (μ := volume) f _ (measurable_phase_exp k)
@@ -270,6 +289,7 @@ lemma schwartz_mul_phase_integrable (f : TestFunctionℂ) (k : SpaceTime) :
   rw [norm_exp_neg_I_mul_real]
 
 /-- The conjugate of a Schwartz function times the phase exp(i⟨k,y⟩) is integrable. -/
+@[blueprint "lem:schwartz-conj-mul-phase-integrable"]
 lemma schwartz_conj_mul_phase_integrable (f : TestFunctionℂ) (k : SpaceTime) :
     Integrable (fun y => starRingEnd ℂ (f y) * Complex.exp (Complex.I * Complex.ofReal ⟪k, y⟫_ℝ)) volume := by
   have hf_conj_int : Integrable (fun y => starRingEnd ℂ (f y)) volume :=
@@ -282,6 +302,7 @@ lemma schwartz_conj_mul_phase_integrable (f : TestFunctionℂ) (k : SpaceTime) :
   ext y; ring
 
 /-- The bounding function for the triple integrand is integrable. -/
+@[blueprint "lem:triple-bound-integrable"]
 lemma triple_bound_integrable (α : ℝ) (hα : 0 < α) (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     Integrable (fun p : SpaceTime × SpaceTime × SpaceTime =>
       ‖f p.1‖ * ((1 / m^2 / (2 * Real.pi) ^ STDimension) * Real.exp (-α * ‖p.2.2‖^2)) * ‖f p.2.1‖)
@@ -301,6 +322,7 @@ lemma triple_bound_integrable (α : ℝ) (hα : 0 < α) (m : ℝ) [Fact (0 < m)]
   ring
 
 /-- The triple integrand is bounded by the integrable bounding function. -/
+@[blueprint "lem:triple-integrand-norm-le"]
 lemma triple_integrand_norm_le (α : ℝ) (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ)
     (x y k : SpaceTime) :
     ‖f x * (Real.exp (-α * ‖k‖^2) * freePropagatorMomentum m k / (2 * Real.pi) ^ STDimension : ℂ) *
@@ -330,6 +352,7 @@ lemma triple_integrand_norm_le (α : ℝ) (m : ℝ) [Fact (0 < m)] (f : TestFunc
         _ = 1 / m^2 / (2 * Real.pi) ^ STDimension * Real.exp (-α * ‖k‖^2) := by ring
 
 /-- The regulated integrand is integrable in all variables jointly. -/
+@[blueprint "lem:regulated-triple-integrable"]
 lemma regulated_triple_integrable (α : ℝ) (hα : 0 < α) (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     Integrable (fun p : SpaceTime × SpaceTime × SpaceTime =>
       let (x, y, k) := p
@@ -369,6 +392,8 @@ lemma regulated_triple_integrable (α : ℝ) (hα : 0 < α) (m : ℝ) [Fact (0 <
     exact triple_integrand_norm_le α m f x y k
 
 /-- Phase factorization: exp(-i⟨k,x-y⟩) = exp(-i⟨k,x⟩) · exp(i⟨k,y⟩) -/
+@[blueprint "lem:phase-factorization"
+  (title := "Phase Factorization for Inner Products")]
 lemma phase_factorization (k x y : SpaceTime) :
     Complex.exp (-Complex.I * Complex.ofReal ⟪k, x - y⟫_ℝ) =
     Complex.exp (-Complex.I * Complex.ofReal ⟪k, x⟫_ℝ) * Complex.exp (Complex.I * Complex.ofReal ⟪k, y⟫_ℝ) := by
@@ -379,16 +404,20 @@ lemma phase_factorization (k x y : SpaceTime) :
   ring
 
 /-- The physics Fourier transform at k. -/
+@[blueprint "def:physics-ft"]
 noncomputable def physicsFT (f : TestFunctionℂ) (k : SpaceTime) : ℂ :=
   ∫ x, f x * Complex.exp (-Complex.I * Complex.ofReal ⟪k, x⟫_ℝ) ∂volume
 
 /-- Norm squared rescaling: ‖c • x‖² = c² ‖x‖² for c ≥ 0. -/
+@[blueprint "lem:norm-sq-smul-eq"]
 lemma norm_sq_smul_eq (c : ℝ) (hc : 0 ≤ c) (x : SpaceTime) :
     ‖c • x‖^2 = c^2 * ‖x‖^2 := by
   rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg hc]
   ring
 
 /-- The physics FT at 2πξ equals the Mathlib FT at ξ. -/
+@[blueprint "lem:physics-ft-rescale"
+  (title := "Physics FT at 2pi*xi Equals Mathlib FT")]
 lemma physicsFT_rescale (f : TestFunctionℂ) (ξ : SpaceTime) :
     physicsFT f ((2 * Real.pi) • ξ) = (SchwartzMap.fourierTransformCLM ℂ f) ξ := by
   simp only [physicsFT, SchwartzMap.fourierTransformCLM_apply]
@@ -406,6 +435,7 @@ lemma physicsFT_rescale (f : TestFunctionℂ) (ξ : SpaceTime) :
   ring
 
 /-- The integrand transforms correctly under k = 2π•p. -/
+@[blueprint "lem:integrand-rescale"]
 lemma integrand_rescale (α : ℝ) (m : ℝ) (f : TestFunctionℂ) (p : SpaceTime) :
     Real.exp (-α * ‖(2 * Real.pi) • p‖^2) * freePropagatorMomentum m ((2 * Real.pi) • p) /
       (2 * Real.pi) ^ STDimension * ‖physicsFT f ((2 * Real.pi) • p)‖^2
@@ -420,7 +450,8 @@ lemma integrand_rescale (α : ℝ) (m : ℝ) (f : TestFunctionℂ) (p : SpaceTim
   have exp_eq : -α * ((2 * Real.pi) ^ 2 * ‖p‖ ^ 2) = -α * (2 * Real.pi) ^ 2 * ‖p‖ ^ 2 := by ring
   rw [exp_eq]
   ring
-
+@[blueprint "lem:change-of-variables-momentum"
+  (title := "Change of Variables in Momentum Space")]
 lemma change_of_variables_momentum (α : ℝ) (m : ℝ) (f : TestFunctionℂ) :
     ∫ k, Real.exp (-α * ‖k‖^2) * freePropagatorMomentum m k / (2 * Real.pi) ^ STDimension *
         ‖physicsFT f k‖^2 ∂volume
@@ -458,6 +489,8 @@ lemma change_of_variables_momentum (α : ℝ) (m : ℝ) (f : TestFunctionℂ) :
   field_simp
 
 /-- After Fubini, the inner k-integral factorizes. -/
+@[blueprint "lem:regulated-fubini-factorization"
+  (title := "Fubini Factorization of Regulated Covariance")]
 lemma regulated_fubini_factorization (α : ℝ) (hα : 0 < α) (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     (∫ x, ∫ y, f x * (freeCovariance_regulated α m x y : ℂ) * (starRingEnd ℂ (f y)) ∂volume ∂volume).re
     = (∫ k, ((Real.exp (-α * ‖k‖^2) * freePropagatorMomentum m k / (2 * Real.pi) ^ STDimension : ℝ) : ℂ) *
@@ -536,10 +569,12 @@ lemma regulated_fubini_factorization (α : ℝ) (hα : 0 < α) (m : ℝ) [Fact (
   exact h_factor_xy k
 
 /-- The x-integral in the factorized form equals the physics FT. -/
+@[blueprint "lem:x-integral-eq-physics-ft"]
 lemma x_integral_eq_physicsFT (f : TestFunctionℂ) (k : SpaceTime) :
     ∫ x, f x * Complex.exp (-Complex.I * Complex.ofReal ⟪k, x⟫_ℝ) ∂volume = physicsFT f k := rfl
 
 /-- The y-integral with conjugate equals the conjugate of the physics FT. -/
+@[blueprint "lem:y-integral-eq-physics-ft-conj"]
 lemma y_integral_eq_physicsFT_conj (f : TestFunctionℂ) (k : SpaceTime) :
     ∫ y, starRingEnd ℂ (f y) * Complex.exp (Complex.I * Complex.ofReal ⟪k, y⟫_ℝ) ∂volume =
     starRingEnd ℂ (physicsFT f k) := by
@@ -554,6 +589,7 @@ lemma y_integral_eq_physicsFT_conj (f : TestFunctionℂ) (k : SpaceTime) :
   simp only [map_neg, map_mul, Complex.conj_I, Complex.conj_ofReal, neg_neg, neg_mul]
 
 /-- The product physicsFT f k * conj(physicsFT f k) = ‖physicsFT f k‖² -/
+@[blueprint "lem:physics-ft-mul-conj"]
 lemma physicsFT_mul_conj (f : TestFunctionℂ) (k : SpaceTime) :
     physicsFT f k * starRingEnd ℂ (physicsFT f k) = (‖physicsFT f k‖^2 : ℂ) := by
   have h := Complex.mul_conj (physicsFT f k)
@@ -562,6 +598,7 @@ lemma physicsFT_mul_conj (f : TestFunctionℂ) (k : SpaceTime) :
   simp only [Complex.ofReal_pow, Complex.normSq_eq_norm_sq]
 
 /-- The factorized form simplifies to an integral of |physics FT|². -/
+@[blueprint "lem:factorized-to-physics-ft-norm-sq"]
 lemma factorized_to_physicsFT_norm_sq (α : ℝ) (m : ℝ) (f : TestFunctionℂ) :
     (∫ k, ((Real.exp (-α * ‖k‖^2) * freePropagatorMomentum m k / (2 * Real.pi) ^ STDimension : ℝ) : ℂ) *
         (∫ x, f x * Complex.exp (-Complex.I * Complex.ofReal ⟪k, x⟫_ℝ) ∂volume) *
@@ -596,6 +633,8 @@ lemma factorized_to_physicsFT_norm_sq (α : ℝ) (m : ℝ) (f : TestFunctionℂ)
     3. Factoring the phase using phase_factorization
     4. Recognizing the x and y integrals as Fourier transforms
     5. Accounting for normalization factors via change of variables -/
+@[blueprint "thm:parseval-covariance-schwartz-regulated-2"
+  (title := "Parseval Identity for Regulated Covariance")]
 theorem parseval_covariance_schwartz_regulated (α : ℝ) (hα : 0 < α) (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     (∫ x, ∫ y, f x * (freeCovariance_regulated α m x y : ℂ) * (starRingEnd ℂ (f y)) ∂volume ∂volume).re
     = ∫ k, Real.exp (-α * (2 * Real.pi)^2 * ‖k‖^2) * ‖(SchwartzMap.fourierTransformCLM ℂ f) k‖^2 * freePropagatorMomentum_mathlib m k ∂volume := by
@@ -607,6 +646,7 @@ theorem parseval_covariance_schwartz_regulated (α : ℝ) (hα : 0 < α) (m : �
   rw [change_of_variables_momentum]
 
 /-- Continuity of the mathlib propagator. -/
+@[blueprint "lem:continuous-free-propagator-momentum-mathlib"]
 lemma continuous_freePropagatorMomentum_mathlib (m : ℝ) [Fact (0 < m)] :
     Continuous fun k => freePropagatorMomentum_mathlib m k := by
   unfold freePropagatorMomentum_mathlib
@@ -620,6 +660,8 @@ lemma continuous_freePropagatorMomentum_mathlib (m : ℝ) [Fact (0 < m)] :
   linarith
 
 /-- The integrand ‖f̂(k)‖² * P(k) is integrable for Schwartz f. -/
+@[blueprint "lem:integrable-schwartz-propagator-mathlib"
+  (title := "Integrability of Schwartz-Propagator Product")]
 lemma integrable_schwartz_propagator_mathlib (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     Integrable (fun k => ‖(SchwartzMap.fourierTransformCLM ℂ f) k‖^2 *
       freePropagatorMomentum_mathlib m k) volume := by
@@ -656,6 +698,8 @@ lemma integrable_schwartz_propagator_mathlib (m : ℝ) [Fact (0 < m)] (f : TestF
 
     The proof uses dominated convergence to pass from the regulated identity
     (parseval_covariance_schwartz_regulated) to the unregulated limit. -/
+@[blueprint "thm:parseval-covariance-schwartz-correct"
+  (title := "Unregulated Parseval Identity as Limit")]
 theorem parseval_covariance_schwartz_correct (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     Filter.Tendsto
       (fun α => (∫ x, ∫ y, f x * (freeCovariance_regulated α m x y : ℂ) * (starRingEnd ℂ (f y)) ∂volume ∂volume).re)
@@ -742,6 +786,8 @@ theorem parseval_covariance_schwartz_correct (m : ℝ) [Fact (0 < m)] (f : TestF
     1. Pointwise convergence: `freeCovariance_regulated_limit_eq_freeCovariance`
     2. Dominator: exp(m²) × |f(x)| × |C_Bessel(x,y)| × |g(y)| is integrable
     3. Bound: `freeCovariance_regulated_le_const_mul_freeCovariance` gives the uniform bound -/
+@[blueprint "thm:bilinear-covariance-regulated-tendsto"
+  (title := "Bilinear Covariance Convergence")]
 theorem bilinear_covariance_regulated_tendstoℂ (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) :
     Filter.Tendsto
       (fun α => ∫ x, ∫ y, f x * (freeCovariance_regulated α m x y : ℂ) * (starRingEnd ℂ (g y)))
@@ -929,6 +975,7 @@ theorem bilinear_covariance_regulated_tendstoℂ (m : ℝ) [Fact (0 < m)] (f g :
 The regulated bilinear form converges to the Bessel form in ℂ when both test functions are the same.
 
 This is a direct corollary of `bilinear_covariance_regulated_tendstoℂ` with g = f. -/
+@[blueprint "thm:bilinear-covariance-regulated-tendsto-self"]
 theorem bilinear_covariance_regulated_tendsto_self (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     Filter.Tendsto
       (fun α => ∫ x, ∫ y, f x * (freeCovariance_regulated α m x y : ℂ) * (starRingEnd ℂ (f y)))
@@ -951,6 +998,8 @@ open scoped InnerProductSpace
 /-- Bilinear extension of the covariance for complex test functions.
     This is the distributional formulation: the double integral is well-defined
     for Schwartz test functions due to the L¹ integrability of the Bessel kernel. -/
+@[blueprint "def:free-covariance-3"
+  (title := "Complex Bilinear Covariance Form")]
 noncomputable def freeCovarianceℂ_bilinear (m : ℝ) (f g : TestFunctionℂ) : ℂ :=
   ∫ x, ∫ y, (f x) * (freeCovariance m x y) * (g y)
 

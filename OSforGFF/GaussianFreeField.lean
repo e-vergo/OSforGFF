@@ -63,6 +63,7 @@ The main proof used by `GFFmaster.lean` is in `OS0_GFF.lean` (holomorphic integr
 namespace OS0_alt
 
 /-- Helper lemma for bilinear expansion with finite sums -/
+@[blueprint "lem:bilin-sum-sum"]
 lemma bilin_sum_sum {E : Type*} [AddCommMonoid E] [Module ℂ E]
   (B : LinearMap.BilinMap ℂ E ℂ) (n : ℕ) (J : Fin n → E) (z : Fin n → ℂ) :
   B (∑ i, z i • J i) (∑ j, z j • J j) = ∑ i, ∑ j, z i * z j * B (J i) (J j) := by
@@ -80,6 +81,7 @@ lemma bilin_sum_sum {E : Type*} [AddCommMonoid E] [Module ℂ E]
 end OS0_alt
 
 /-- Assumption: The complex covariance is continuous bilinear -/
+@[blueprint "def:covariance-continuous"]
 def CovarianceContinuous (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (J K : TestFunctionℂ), Continuous (fun z : ℂ =>
     SchwingerFunctionℂ₂ dμ_config (z • J) K)
@@ -94,6 +96,7 @@ Note: The new proof via holomorphic integral theorem is in `OSforGFF/OS0_GFF.lea
 -/
 
 namespace OS0_alt
+@[blueprint "def:g-jcov-bilin"]
 
 def GJcov_bilin (dμ_config : ProbabilityMeasure FieldConfiguration)
   (h_bilinear : CovarianceBilinear dμ_config) : LinearMap.BilinMap ℂ TestFunctionℂ ℂ :=
@@ -112,6 +115,7 @@ def GJcov_bilin (dμ_config : ProbabilityMeasure FieldConfiguration)
     (by intro a x y   -- homogeneity in the 2nd arg
         exact (h_bilinear a x 0 y).2.2.1)
 
+@[blueprint "thm:gaussian-satisfies-os0"]
 theorem gaussian_satisfies_OS0
   (dμ_config : ProbabilityMeasure FieldConfiguration)
   (h_gaussian : isGaussianGJ dμ_config)
@@ -206,12 +210,14 @@ differences of spacetime points.
 -/
 
 /-- Assumption: The covariance is invariant under Euclidean transformations -/
+@[blueprint "def:covariance-euclidean-invariant"]
 def CovarianceEuclideanInvariant (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (g : QFT.E) (f h : TestFunction),
     SchwingerFunction₂ dμ_config (QFT.euclidean_action_real g f) (QFT.euclidean_action_real g h) =
     SchwingerFunction₂ dμ_config f h
 
 /-- Assumption: The complex covariance is invariant under Euclidean transformations -/
+@[blueprint "def:covariance-euclidean-invariant-2"]
 def CovarianceEuclideanInvariantℂ (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (g : QFT.E) (f h : TestFunctionℂ),
     SchwingerFunctionℂ₂ dμ_config (QFT.euclidean_action g f) (QFT.euclidean_action g h) =

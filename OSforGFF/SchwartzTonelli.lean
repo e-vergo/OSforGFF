@@ -32,6 +32,7 @@ open MeasureTheory MeasureSpace FiniteDimensional Real
 
 /-- Norm bound: ‖spacetimeDecomp.symm (t, v)‖ ≥ ‖v‖.
     This follows from: ‖x‖² = t² + ‖v‖² ≥ ‖v‖². -/
+@[blueprint "lem:spacetime-decomp-symm-norm-ge"]
 lemma spacetimeDecomp_symm_norm_ge (t : ℝ) (v : SpatialCoords) :
     ‖spacetimeDecomp.symm (t, v)‖ ≥ ‖v‖ := by
   have h_spatial : spatialPart (spacetimeDecomp.symm (t, v)) = v :=
@@ -47,6 +48,7 @@ lemma spacetimeDecomp_symm_norm_ge (t : ℝ) (v : SpatialCoords) :
   nlinarith [sq_nonneg (‖spacetimeDecomp.symm (t, v)‖ - ‖v‖)]
 
 /-- Slice integrability: for fixed t, the slice is integrable over SpatialCoords. -/
+@[blueprint "lem:schwartz-slice-integrable"]
 lemma schwartz_slice_integrable (f : SchwartzMap SpaceTime ℂ) (t : ℝ) :
     Integrable (fun v : SpatialCoords => ‖f (spacetimeDecomp.symm (t, v))‖) volume := by
   have hST_dim : Module.finrank ℝ SpaceTime < 5 := by
@@ -89,6 +91,7 @@ lemma schwartz_slice_integrable (f : SchwartzMap SpaceTime ℂ) (t : ℝ) :
     exact h_bound v
 
 /-- Schwartz composed with spacetimeDecomp.symm is integrable on the product. -/
+@[blueprint "lem:schwartz-integrable-on-prod"]
 lemma schwartz_integrable_on_prod' (f : SchwartzMap SpaceTime ℂ) :
     Integrable (fun p : ℝ × SpatialCoords => ‖f (spacetimeDecomp.symm p)‖) := by
   have h_mp : MeasurePreserving spacetimeDecomp (volume : Measure SpaceTime) volume :=

@@ -56,12 +56,14 @@ private lemma tendsto_of_tendsto_succ {α : Type*} {f : ℕ → α} {L : Filter 
 /-- Convert a ContDiffBump centered at 0 to a normalized Schwartz function.
     This produces the L¹-normalized version φ.normed volume, which integrates to 1.
     Bump functions have compact support and are smooth, so they are Schwartz. -/
+@[blueprint "def:bump-to-schwartz"
+  (title := "Normalized Bump as Schwartz Function")]
 noncomputable def bumpToSchwartz (φ : ContDiffBump (0 : SpaceTime)) : TestFunction :=
   -- The normed bump has compact support and is C^∞, hence Schwartz
   (φ.hasCompactSupport_normed (μ := volume)).toSchwartzMap φ.contDiff_normed
 
 /-- bumpToSchwartz produces the L¹-normalized bump function. -/
-@[simp]
+@[simp, blueprint "thm:bump-to-schwartz-apply"]
 theorem bumpToSchwartz_apply (φ : ContDiffBump (0 : SpaceTime)) (x : SpaceTime) :
     bumpToSchwartz φ x = φ.normed volume x := rfl
 
@@ -70,6 +72,7 @@ theorem bumpToSchwartz_apply (φ : ContDiffBump (0 : SpaceTime)) (x : SpaceTime)
 
     Translation preserves smoothness and decay properties.
     See `SchwartzMap.translate` in FunctionalAnalysis.lean for the general version. -/
+@[blueprint "def:translate-schwartz"]
 noncomputable def translateSchwartz (f : TestFunction) (a : SpaceTime) : TestFunction :=
   f.translate a
 
@@ -78,6 +81,8 @@ noncomputable def translateSchwartz (f : TestFunction) (a : SpaceTime) : TestFun
     pointwise value as the bump width → 0.
 
     SmearedTwoPointFunction dμ φ x = ∫∫ φ(u-x) ⟨φ(u)φ(v)⟩ φ(v) du dv -/
+@[blueprint "def:smeared-two-point-function"
+  (title := "Smeared Two-Point Function")]
 noncomputable def SmearedTwoPointFunction (dμ_config : ProbabilityMeasure FieldConfiguration)
     (φ : ContDiffBump (0 : SpaceTime)) (x : SpaceTime) : ℝ :=
   SchwingerFunction₂ dμ_config
@@ -86,6 +91,8 @@ noncomputable def SmearedTwoPointFunction (dμ_config : ProbabilityMeasure Field
 
 /-- A canonical sequence of bump functions with rOut → 0.
     We use rOut = 1/n for n ∈ ℕ⁺. -/
+@[blueprint "def:standard-bump-sequence"
+  (title := "Standard Bump Sequence with rOut = 1/n")]
 noncomputable def standardBumpSequence (n : ℕ) (hn : n ≠ 0) : ContDiffBump (0 : SpaceTime) :=
   -- Create a bump with rOut = 1/n and rIn = 1/(2n)
   { rIn := 1 / (2 * n)
@@ -133,7 +140,8 @@ noncomputable def SchwingerTwoPointFunction
       (fun n : ℕ => if hn : n = 0 then 0 else SmearedTwoPointFunction dμ_config (standardBumpSequence n hn) x)
 
 /-- SchwingerTwoPointFunction vanishes at coincident points by definition. -/
-@[simp]
+@[simp, blueprint "thm:schwinger-two-point-function-zero"
+  (title := "S2 Vanishes at Coincident Points")]
 theorem schwingerTwoPointFunction_zero
     (dμ_config : ProbabilityMeasure FieldConfiguration) :
     SchwingerTwoPointFunction dμ_config 0 = 0 := by

@@ -130,6 +130,7 @@ lemma ω_im_decompose_linear
     using this
 
 /-- Linearity of the complex pairing in the test-function argument. -/
+@[blueprint "lem:pairing-linear-combo"]
 lemma pairing_linear_combo
   (ω : FieldConfiguration) (f g : TestFunctionℂ) (t s : ℂ) :
   distributionPairingℂ_real ω (t • f + s • g)
@@ -177,6 +178,7 @@ lemma pairing_linear_combo
 /-! ## Helper lemmas for real→complex Schwartz embedding -/
 
 /-- The norm of the ℝ-linear embedding ℝ → ℂ is exactly 1. -/
+@[blueprint "lem:norm-of-real-clm"]
 lemma Complex.norm_ofRealCLM : ‖Complex.ofRealCLM‖ = 1 := by
   apply ContinuousLinearMap.opNorm_eq_of_bounds
   · norm_num
@@ -188,6 +190,7 @@ lemma Complex.norm_ofRealCLM : ‖Complex.ofRealCLM‖ = 1 := by
 
 /-- Composing a continuous multilinear map (to ℝ) with the real→complex embedding
     preserves the operator norm, since the embedding is an isometry. -/
+@[blueprint "lem:norm-comp-continuous-multilinear-map-of-real"]
 lemma norm_compContinuousMultilinearMap_ofReal {n : ℕ} {E : Fin n → Type*}
     [∀ i, NormedAddCommGroup (E i)] [∀ i, NormedSpace ℝ (E i)]
     (m : ContinuousMultilinearMap ℝ E ℝ) :
@@ -211,6 +214,7 @@ lemma norm_compContinuousMultilinearMap_ofReal {n : ℕ} {E : Fin n → Type*}
     real→complex embedding equals the norm of the n-th iterated derivative of the
     original Schwartz function. This follows from the chain rule and the fact that
     the embedding is an isometry. -/
+@[blueprint "lem:iterated-f-deriv-of-real-norm-eq"]
 lemma iteratedFDeriv_ofReal_norm_eq (f : TestFunction) (n : ℕ) (x : SpaceTime) :
     ‖iteratedFDeriv ℝ n (fun x ↦ (f x : ℂ)) x‖ = ‖iteratedFDeriv ℝ n f.toFun x‖ := by
   have h_comp : (fun x => (f x : ℂ)) = Complex.ofRealCLM ∘ f.toFun := rfl
@@ -273,6 +277,7 @@ def toComplex (f : TestFunction) : TestFunctionℂ :=
     2. The composition with ofRealCLM is smooth
     3. Derivative norms are preserved (iteratedFDeriv_ofReal_norm_eq)
     so the Schwartz seminorm bounds are satisfied. -/
+@[blueprint "def:to-complex-clm"]
 noncomputable def toComplexCLM : TestFunction →L[ℝ] TestFunctionℂ :=
   SchwartzMap.mkCLM (𝕜 := ℝ) (𝕜' := ℝ) (σ := RingHom.id ℝ) (fun f x => (f x : ℂ))
     (fun f g x => by simp only [SchwartzMap.add_apply]; exact Complex.ofReal_add _ _)
@@ -373,6 +378,7 @@ noncomputable def conjSchwartz {E : Type*} [NormedAddCommGroup E] [NormedSpace �
     - conj(⟨ω, f⟩) = ⟨ω, f_re⟩ - i⟨ω, f_im⟩
     - ⟨ω, conj(f)⟩ = ⟨ω, conj(f)_re⟩ + i⟨ω, conj(f)_im⟩
     - conj(f)_re = f_re and conj(f)_im = -f_im -/
+@[blueprint "lem:distribution-pairing"]
 lemma distributionPairingℂ_real_conj (ω : FieldConfiguration) (f : TestFunctionℂ) :
     starRingEnd ℂ (distributionPairingℂ_real ω f) = distributionPairingℂ_real ω (conjSchwartz f) := by
   -- Expand distributionPairingℂ_real in terms of real and imaginary parts

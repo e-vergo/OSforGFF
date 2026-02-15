@@ -51,18 +51,22 @@ Since (c/u - u)² = (u - c/u)², these are equivalent.
 -/
 
 /-- The Glasser quadratic form is symmetric: (c/u - u)² = (u - c/u)² -/
+@[blueprint "lem:glasser-sq-symm"]
 lemma glasser_sq_symm (c u : ℝ) : (c / u - u)^2 = (u - c / u)^2 := by ring
 
 /-- Expansion: (c/u - u)² = c²/u² - 2c + u² -/
+@[blueprint "lem:glasser-expand"]
 lemma glasser_expand (c u : ℝ) (hu : u ≠ 0) : (c / u - u)^2 = c^2 / u^2 - 2*c + u^2 := by
   field_simp; ring
 
 /-- Lower bound: (c/u - u)² ≥ u² - 2c -/
+@[blueprint "lem:glasser-lower-bound"]
 lemma glasser_lower_bound (c u : ℝ) (hu : u ≠ 0) : (c / u - u)^2 ≥ u^2 - 2*c := by
   rw [glasser_expand c u hu]; have : 0 ≤ c^2 / u^2 := div_nonneg (sq_nonneg c) (sq_nonneg u); linarith
 
 
 /-- The derivative of u ↦ c/u - u is -c/u² - 1 -/
+@[blueprint "lem:has-deriv-at-glasser-map"]
 lemma hasDerivAt_glasser_map (c : ℝ) (u : ℝ) (hu : u ≠ 0) :
     HasDerivAt (fun x => c / x - x) (-c / u^2 - 1) u := by
   convert ((hasDerivAt_inv hu).const_mul c).sub (hasDerivAt_id u) using 1; field_simp
@@ -98,6 +102,7 @@ Therefore I = √π/2.
 -/
 /-- The substitution u ↦ c/u shows that the Glasser integral is invariant under
     multiplication by c/u². This is the key identity that enables the proof. -/
+@[blueprint "lem:glasser-integral-substitution-identity"]
 lemma glasser_integral_substitution_identity (c : ℝ) (hc : 0 < c) :
     ∫ u in Ioi 0, exp (-(c/u - u)^2) =
     ∫ u in Ioi 0, (c/u^2) * exp (-(c/u - u)^2) := by
@@ -190,6 +195,7 @@ theorem glasser_integrable (c : ℝ) (_hc : 0 < c) :
 /-- The weighted Glasser integrand is integrable on (0, ∞).
     Proof: Use change of variables v = c/u which maps (0,1] → [c,∞) and (1,∞) → (0,c].
     On each piece, the weighted integrand transforms to the unweighted one on a subset of (0,∞). -/
+@[blueprint "thm:glasser-weighted-integrable"]
 theorem glasser_weighted_integrable (c : ℝ) (hc : 0 < c) :
     IntegrableOn (fun u => (c/u^2) * exp (-(c/u - u)^2)) (Ioi 0) := by
   rw [Ioi_zero_eq_Ioc_union_Ioi]
@@ -301,6 +307,7 @@ theorem glasser_weighted_integrable (c : ℝ) (hc : 0 < c) :
       rw [ae_restrict_iff' measurableSet_Ioi]
       apply ae_of_all; intro u hu; exact h_bound u hu
     exact Integrable.mono h_dom_int (h_contOn.aestronglyMeasurable measurableSet_Ioi) h_ae_bound
+@[blueprint "lem:glasser-integral-double"]
 
 lemma glasser_integral_double (c : ℝ) (hc : 0 < c) :
     2 * ∫ u in Ioi 0, exp (-(c/u - u)^2) =
@@ -310,6 +317,7 @@ lemma glasser_integral_double (c : ℝ) (hc : 0 < c) :
   exact setIntegral_congr_fun measurableSet_Ioi fun _ _ => by ring
 
 /-- The Glasser map w = c/u - u tends to +∞ as u → 0⁺. -/
+@[blueprint "lem:glasser-tendsto-at-top-at-zero"]
 lemma glasser_tendsto_atTop_at_zero (c : ℝ) (hc : 0 < c) :
     Tendsto (fun u => c / u - u) (𝓝[>] 0) atTop := by
   have h1 : Tendsto (fun (u : ℝ) => u⁻¹) (nhdsWithin (0 : ℝ) (Ioi 0)) atTop := tendsto_inv_nhdsGT_zero
@@ -333,16 +341,19 @@ lemma glasser_tendsto_atTop_at_zero (c : ℝ) (hc : 0 < c) :
   exact tendsto_atTop_add_left_of_le' _ (-1) h_bdd h3
 
 /-- The Glasser map w = c/u - u tends to -∞ as u → +∞. -/
+@[blueprint "lem:glasser-tendsto-at-bot-at-top"]
 lemma glasser_tendsto_atBot_at_top (c : ℝ) (_hc : 0 < c) :
     Tendsto (fun u => c / u - u) atTop atBot := by
   have h1 : Tendsto (fun u => c / u) atTop (𝓝 0) := Filter.Tendsto.const_div_atTop tendsto_id c
   simpa [sub_eq_add_neg] using h1.add_atBot tendsto_neg_atTop_atBot
 
 /-- The Glasser map is continuous on (0, ∞). -/
+@[blueprint "lem:glasser-continuous-on"]
 lemma glasser_continuousOn (c : ℝ) : ContinuousOn (fun u => c / u - u) (Ioi 0) :=
   (continuousOn_const.div continuousOn_id fun _ hu => ne_of_gt hu).sub continuousOn_id
 
 /-- The Glasser map is strictly decreasing on (0, ∞). -/
+@[blueprint "lem:glasser-strict-anti-on"]
 lemma glasser_strictAntiOn (c : ℝ) (hc : 0 < c) : StrictAntiOn (fun u => c / u - u) (Ioi 0) := by
   intro x hx y hy hxy
   simp only [mem_Ioi] at hx hy
@@ -367,15 +378,18 @@ lemma glasser_strictAntiOn (c : ℝ) (hc : 0 < c) : StrictAntiOn (fun u => c / u
     _ = c / x - x := by ring
 
 /-- The Glasser map is injective on (0, ∞). -/
+@[blueprint "lem:glasser-inj-on"]
 lemma glasser_injOn (c : ℝ) (hc : 0 < c) : InjOn (fun u => c / u - u) (Ioi 0) :=
   (glasser_strictAntiOn c hc).injOn
 
 /-- The Glasser map has the stated derivative on (0, ∞). -/
+@[blueprint "lem:glasser-has-deriv-within-at"]
 lemma glasser_hasDerivWithinAt (c : ℝ) (u : ℝ) (hu : 0 < u) :
     HasDerivWithinAt (fun x => c / x - x) (-c / u^2 - 1) (Ioi 0) u :=
   (hasDerivAt_glasser_map c u hu.ne').hasDerivWithinAt
 
 /-- The image of (0, ∞) under the Glasser map is all of ℝ. -/
+@[blueprint "lem:glasser-image-eq-univ"]
 lemma glasser_image_eq_univ (c : ℝ) (hc : 0 < c) :
     (fun u => c / u - u) '' (Ioi 0) = univ := by
   apply eq_univ_of_forall
@@ -411,6 +425,7 @@ lemma glasser_image_eq_univ (c : ℝ) (hc : 0 < c) :
     exact h_ivt (mem_Ici.mpr (le_of_lt hw))
 
 /-- The absolute value of the Glasser map derivative is 1 + c/u². -/
+@[blueprint "lem:glasser-deriv-abs"]
 lemma glasser_deriv_abs (c : ℝ) (hc : 0 < c) (u : ℝ) (hu : u ∈ Ioi 0) :
     |(-c / u^2 - 1)| = 1 + c / u^2 := by
   have h : 0 < c / u^2 := div_pos hc (sq_pos_of_pos hu)
@@ -481,6 +496,7 @@ lemma complete_square (a b : ℝ) (ha : 0 < a) (hb : 0 < b) (t : ℝ) (ht : 0 < 
 /-! ## Part 5: The main substitutions -/
 
 /-- First substitution: s = t² transforms s^{-1/2} ds to 2 dt -/
+@[blueprint "lem:laplace-integral-subst-sq"]
 lemma laplace_integral_subst_sq (a b : ℝ) (_ha : 0 < a) (_hb : 0 < b) :
     ∫ s in Ioi 0, s^(-(1/2 : ℝ)) * exp (-a/s - b*s) =
     2 * ∫ t in Ioi 0, exp (-a/t^2 - b*t^2) := by
@@ -534,6 +550,7 @@ lemma laplace_integral_subst_sq (a b : ℝ) (_ha : 0 < a) (_hb : 0 < b) :
   ring
 
 /-- After completing the square, factor out exp(-2√(ab)) -/
+@[blueprint "lem:laplace-integral-factor"]
 lemma laplace_integral_factor (a b : ℝ) (ha : 0 < a) (hb : 0 < b) :
     ∫ t in Ioi 0, exp (-a/t^2 - b*t^2) =
     exp (-2 * sqrt (a * b)) * ∫ t in Ioi 0, exp (-(sqrt a / t - sqrt b * t)^2) := by
@@ -543,6 +560,7 @@ lemma laplace_integral_factor (a b : ℝ) (ha : 0 < a) (hb : 0 < b) :
   ring_nf
 
 /-- Second substitution: u = √b · t, so √a/t - √b·t = √(ab)/u - u -/
+@[blueprint "lem:laplace-integral-subst-scale"]
 lemma laplace_integral_subst_scale (a b : ℝ) (ha : 0 < a) (hb : 0 < b) :
     ∫ t in Ioi 0, exp (-(sqrt a / t - sqrt b * t)^2) =
     (1 / sqrt b) * ∫ u in Ioi 0, exp (-(sqrt (a * b) / u - u)^2) := by
@@ -584,6 +602,7 @@ theorem laplace_integral_half_power (a b : ℝ) (ha : 0 < a) (hb : 0 < b) :
 
     which matches √(π/b) · exp(-2√(0·b)) = √(π/b) · 1 = √(π/b).
 -/
+@[blueprint "thm:laplace-integral-half-power-nonneg"]
 theorem laplace_integral_half_power_nonneg (a b : ℝ) (ha : 0 ≤ a) (hb : 0 < b) :
     ∫ s in Ioi 0, s^(-(1/2 : ℝ)) * exp (-a/s - b*s) =
     sqrt (π / b) * exp (-2 * sqrt (a * b)) := by

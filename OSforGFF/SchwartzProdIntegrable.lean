@@ -154,19 +154,23 @@ On the bounded time domain {0 < t₁, 0 < t₂, t₁+t₂ < 1}, this gives integ
 -/
 
 /-- The spatial part of SpaceTime: ℝ³. -/
+@[blueprint "def:spatial-coords3"]
 abbrev SpatialCoords3 : Type := EuclideanSpace ℝ (Fin 3)
 
 /-- Decomposition of SpaceTime as time × space. -/
+@[blueprint "def:spacetime-of-time-space"]
 noncomputable def spacetimeOfTimeSpace (t : ℝ) (x : SpatialCoords3) : SpaceTime :=
   EuclideanSpace.equiv (Fin 4) ℝ |>.symm (Fin.cons t (fun i => x i))
 
 /-- The time coordinate of spacetimeOfTimeSpace is t. -/
+@[blueprint "lem:spacetime-of-time-space-time"]
 lemma spacetimeOfTimeSpace_time (t : ℝ) (x : SpatialCoords3) :
     (spacetimeOfTimeSpace t x) 0 = t := by
   simp [spacetimeOfTimeSpace, EuclideanSpace.equiv]
 
 /-- Access the i-th spatial component of spacetimeOfTimeSpace.
     Mathematical fact: (spacetimeOfTimeSpace t x) (i+1) = x i -/
+@[blueprint "lem:spacetime-of-time-space-spatial"]
 lemma spacetimeOfTimeSpace_spatial (t : ℝ) (x : SpatialCoords3) (i : Fin 3) :
     (spacetimeOfTimeSpace t x) ⟨i.val + 1, Nat.add_lt_add_right i.isLt 1⟩ = x i := by
   have h : (⟨i.val + 1, Nat.add_lt_add_right i.isLt 1⟩ : Fin 4) = Fin.succ i := rfl
@@ -174,6 +178,7 @@ lemma spacetimeOfTimeSpace_spatial (t : ℝ) (x : SpatialCoords3) (i : Fin 3) :
 
 /-- The decomposition: spacetimeOfTimeSpace t x = timeOrigin t + spatialEmbed x.
     This is the key structural fact: (t, x) = (t, 0) + (0, x). -/
+@[blueprint "lem:spacetime-of-time-space-decompose"]
 lemma spacetimeOfTimeSpace_decompose (t : ℝ) (x : SpatialCoords3) :
     spacetimeOfTimeSpace t x = spacetimeOfTimeSpace t 0 + spacetimeOfTimeSpace 0 x := by
   ext j
@@ -184,6 +189,7 @@ lemma spacetimeOfTimeSpace_decompose (t : ℝ) (x : SpatialCoords3) :
     simp [spacetimeOfTimeSpace, EuclideanSpace.equiv, Fin.cons_succ]
 
 /-- Norm comparison: the spacetime norm dominates the spatial norm. -/
+@[blueprint "lem:spacetime-of-time-space-norm-ge"]
 lemma spacetimeOfTimeSpace_norm_ge (t : ℝ) (x : SpatialCoords3) :
     ‖spacetimeOfTimeSpace t x‖ ≥ ‖x‖ := by
   have hsq : ‖spacetimeOfTimeSpace t x‖ ^ 2 = t ^ 2 + ‖x‖ ^ 2 := by
@@ -208,6 +214,7 @@ lemma spacetimeOfTimeSpace_norm_ge (t : ℝ) (x : SpatialCoords3) :
 
 /-- Linear embedding of ℝ³ into ℝ⁴ as the spatial subspace at time 0.
     This maps x ↦ (0, x₀, x₁, x₂), i.e., spacetimeOfTimeSpace 0 x. -/
+@[blueprint "def:spatial-embed"]
 noncomputable def spatialEmbed : SpatialCoords3 →ₗ[ℝ] SpaceTime where
   toFun := fun x => spacetimeOfTimeSpace 0 x
   map_add' := fun x y => by
@@ -222,18 +229,22 @@ noncomputable def spatialEmbed : SpatialCoords3 →ₗ[ℝ] SpaceTime where
     · simp [spacetimeOfTimeSpace, EuclideanSpace.equiv, Fin.cons_succ]
 
 /-- The spatial embedding is continuous (being linear on finite-dim spaces). -/
+@[blueprint "lem:spatial-embed-continuous"]
 lemma spatialEmbed_continuous : Continuous spatialEmbed :=
   LinearMap.continuous_of_finiteDimensional spatialEmbed
 
 /-- The spatial embedding as a CLM. -/
+@[blueprint "def:spatial-embed-clm"]
 noncomputable def spatialEmbedCLM : SpatialCoords3 →L[ℝ] SpaceTime :=
   ⟨spatialEmbed, spatialEmbed_continuous⟩
 
 /-- The time-origin point: (t, 0, 0, 0) in SpaceTime. -/
+@[blueprint "def:time-origin"]
 noncomputable def timeOrigin (t : ℝ) : SpaceTime :=
   spacetimeOfTimeSpace t 0
 
 /-- spacetimeOfTimeSpace is continuous in the spatial argument for fixed time. -/
+@[blueprint "lem:continuous-spacetime-of-time-space-right"]
 lemma continuous_spacetimeOfTimeSpace_right (t : ℝ) : Continuous (spacetimeOfTimeSpace t) := by
   -- spacetimeOfTimeSpace t x = timeOrigin t + spatialEmbedCLM x
   -- The first term is constant, the second is a CLM applied to x
@@ -250,6 +261,7 @@ lemma continuous_spacetimeOfTimeSpace_right (t : ℝ) : Continuous (spacetimeOfT
 
 /-- A Schwartz function restricted to a fixed time slice is integrable over ℝ³.
     Uses decay transfer: 4D Schwartz decay implies 3D integrability via norm comparison. -/
+@[blueprint "lem:schwartz-time-slice-integrable"]
 lemma schwartz_time_slice_integrable (f : TestFunctionℂ) (t : ℝ) :
     Integrable (fun x : SpatialCoords3 => f (spacetimeOfTimeSpace t x)) volume := by
   -- Strategy: Show the function has rapid decay and use integrability of decay functions
@@ -311,10 +323,12 @@ lemma schwartz_time_slice_integrable (f : TestFunctionℂ) (t : ℝ) :
   exact h_bound x
 
 /-- The spatial integral G(t) = ∫_{ℝ³} ‖f(t, x)‖ dx. -/
+@[blueprint "def:spatial-norm-integral"]
 noncomputable def spatialNormIntegral (f : TestFunctionℂ) (t : ℝ) : ℝ :=
   ∫ x : SpatialCoords3, ‖f (spacetimeOfTimeSpace t x)‖
 
 /-- G(t) = 0 for t ≤ 0 when f vanishes on {t ≤ 0}. -/
+@[blueprint "lem:spatial-norm-integral-zero-of-neg"]
 lemma spatialNormIntegral_zero_of_neg (f : TestFunctionℂ)
     (hf_supp : ∀ x : SpaceTime, x 0 ≤ 0 → f x = 0) (t : ℝ) (ht : t ≤ 0) :
     spatialNormIntegral f t = 0 := by
@@ -327,6 +341,7 @@ lemma spatialNormIntegral_zero_of_neg (f : TestFunctionℂ)
   simp [h_zero]
 
 /-- G(t) is nonnegative. -/
+@[blueprint "lem:spatial-norm-integral-nonneg"]
 lemma spatialNormIntegral_nonneg (f : TestFunctionℂ) (t : ℝ) :
     0 ≤ spatialNormIntegral f t :=
   integral_nonneg (fun _ => norm_nonneg _)
@@ -356,6 +371,7 @@ lemma spatialNormIntegral_nonneg (f : TestFunctionℂ) (t : ℝ) :
     integral ∫ ‖f(t, ·)‖ dx bounded by C·t.
 
     **Used by**: `spatialNormIntegral_linear_bound` and `F_norm_bound_via_linear_vanishing`. -/
+@[blueprint "lem:schwartz-vanishing-ftc-decay"]
 lemma schwartz_vanishing_ftc_decay (f : TestFunctionℂ)
     (hf_supp : ∀ x : SpaceTime, x 0 ≤ 0 → f x = 0) :
     ∃ C : ℝ, 0 < C ∧ ∀ (t : ℝ) (_ht : 0 < t) (x_sp : SpatialCoords3),
@@ -610,6 +626,7 @@ lemma schwartz_vanishing_ftc_decay (f : TestFunctionℂ)
     This follows from integrating the pointwise bound ‖f(t,x)‖ ≤ C·t
     over the spatial coordinates. Since Schwartz functions have fast decay,
     the spatial integral is finite. -/
+@[blueprint "thm:spatial-norm-integral-linear-bound"]
 theorem spatialNormIntegral_linear_bound (f : TestFunctionℂ)
     (hf_supp : ∀ x : SpaceTime, x 0 ≤ 0 → f x = 0) :
     ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ, 0 < t → spatialNormIntegral f t ≤ C * t := by

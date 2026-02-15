@@ -58,6 +58,7 @@ All axioms for this file are collected here for easy reference.
 /-- Plancherel (Schwartz): L² norm preservation for the Fourier transform.
     This follows directly from Mathlib's `SchwartzMap.integral_norm_sq_fourier`.
     Mathlib's Fourier transform is unitary-normalized, so no multiplicative constant is needed. -/
+@[blueprint "thm:fourier-plancherel-schwartz"]
 theorem fourier_plancherel_schwartz (g : TestFunctionℂ) :
     ∫ k, ‖(SchwartzMap.fourierTransformCLM ℂ g) k‖^2 ∂volume =
       ∫ x, ‖g x‖^2 ∂volume :=
@@ -81,10 +82,12 @@ theorem fourier_plancherel_schwartz (g : TestFunctionℂ) :
     Note: The abstract `SchwingerTwoPointFunction` in OS_Axioms.lean is now defined as
     a limit (using `limUnder`), properly avoiding DiracDelta. For the GFF specifically,
     we use this direct definition for computational convenience. -/
+@[blueprint "def:schwinger-two-point-function-gff"]
 noncomputable def SchwingerTwoPointFunction_GFF (m : ℝ) [Fact (0 < m)] (x : SpaceTime) : ℝ :=
   freeCovarianceKernel m x
 
 /-- The GFF two-point function equals the free covariance kernel by definition. -/
+@[blueprint "thm:schwinger-two-point-eq-free-covariance-kernel"]
 theorem schwingerTwoPoint_eq_freeCovarianceKernel (m : ℝ) [Fact (0 < m)] (x : SpaceTime) :
   SchwingerTwoPointFunction_GFF m x = freeCovarianceKernel m x := rfl
 
@@ -97,6 +100,7 @@ theorem schwingerTwoPoint_eq_freeCovarianceKernel (m : ℝ) [Fact (0 < m)] (x : 
     2. SchwingerFunction₂ for the GFF computes ∫∫ f(u) C(u-v) g(v) du dv
 
     Both are standard properties of the GFF; the sorries encode these standard facts. -/
+@[blueprint "thm:schwinger-two-point-function-eq-gff"]
 theorem schwingerTwoPointFunction_eq_GFF (m : ℝ) [Fact (0 < m)] (x : SpaceTime) (hx : x ≠ 0) :
   SchwingerTwoPointFunction (gaussianFreeField_free m) x = SchwingerTwoPointFunction_GFF m x := by
   -- Use schwingerTwoPointFunction_eq_kernel
@@ -134,6 +138,7 @@ theorem schwingerTwoPointFunction_eq_GFF (m : ℝ) [Fact (0 < m)] (x : SpaceTime
 /-- The abstract SchwingerTwoPointFunction equals freeCovarianceKernel for the GFF.
     This is the version needed for downstream proofs using TwoPointIntegrable.
     Note: Only holds for x ≠ 0 since the covariance is undefined at coincident points. -/
+@[blueprint "thm:schwinger-two-point-function-eq-free-covariance-kernel"]
 theorem schwingerTwoPointFunction_eq_freeCovarianceKernel (m : ℝ) [Fact (0 < m)] (x : SpaceTime)
     (hx : x ≠ 0) :
   SchwingerTwoPointFunction (gaussianFreeField_free m) x = freeCovarianceKernel m x := by
@@ -143,6 +148,7 @@ theorem schwingerTwoPointFunction_eq_freeCovarianceKernel (m : ℝ) [Fact (0 < m
     For the free field, this follows from the Bessel function asymptotics:
     - Near origin: K₁(mr) ~ 1/(mr), giving decay like 1/r²
     - Far from origin: K₁(mr) ~ exp(-mr), which is even faster decay -/
+@[blueprint "thm:schwinger-two-point-decay-bound-gff"]
 theorem schwinger_two_point_decay_bound_GFF (m : ℝ) [Fact (0 < m)] :
   ∃ C : ℝ, C > 0 ∧
     ∀ x y : SpaceTime,
@@ -160,6 +166,9 @@ theorem schwinger_two_point_decay_bound_GFF (m : ℝ) [Fact (0 < m)] :
     Uses the bridge lemma to connect to the concrete GFF definition.
     Note: At x = y (coincident points), the bound still holds since the abstract
     definition regularizes S(0) = 0 and 0^(-2) = 0 by Mathlib convention. -/
+@[blueprint "thm:schwinger-two-point-decay-bound"
+  (title := "Two-Point Function Decay Bound")
+  (statement := /-- The Schwinger two-point function satisfies a polynomial decay bound: $\|S_2(x - y)\| \le C\|x - y\|^{-2}$ for some $C > 0$, following from Bessel function asymptotics. -/)]
 theorem schwinger_two_point_decay_bound (m : ℝ) [Fact (0 < m)] :
   ∃ C : ℝ, C > 0 ∧
     ∀ x y : SpaceTime,
@@ -187,6 +196,7 @@ theorem schwinger_two_point_decay_bound (m : ℝ) [Fact (0 < m)] :
 /-- The abstract two-point Schwinger function is measurable.
     This uses the bridge lemma to connect to the concrete GFF definition.
     The functions agree on the complement of {0}, which has full measure. -/
+@[blueprint "thm:schwinger-two-point-measurable"]
 theorem schwingerTwoPoint_measurable (m : ℝ) [Fact (0 < m)] :
     AEStronglyMeasurable (fun x => SchwingerTwoPointFunction (gaussianFreeField_free m) x) volume := by
   -- Use that the abstract and concrete definitions agree except possibly at 0
@@ -217,6 +227,9 @@ Elementary bound on the GFF generating function using complex exponential proper
 /-- The norm of the GFF generating function equals the exponential of minus one-half
     the real part of the covariance. This is an elementary property of complex exponentials:
     |exp(z)| = exp(Re z). -/
+@[blueprint "lem:gff-generating-norm-eq"
+  (title := "Generating Functional Norm Identity")
+  (statement := /-- $\|Z[f]\| = \exp(-\tfrac{1}{2}\operatorname{Re} C(f, f))$ where $C$ is the free covariance bilinear form. This is an elementary property of complex exponentials: $|\exp(z)| = \exp(\operatorname{Re} z)$. -/)]
 lemma gff_generating_norm_eq (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
   ‖GJGeneratingFunctionalℂ (gaussianFreeField_free m) f‖ =
     Real.exp (-(1/2) * (freeCovarianceℂ_bilinear m f f).re) := by
@@ -227,6 +240,9 @@ lemma gff_generating_norm_eq (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
 /-- Using bilinearity and the real/imaginary decomposition, the real part of C(f,f)
     satisfies Re C(f,f) = C(Re f, Re f) - C(Im f, Im f). Combined with monotonicity
     of exp, this gives the bound exp(-1/2 Re C(f,f)) ≤ exp(1/2 C(Im f, Im f)). -/
+@[blueprint "lem:gff-generating-bound-by-imaginary"
+  (title := "Generating Functional Bound by Imaginary Part")
+  (statement := /-- $\exp(-\tfrac{1}{2}\operatorname{Re} C(f, f)) \le \exp(\tfrac{1}{2} C(\operatorname{Im} f, \operatorname{Im} f))$. This follows from $\operatorname{Re} C(f, f) = C(\operatorname{Re} f, \operatorname{Re} f) - C(\operatorname{Im} f, \operatorname{Im} f)$ and positivity of $C(\operatorname{Re} f, \operatorname{Re} f)$. -/)]
 lemma gff_generating_bound_by_imaginary (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
   Real.exp (-(1/2) * (freeCovarianceℂ_bilinear m f f).re) ≤
     Real.exp ((1/2) * (freeCovarianceℂ_bilinear m (toComplex (complex_testfunction_decompose f).2)
@@ -312,6 +328,9 @@ The covariance of the imaginary part is bounded by (1/m²) times the L² norm sq
 This uses the momentum space representation and the bound 1/(‖k‖² + m²) ≤ 1/m²,
 plus Plancherel and the pointwise bound |Im f| ≤ |f|.
 -/
+@[blueprint "lem:covariance-imaginary-l2-bound"
+  (title := "Covariance Imaginary Part L2 Bound")
+  (statement := /-- $\operatorname{Re} C(\operatorname{Im} f, \operatorname{Im} f) \le \frac{1}{m^2}\|f\|_{L^2}^2$. Uses the momentum space bound $1/(\|k\|^2 + m^2) \le 1/m^2$, Plancherel's theorem, and $\|\operatorname{Im} f\| \le \|f\|$ pointwise. -/)]
 lemma covariance_imaginary_L2_bound (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
   (freeCovarianceℂ_bilinear m (toComplex (complex_testfunction_decompose f).2)
                                (toComplex (complex_testfunction_decompose f).2)).re ≤
@@ -466,6 +485,9 @@ lemma covariance_imaginary_L2_bound (m : ℝ) [Fact (0 < m)] (f : TestFunction�
 /-- The GFF generating functional satisfies the exponential bound
     |Z[f]| ≤ exp((1/2m²)||f||²_{L²}). This combines the norm equality,
     the bound by imaginary part, and the L² bound to give the final OS1 estimate. -/
+@[blueprint "lem:gff-generating-l2-bound"
+  (title := "GFF Generating Functional L2 Bound")
+  (statement := /-- $\|Z[f]\| \le \exp\!\bigl(\frac{1}{2m^2}\|f\|_{L^2}^2\bigr)$. Chains the norm identity, the imaginary part bound, and the $L^2$ covariance bound into a single exponential estimate. -/)]
 lemma gff_generating_L2_bound (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
   ‖GJGeneratingFunctionalℂ (gaussianFreeField_free m) f‖ ≤
     Real.exp ((1 / (2 * m^2)) * ∫ x, ‖f x‖^2 ∂volume) := by
@@ -487,6 +509,9 @@ Using the axioms above, we establish local integrability of the Schwinger functi
 /-- The two-point Schwinger function is locally integrable.
     This follows from the polynomial decay bound |S_2(x)| ≤ C|x|^{-2}.
     In d=4 spacetime dimensions, |x|^{-2} is locally integrable since 2 < 4. -/
+@[blueprint "lem:gff-two-point-locally-integrable"
+  (title := "Two-Point Function Local Integrability")
+  (statement := /-- The GFF two-point Schwinger function is locally integrable. In $d = 4$ spacetime dimensions, $|x|^{-2}$ is locally integrable since $2 < 4$, and the decay bound $|S_2(x)| \le C|x|^{-2}$ gives the result. -/)]
 lemma gff_two_point_locally_integrable (m : ℝ) [Fact (0 < m)] :
   TwoPointIntegrable (gaussianFreeField_free m) := by
   unfold TwoPointIntegrable

@@ -73,6 +73,7 @@ lemma continuous_entrywiseExp (ι : Type u) [Fintype ι] [DecidableEq ι] :
   hadamardPow R (n+1) = hadamardPow R n ∘ₕ R := rfl
 
 /-- Hadamard powers act entrywise as usual scalar powers. -/
+@[blueprint "lem:hadamard-pow-apply"]
 lemma hadamardPow_apply (R : Matrix ι ι ℝ) (n : ℕ) (i j : ι) :
   hadamardPow R n i j = (R i j) ^ n := by
   induction n with
@@ -80,15 +81,18 @@ lemma hadamardPow_apply (R : Matrix ι ι ℝ) (n : ℕ) (i j : ι) :
   | succ n ih => simp [Matrix.hadamard, ih, pow_succ]
 
 /-- One term of the Hadamard-series for the entrywise exponential. -/
+@[blueprint "def:entrywise-exp-series-term"]
 noncomputable def entrywiseExpSeriesTerm (R : Matrix ι ι ℝ) (n : ℕ) : Matrix ι ι ℝ :=
   (1 / (Nat.factorial n : ℝ)) • hadamardPow R n
 
 /-- Series definition of the entrywise exponential using Hadamard powers (entrywise `tsum`). -/
+@[blueprint "def:entrywise-exp-hadamard-series"]
 noncomputable def entrywiseExp_hadamardSeries (R : Matrix ι ι ℝ) : Matrix ι ι ℝ :=
   fun i j => tsum (fun n : ℕ => (1 / (Nat.factorial n : ℝ)) * (hadamardPow R n i j))
 
 /-- The entrywise exponential agrees with its Hadamard series expansion.
     Uses the Taylor series for Complex.exp and converts to the real case. -/
+@[blueprint "lem:entrywise-exp-eq-hadamard-series"]
 lemma entrywiseExp_eq_hadamardSeries (R : Matrix ι ι ℝ) :
   entrywiseExp R = entrywiseExp_hadamardSeries R := by
   classical
@@ -139,6 +143,7 @@ lemma entrywiseExp_eq_hadamardSeries (R : Matrix ι ι ℝ) :
   simpa [x, hadamardPow_apply, one_div, div_eq_mul_inv, mul_comm] using hx_sum'
 
 /-- Ones is the identity for the Hadamard product. -/
+@[blueprint "lem:hadamard-one-h-mul-left"]
 lemma hadamardOne_hMul_left (R : Matrix ι ι ℝ) : Matrix.hadamard (hadamardOne ι) R = R := by
   ext i j; simp [hadamardOne, Matrix.hadamard]
 
@@ -172,6 +177,7 @@ lemma hadamardPow_posDef_of_posDef
 
 /-- The quadratic form of the Hadamard series equals the sum of quadratic forms of individual terms.
     This lemma handles the complex interchange of summation and quadratic form evaluation. -/
+@[blueprint "lem:quadratic-form-entrywise-exp-hadamard-series"]
 lemma quadratic_form_entrywiseExp_hadamardSeries
   (R : Matrix ι ι ℝ) (x : ι → ℝ) :
   x ⬝ᵥ (entrywiseExp_hadamardSeries R).mulVec x =
@@ -249,6 +255,7 @@ lemma quadratic_form_entrywiseExp_hadamardSeries
 
 /-- Summability of the scalar quadratic-form coefficients appearing in the
     Hadamard exponential series. -/
+@[blueprint "lem:summable-hadamard-quad-series"]
 lemma summable_hadamardQuadSeries
     (R : Matrix ι ι ℝ) (x : ι → ℝ) :
     Summable (fun n : ℕ =>

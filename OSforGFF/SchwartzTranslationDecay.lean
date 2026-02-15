@@ -56,6 +56,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 /-! ## Helper lemmas for Schwartz functions -/
 
 /-- Schwartz functions are integrable. -/
+@[blueprint "lem:schwartz-integrable"]
 lemma schwartz_integrable (f : SchwartzMap E ℂ) : Integrable f := f.integrable
 
 omit [MeasurableSpace E] [BorelSpace E] in
@@ -63,6 +64,8 @@ omit [MeasurableSpace E] [BorelSpace E] in
 
 Proof: Schwartz decay gives ‖x‖^k · ‖f(x)‖ ≤ seminorm k 0 f for all k.
 Taking k = 1: ‖f(x)‖ ≤ C/‖x‖ → 0 as ‖x‖ → ∞. -/
+@[blueprint "lem:schwartz-tendsto-zero"
+  (title := "Schwartz Functions Vanish at Infinity")]
 lemma schwartz_tendsto_zero (f : SchwartzMap E ℂ) :
     Tendsto f (cocompact E) (nhds 0) := by
   rw [Metric.tendsto_nhds]
@@ -103,15 +106,19 @@ lemma schwartz_tendsto_zero (f : SchwartzMap E ℂ) :
 /-! ## Kernel decomposition -/
 
 /-- The singular (compactly supported) part of the kernel. -/
+@[blueprint "def:kernel-singular"]
 def kernelSingular (K : E → ℝ) (R₀ : ℝ) : E → ℝ :=
   fun x => K x * (closedBall (0 : E) R₀).indicator (fun _ => (1 : ℝ)) x
 
 /-- The tail (decaying) part of the kernel. -/
+@[blueprint "def:kernel-tail"]
 def kernelTail (K : E → ℝ) (R₀ : ℝ) : E → ℝ :=
   fun x => K x * (closedBall (0 : E) R₀)ᶜ.indicator (fun _ => (1 : ℝ)) x
 
 omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- Kernel decomposes into singular and tail parts. -/
+@[blueprint "lem:kernel-decomposition"
+  (title := "Kernel Singular-Tail Decomposition")]
 lemma kernel_decomposition (K : E → ℝ) (R₀ : ℝ) :
     K = fun x => kernelSingular K R₀ x + kernelTail K R₀ x := by
   ext x
@@ -124,6 +131,8 @@ lemma kernel_decomposition (K : E → ℝ) (R₀ : ℝ) :
 
 omit [MeasurableSpace E] [BorelSpace E] in
 /-- K_tail vanishes at infinity when K has polynomial decay. -/
+@[blueprint "lem:kernel-tail-tendsto-zero"
+  (title := "Kernel Tail Vanishes at Infinity")]
 lemma kernelTail_tendsto_zero (K : E → ℝ) (R₀ : ℝ)
     (α : ℝ) (hα : α > 0) (C : ℝ)
     (hK_decay : ∀ z : E, ‖z‖ ≥ R₀ → |K z| ≤ C / ‖z‖ ^ α) :
@@ -208,6 +217,7 @@ This is the main engine of the proof. In Mathlib this should be something like
 
 omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- A continuous function vanishing at infinity is bounded. -/
+@[blueprint "lem:bounded-of-continuous-tendsto-zero"]
 lemma bounded_of_continuous_tendsto_zero
     {g : E → ℂ} (hg_cont : Continuous g) (hg_zero : Tendsto g (cocompact E) (nhds 0)) :
     ∃ C : ℝ, ∀ x, ‖g x‖ ≤ C := by
@@ -241,6 +251,8 @@ lemma bounded_of_continuous_tendsto_zero
 /-- For integrable f and ε > 0, there exists a compact set K with small tail integral.
 
 This is a standard consequence of integrability - the integral concentrates on compact sets. -/
+@[blueprint "lem:integrable-tail-small"
+  (title := "Integrable Tail Concentration")]
 lemma integrable_tail_small {f : E → ℂ} (hf : Integrable f) (ε : ℝ) (hε : 0 < ε) :
     ∃ K : Set E, IsCompact K ∧ ∫ x in Kᶜ, ‖f x‖ < ε := by
   -- Use: for antitone sequence of sets, integral tends to integral over intersection
@@ -440,6 +452,8 @@ on E × E.
 
 This enables Fubini's theorem to swap integration order:
 ∫∫ f(x) K(x-y) g(y-a) dx dy = ∫ (∫ f(x) K(x-y) dx) g(y-a) dy -/
+@[blueprint "thm:schwartz-bilinear-prod-integrable"
+  (title := "Product Integrability for Schwartz Bilinear Forms")]
 theorem schwartz_bilinear_prod_integrable
     (f g : SchwartzMap E ℂ)
     (K : E → ℝ) (hK_meas : Measurable K) (hK_loc : LocallyIntegrable K volume)
@@ -586,6 +600,8 @@ theorem schwartz_bilinear_prod_integrable
 /-! ## Main theorem -/
 
 /-- The bilinear integral of Schwartz functions against a decaying kernel -/
+@[blueprint "def:schwartz-bilinear-integral"
+  (title := "Schwartz Bilinear Integral")]
 def schwartzBilinearIntegral (f g : SchwartzMap E ℂ) (K : E → ℝ) (a : E) : ℂ :=
   ∫ x : E, ∫ y : E, f x * (K (x - y) : ℂ) * g (y - a)
 

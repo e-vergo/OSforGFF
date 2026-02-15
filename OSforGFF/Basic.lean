@@ -155,9 +155,11 @@ example : Module ℂ TestFunctionℂ := by infer_instance
 variable (x : SpaceTime)
 
 /- Probability distribution over field configurations (distributions) -/
+@[blueprint "def:pointwise-mul-clm"]
 def pointwiseMulCLM : ℂ →L[ℂ] ℂ →L[ℂ] ℂ := ContinuousLinearMap.mul ℂ ℂ
 
 /-- Multiplication lifted to the Schwartz space. -/
+@[blueprint "def:schwartz-mul"]
 def schwartzMul (g : TestFunctionℂ) : TestFunctionℂ →L[ℂ] TestFunctionℂ :=
   (SchwartzMap.bilinLeftCLM pointwiseMulCLM (SchwartzMap.hasTemperateGrowth_general g))
 
@@ -292,6 +294,7 @@ omit [SigmaFinite μ]
 
 /-- Decompose a complex test function into its real and imaginary parts as real test functions.
     This is more efficient than separate extraction functions. -/
+@[blueprint "def:complex-testfunction-decompose"]
 def complex_testfunction_decompose (f : TestFunctionℂ) : TestFunction × TestFunction :=
   (schwartz_comp_clm f Complex.reCLM, schwartz_comp_clm f Complex.imCLM)
 
@@ -320,6 +323,7 @@ def complex_testfunction_decompose (f : TestFunctionℂ) : TestFunction × TestF
   simp [complex_testfunction_decompose]
 
 /-- Recomposition at a point via the decomposition. -/
+@[blueprint "lem:complex-testfunction-decompose-recompose"]
 lemma complex_testfunction_decompose_recompose
   (f : TestFunctionℂ) (x : SpaceTime) :
   f x = ((complex_testfunction_decompose f).1 x : ℂ)
@@ -335,6 +339,7 @@ lemma complex_testfunction_decompose_recompose
 /-- Complex version of the pairing: real field configuration with complex test function
     We extend the pairing by treating the complex test function as f(x) = f_re(x) + i*f_im(x)
     and defining ⟨ω, f⟩ = ⟨ω, f_re⟩ + i*⟨ω, f_im⟩ -/
+@[blueprint "def:distribution-pairing"]
 def distributionPairingℂ_real (ω : FieldConfiguration) (f : TestFunctionℂ) : ℂ :=
   -- Extract real and imaginary parts using our efficient decomposition
   let ⟨f_re, f_im⟩ := complex_testfunction_decompose f
@@ -369,9 +374,11 @@ def GJMean (dμ_config : ProbabilityMeasure FieldConfiguration)
 abbrev SpatialCoords := EuclideanSpace ℝ (Fin (STDimension - 1))
 
 /-- L² space on spatial slices (real-valued) -/
+@[blueprint "def:spatial-l2"]
 abbrev SpatialL2 := Lp ℝ 2 (volume : Measure SpatialCoords)
 
 /-- Extract spatial part of spacetime coordinate -/
+@[blueprint "def:spatial-part"]
 def spatialPart (x : SpaceTime) : SpatialCoords :=
   (EuclideanSpace.equiv (Fin (STDimension - 1)) ℝ).symm
     (fun i => x ⟨i.val + 1, by simp [STDimension]; omega⟩)

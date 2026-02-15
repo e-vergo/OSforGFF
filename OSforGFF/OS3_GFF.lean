@@ -66,6 +66,9 @@ attribute [local simp] inner_sub_right inner_sub_left
 
 /-- Reflection matrix built from the real covariance is positive semidefinite.
     This is the real analogue of covariance reflection positivity. -/
+@[blueprint "lem:free-covariance-form-r-reflection-matrix-pos-semidef"
+  (title := "Reflection Covariance Matrix is PSD")
+  (statement := /-- The matrix $R_{ij} = C_m(\theta f_i, f_j)$ built from reflected positive-time test functions is positive semidefinite. -/)]
 lemma freeCovarianceFormR_reflection_matrix_posSemidef
     (m : ℝ) [Fact (0 < m)]
     {n : ℕ} (f : Fin n → PositiveTimeTestFunction) :
@@ -213,6 +216,9 @@ lemma freeCovarianceFormR_reflection_matrix_posSemidef
   exact freeCovarianceFormR_reflection_nonneg m g
 
 /-- Quadratic expansion identity for reflected arguments. -/
+@[blueprint "lem:free-covariance-form-r-reflection-expansion"
+  (title := "Quadratic Expansion for Reflected Arguments")
+  (statement := /-- $C_m(f - \theta g, f - \theta g) = C_m(f,f) + C_m(g,g) - 2\,C_m(\theta f, g)$ for test functions $f, g$. -/)]
 lemma freeCovarianceFormR_reflection_expansion
     (m : ℝ) [Fact (0 < m)] (f g : TestFunction) :
     freeCovarianceFormR m
@@ -327,6 +333,9 @@ lemma freeCovarianceFormR_reflection_expansion
     _ = Cf + Cg - 2 * Cfg := by ring
 
 /-- Evaluate the real generating functional of the free field on a real test function. -/
+@[blueprint "lem:gaussian-free-field-real-generating-re"
+  (title := "Real Generating Functional of the Free Field")
+  (statement := /-- $\mathrm{Re}\,Z[h] = \exp\!\bigl(-\tfrac{1}{2}\,C_m(h,h)\bigr)$ for real test functions $h$. -/)]
 lemma gaussianFreeField_real_generating_re
     (m : ℝ) [Fact (0 < m)] (h : TestFunction) :
     (GJGeneratingFunctional (gaussianFreeField_free m) h).re
@@ -347,6 +356,9 @@ lemma gaussianFreeField_real_generating_re
   simpa [r] using h_char'
 
 /-- Factorisation of OS3 matrix entries in the purely real setting. -/
+@[blueprint "lem:gaussian-free-field-real-entry-factor"
+  (title := "OS3 Matrix Entry Factorisation")
+  (statement := /-- $\mathrm{Re}\,Z[f - \theta g] = \mathrm{Re}\,Z[f]\;\mathrm{Re}\,Z[g]\;\exp\!\bigl(C_m(\theta f, g)\bigr)$ for positive-time test functions $f, g$. -/)]
 lemma gaussianFreeField_real_entry_factor
     (m : ℝ) [Fact (0 < m)]
     {f g : PositiveTimeTestFunction} :
@@ -438,6 +450,9 @@ section GaussianRealReflectionPositivity
 variable (m : ℝ) [Fact (0 < m)]
 
 /-- Matrix formulation of the real OS3 inequality for the Gaussian free field. -/
+@[blueprint "lem:gaussian-free-field-os3-matrix-real"
+  (title := "Matrix Formulation of Real OS3")
+  (statement := /-- For positive-time test functions $f_i$ and real coefficients $c_i$, $\sum_{i,j} c_i c_j\,\mathrm{Re}\,Z[f_i - \theta f_j] \ge 0$. -/)]
 lemma gaussianFreeField_OS3_matrix_real
     {n : ℕ} (f : Fin n → PositiveTimeTestFunction) (c : Fin n → ℝ) :
     0 ≤ (∑ i, ∑ j, c i * c j *

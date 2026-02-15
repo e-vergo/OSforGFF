@@ -43,6 +43,8 @@ The hierarchy of operator conditions between normed spaces:
 
 /-- A continuous linear map between normed spaces is **nuclear** if it admits a
     representation T(x) = ∑ₙ (φₙ x) • yₙ where ∑ₙ ‖φₙ‖ · ‖yₙ‖ < ∞. -/
+@[blueprint "def:is-nuclear-map"
+  (title := "Nuclear Operator")]
 def IsNuclearMap {E F : Type*}
     [NormedAddCommGroup E] [NormedSpace ℝ E]
     [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
@@ -58,16 +60,22 @@ def IsNuclearMap {E F : Type*}
 
     The inner product can be recovered by polarization:
     ⟨x,y⟩_p = (p(x+y)² - p(x-y)²) / 4. -/
+@[blueprint "def:is-hilbertian"
+  (title := "Hilbertian Seminorm")]
 def Seminorm.IsHilbertian {E : Type*} [AddCommGroup E] [Module ℝ E]
     (p : Seminorm ℝ E) : Prop :=
   ∀ x y : E, p (x + y) ^ 2 + p (x - y) ^ 2 = 2 * (p x ^ 2 + p y ^ 2)
 
 /-- The inner product induced by a Hilbertian seminorm via polarization. -/
+@[blueprint "def:inner-prod"
+  (title := "Seminorm Inner Product (Polarization)")]
 noncomputable def Seminorm.innerProd {E : Type*} [AddCommGroup E] [Module ℝ E]
     (p : Seminorm ℝ E) (x y : E) : ℝ :=
   (p (x + y) ^ 2 - p (x - y) ^ 2) / 4
 
 /-- A finite sequence is **p-orthonormal**: ⟨eᵢ, eⱼ⟩_p = δᵢⱼ. -/
+@[blueprint "def:is-orthonormal-seq"
+  (title := "Orthonormal Sequence")]
 def Seminorm.IsOrthonormalSeq {E : Type*} [AddCommGroup E] [Module ℝ E]
     (p : Seminorm ℝ E) {n : ℕ} (e : Fin n → E) : Prop :=
   ∀ i j, p.innerProd (e i) (e j) = if i = j then 1 else 0
@@ -81,6 +89,8 @@ def Seminorm.IsOrthonormalSeq {E : Type*} [AddCommGroup E] [Module ℝ E]
     For Schwartz space with Hermite basis and Sobolev norms ‖f‖_k² = ∑ n^{2k} |⟨f,hₙ⟩|²,
     the inclusion from level k+s to level k has eigenvalues n^{-s}, and
     ∑ n^{-2s} < ∞ for s > ½. -/
+@[blueprint "def:is-hilbert-schmidt-embedding"
+  (title := "Hilbert-Schmidt Embedding")]
 def Seminorm.IsHilbertSchmidtEmbedding {E : Type*} [AddCommGroup E] [Module ℝ E]
     (p q : Seminorm ℝ E) : Prop :=
   q ≤ p ∧

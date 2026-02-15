@@ -50,6 +50,7 @@ instance : BorelSpace FieldConfiguration := ⟨rfl⟩
 /-- A real symmetric, positive semidefinite covariance form on real test functions,
     together with a proof that the associated Gaussian characteristic functional
     exp(-½Q(f,f)) is positive definite. -/
+@[blueprint "def:covariance-form"]
 structure CovarianceForm where
   Q : TestFunction → TestFunction → ℝ
   symm : ∀ f g, Q f g = Q g f
@@ -61,9 +62,11 @@ structure CovarianceForm where
     (fun f : TestFunction => Complex.exp (-(1/2 : ℂ) * (Q f f : ℂ)))
 
 /-- The negation map on field configurations: T(ω) = -ω -/
+@[blueprint "def:neg-map"]
 def negMap : FieldConfiguration → FieldConfiguration := fun ω => -ω
 
 /-- The negation map is measurable -/
+@[blueprint "lem:neg-map-measurable"]
 lemma negMap_measurable : Measurable negMap := by
   -- The negation map is continuous on WeakDual, hence measurable
   -- WeakDual is a topological vector space and negation is continuous

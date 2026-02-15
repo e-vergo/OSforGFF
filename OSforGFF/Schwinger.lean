@@ -144,12 +144,16 @@ def SchwingerFunction₁ (dμ_config : ProbabilityMeasure FieldConfiguration)
   SchwingerFunction dμ_config 1 ![f]
 
 /-- The 2-point Schwinger function: the covariance -/
+@[blueprint "def:schwinger-function-2"
+  (title := "Two-Point Schwinger Function")]
 def SchwingerFunction₂ (dμ_config : ProbabilityMeasure FieldConfiguration)
   (f g : TestFunction) : ℝ :=
   SchwingerFunction dμ_config 2 ![f, g]
 
 
 /-- The Schwinger function equals the GJ mean for n=1 -/
+@[blueprint "lem:schwinger-eq-mean"
+  (title := "S1 Equals GJ Mean")]
 lemma schwinger_eq_mean (dμ_config : ProbabilityMeasure FieldConfiguration) (f : TestFunction) :
   SchwingerFunction₁ dμ_config f = GJMean dμ_config f := by
   unfold SchwingerFunction₁ SchwingerFunction GJMean
@@ -159,6 +163,8 @@ lemma schwinger_eq_mean (dμ_config : ProbabilityMeasure FieldConfiguration) (f 
   simp
 
 /-- The Schwinger function equals the direct covariance integral for n=2 -/
+@[blueprint "lem:schwinger-eq-covariance-2"
+  (title := "S2 Equals Field Covariance")]
 lemma schwinger_eq_covariance (dμ_config : ProbabilityMeasure FieldConfiguration) (f g : TestFunction) :
   SchwingerFunction₂ dμ_config f g = ∫ ω, (distributionPairing ω f) * (distributionPairing ω g) ∂dμ_config.toMeasure := by
   unfold SchwingerFunction₂ SchwingerFunction
@@ -167,6 +173,8 @@ lemma schwinger_eq_covariance (dμ_config : ProbabilityMeasure FieldConfiguratio
   simp [Fin.prod_univ_two]
 
 /-- For centered measures (zero mean), the 1-point function vanishes -/
+@[blueprint "lem:schwinger-vanishes-centered"
+  (title := "S1 Vanishes for Centered Measures")]
 lemma schwinger_vanishes_centered (dμ_config : ProbabilityMeasure FieldConfiguration)
   (h_centered : ∀ f : TestFunction, GJMean dμ_config f = 0) (f : TestFunction) :
   SchwingerFunction₁ dμ_config f = 0 := by
@@ -174,18 +182,23 @@ lemma schwinger_vanishes_centered (dμ_config : ProbabilityMeasure FieldConfigur
   exact h_centered f
 
 /-- Complex version of Schwinger functions for complex test functions -/
+@[blueprint "def:schwinger-function-3"
+  (title := "Complex Schwinger n-Point Function")]
 def SchwingerFunctionℂ (dμ_config : ProbabilityMeasure FieldConfiguration) (n : ℕ)
   (f : Fin n → TestFunctionℂ) : ℂ :=
   ∫ ω, (∏ i, distributionPairingℂ_real ω (f i)) ∂dμ_config.toMeasure
 
 /-- The complex 2-point Schwinger function for complex test functions.
     This is the natural extension of SchwingerFunction₂ to complex test functions. -/
+@[blueprint "def:schwinger-function-4"]
 def SchwingerFunctionℂ₂ (dμ_config : ProbabilityMeasure FieldConfiguration)
   (φ ψ : TestFunctionℂ) : ℂ :=
   SchwingerFunctionℂ dμ_config 2 ![φ, ψ]
 
 /-- Property that SchwingerFunctionℂ₂ is ℂ-bilinear in both arguments.
     This is a key property for Gaussian measures and essential for OS0 analyticity. -/
+@[blueprint "def:covariance-bilinear"
+  (title := "Covariance Bilinearity Property")]
 def CovarianceBilinear (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (c : ℂ) (φ₁ φ₂ ψ : TestFunctionℂ),
     SchwingerFunctionℂ₂ dμ_config (c • φ₁) ψ = c * SchwingerFunctionℂ₂ dμ_config φ₁ ψ ∧
@@ -195,6 +208,8 @@ def CovarianceBilinear (dμ_config : ProbabilityMeasure FieldConfiguration) : Pr
 
 /-- If the product pairing is integrable for all test functions, then the complex
     2-point Schwinger function is ℂ-bilinear in both arguments. -/
+@[blueprint "lem:covariance-bilinear-of-integrable"
+  (title := "Covariance Bilinearity from Integrability")]
 lemma CovarianceBilinear_of_integrable
   (dμ_config : ProbabilityMeasure FieldConfiguration)
   (h_int : ∀ (φ ψ : TestFunctionℂ),
@@ -495,7 +510,11 @@ as distributions on product spaces. These are needed by other modules.
 -/
 
 /-- The product space of n copies of spacetime -/
+@[blueprint "def:space-time-product"
+  (title := "n-Fold Spacetime Product")]
 abbrev SpaceTimeProduct (n : ℕ) := (Fin n) → SpaceTime
 
 /-- Test functions on the n-fold product space -/
+@[blueprint "def:test-function-product"
+  (title := "Test Functions on Product Space")]
 abbrev TestFunctionProduct (n : ℕ) := SchwartzMap (SpaceTimeProduct n) ℝ

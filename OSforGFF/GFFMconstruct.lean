@@ -122,6 +122,8 @@ noncomputable section
 -/
 
 /-- A covariance function on test functions that determines the Gaussian measure -/
+@[blueprint "def:covariance-function"
+  (title := "Covariance Function")]
 structure CovarianceFunction where
   covar : TestFunctionℂ → TestFunctionℂ → ℂ
   symmetric : ∀ f g, covar f g = (starRingEnd ℂ) (covar g f)
@@ -131,11 +133,15 @@ structure CovarianceFunction where
   bounded : ∃ M > 0, ∀ f, ‖covar f f‖ ≤ M * (∫ x, ‖f x‖ ∂volume) * (∫ x, ‖f x‖^2 ∂volume)^(1/2)
 
 /-- A measure is centered (has zero mean) -/
+@[blueprint "def:is-centered-gj"
+  (title := "Centered Measure (Zero Mean)")]
 def isCenteredGJ (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (f : TestFunction), GJMean dμ_config f = 0
 
 /-- A measure is Gaussian if its generating functional has the Gaussian form.
     For a centered Gaussian measure, Z[J] = exp(-½⟨J, CJ⟩) where C is the covariance. -/
+@[blueprint "def:is-gaussian-gj"
+  (title := "Gaussian Generating Functional")]
 def isGaussianGJ (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   isCenteredGJ dμ_config ∧
   ∀ (J : TestFunctionℂ),
@@ -183,6 +189,8 @@ noncomputable def constructGaussianMeasureMinlos_free (m : ℝ) [Fact (0 < m)] :
   exact Classical.choose h_minlos
 
 /-- The Gaussian Free Field with mass m > 0, constructed via specialized Minlos -/
+@[blueprint "def:gaussian-free-field-free"
+  (title := "Gaussian Free Field Measure")]
 noncomputable def gaussianFreeField_free (m : ℝ) [Fact (0 < m)] : ProbabilityMeasure FieldConfiguration :=
   constructGaussianMeasureMinlos_free m
 
@@ -191,6 +199,8 @@ noncomputable def gaussianFreeField_free (m : ℝ) [Fact (0 < m)] : ProbabilityM
 
 /-- Real characteristic functional of the free GFF: for real test functions f, the generating
     functional equals the Gaussian form with the real covariance. -/
+@[blueprint "thm:gff-real-characteristic"
+  (title := "GFF Real Characteristic Functional")]
 theorem gff_real_characteristic (m : ℝ) [Fact (0 < m)] :
   ∀ f : TestFunction,
     GJGeneratingFunctional (gaussianFreeField_free m) f =
@@ -331,6 +341,8 @@ theorem gaussianFreeField_pairing_memLp
 /-- The GFF pairing has an integrable square (is in L²).
     This follows from the fact that the pushforward is a Gaussian measure,
     and Gaussian measures have finite moments of all orders. -/
+@[blueprint "lem:gff-pairing-square-integrable"
+  (title := "GFF Pairing is Square-Integrable")]
 lemma gff_pairing_square_integrable
   (m : ℝ) [Fact (0 < m)] (φ : TestFunction) :
   Integrable (fun ω => (distributionPairingCLM φ ω)^2) (gaussianFreeField_free m).toMeasure := by
@@ -349,6 +361,8 @@ lemma gff_pairing_square_integrable
 /-- The second moment of the GFF pairing equals the covariance form.
     This follows from the fact that the pushforward is a Gaussian with variance
     equal to the covariance form, and for centered Gaussians, variance = second moment. -/
+@[blueprint "lem:gff-second-moment-eq-covariance"
+  (title := "Second Moment Equals Covariance")]
 lemma gff_second_moment_eq_covariance
   (m : ℝ) [Fact (0 < m)] (φ : TestFunction) :
   ∫ ω, (distributionPairingCLM φ ω)^2 ∂(gaussianFreeField_free m).toMeasure =
@@ -375,6 +389,8 @@ lemma gff_second_moment_eq_covariance
 
 /-- The Gaussian CF with the free covariance is positive definite,
     via the square-root propagator embedding into a Hilbert space. -/
+@[blueprint "lem:free-covariance-form-r-gaussian-cf-pd"
+  (title := "Free Covariance Gaussian CF is Positive Definite")]
 lemma freeCovarianceFormR_gaussian_cf_pd (m : ℝ) [Fact (0 < m)] :
     IsPositiveDefinite
       (fun f : TestFunction => Complex.exp (-(1/2 : ℂ) * (freeCovarianceFormR m f f : ℂ))) := by
@@ -390,6 +406,8 @@ lemma freeCovarianceFormR_gaussian_cf_pd (m : ℝ) [Fact (0 < m)] :
   exact gaussian_positive_definite_via_embedding T (freeCovarianceFormR m) h_eq
 
 /-- The free covariance form as a MinlosAnalytic.CovarianceForm structure. -/
+@[blueprint "def:free-covariance-form"
+  (title := "Free Covariance Form")]
 def freeCovarianceForm (m : ℝ) [Fact (0 < m)] : MinlosAnalytic.CovarianceForm :=
   { Q := freeCovarianceFormR m
     symm := freeCovarianceFormR_symm m
@@ -452,6 +470,8 @@ This follows from `gff_pairing_is_gaussian` which shows the pushforward is a 1D 
 combined with Mathlib's `IsGaussian.exists_integrable_exp_sq` (Fernique's theorem).
 
 Proven 2025-12-16, replacing the previous axiom. -/
+@[blueprint "thm:gaussian-free-field-pairing-exp-sq-integrable"
+  (title := "Fernique Exponential Square Integrability")]
 theorem gaussianFreeField_pairing_expSq_integrable
   (m : ℝ) [Fact (0 < m)] (φ : TestFunction) :
   ∃ α : ℝ, 0 < α ∧
@@ -480,6 +500,7 @@ theorem gaussianFreeField_pairing_expSq_integrable
 /-- For real test functions, the square of the Gaussian pairing is integrable under the
     free Gaussian Free Field measure. This is the diagonal (f = g) case needed for
     establishing two-point integrability. -/
+@[blueprint "lem:gaussian-pairing-square-integrable-real"]
 lemma gaussian_pairing_square_integrable_real
     (m : ℝ) [Fact (0 < m)] (φ : TestFunction) :
   Integrable (fun ω => (distributionPairing ω φ) ^ 2)

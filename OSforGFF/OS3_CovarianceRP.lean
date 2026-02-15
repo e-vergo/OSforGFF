@@ -76,6 +76,8 @@ avoids non-convergent pointwise integrals. -/
 
     This is the distributional formulation that is mathematically well-defined
     for Schwartz test functions. -/
+@[blueprint "def:rp-inner-product"
+  (title := "Reflection Positivity Inner Product")]
 noncomputable def rpInnerProduct (m : ℝ) (f : TestFunctionℂ) : ℂ :=
   freeCovarianceℂ_bilinear m (star f) f
 
@@ -90,10 +92,11 @@ open MeasureTheory Complex Real
 open scoped ComplexConjugate
 
 /-! ## Part 1: Core Definitions -/
-
+@[blueprint "def:time-reflection-2"
+  (title := "Euclidean Time Reflection")]
 noncomputable def timeReflection (x : SpaceTime) : SpaceTime :=
   (WithLp.equiv 2 _).symm (Function.update x.ofLp 0 (-x.ofLp 0))
-
+@[blueprint "lem:time-reflection-involutive"]
 lemma timeReflection_involutive : Function.Involutive timeReflection := by
   intro x
   simp only [timeReflection]
@@ -102,17 +105,19 @@ lemma timeReflection_involutive : Function.Involutive timeReflection := by
   simp only [WithLp.equiv_symm_apply]
   by_cases hi : i = 0 <;> simp [hi, Function.update]
 
+@[blueprint "def:spatial-dot"]
 noncomputable def spatialDot (k_spatial x_spatial : SpatialCoords) : ℝ :=
   ∑ i, k_spatial i * x_spatial i
-
+@[blueprint "def:free-covariance-2"]
 noncomputable def freeCovarianceℂ_bilinear (m : ℝ) (f g : TestFunctionℂ) : ℂ :=
   ∫ x, ∫ y, (f x) * (_root_.freeCovariance m x y) * (g y)
-
+@[blueprint "def:weighted-laplace-fourier"
+  (title := "Weighted Laplace-Fourier Transform")]
 noncomputable def weightedLaplaceFourier (m : ℝ) (f : TestFunctionℂ) (k_sp : SpatialCoords) : ℂ :=
   let ω := Real.sqrt (‖k_sp‖^2 + m^2)
   ∫ x : SpaceTime, f x * Complex.exp (-ω * x 0) *
     Complex.exp (-Complex.I * spatialDot k_sp (spatialPart x))
-
+@[blueprint "def:rp-inner-product-2"]
 noncomputable def rpInnerProduct (m : ℝ) (f : TestFunctionℂ) : ℂ :=
   freeCovarianceℂ_bilinear m (star f) f
 
@@ -120,10 +125,13 @@ noncomputable def rpInnerProduct (m : ℝ) (f : TestFunctionℂ) : ℂ :=
 
 variable (m : ℝ) [Fact (0 < m)]
 
+@[blueprint "lem:star-apply"]
 lemma star_apply (f : TestFunctionℂ) (x : SpaceTime) :
     (star f) x = starRingEnd ℂ (f (timeReflection x)) := rfl
 
 omit [Fact (0 < m)] in
+@[blueprint "thm:rp-inner-product-eq-bessel-reflected"
+  (title := "RP Inner Product via Reflected Bessel Kernel")]
 theorem rpInnerProduct_eq_bessel_reflected (f : TestFunctionℂ) :
     rpInnerProduct m f =
       ∫ x : SpaceTime, ∫ y : SpaceTime,
@@ -146,6 +154,8 @@ theorem rpInnerProduct_eq_bessel_reflected (f : TestFunctionℂ) :
 /-- The mixed representation from the Schwinger pathway.
     This is more direct than the k₀-inside form for proving reflection positivity,
     because `(1/ω) exp(-ω|t|)` already factorizes for positive-time test functions. -/
+@[blueprint "thm:mixed-representation"
+  (title := "Mixed Representation of RP Inner Product")]
 theorem mixed_representation (f : TestFunctionℂ)
     (hf_supp : ∀ x, x 0 ≤ 0 → f x = 0) :
     rpInnerProduct m f =
@@ -160,6 +170,7 @@ theorem mixed_representation (f : TestFunctionℂ)
   exact bessel_bilinear_eq_mixed_representation m f hf_supp
 
 /-! ## Part 4: Key Lemmas -/
+@[blueprint "lem:energy-pos"]
 
 lemma energy_pos (k_sp : SpatialCoords) : 0 < Real.sqrt (‖k_sp‖^2 + m^2) := by
   apply Real.sqrt_pos_of_pos
@@ -169,11 +180,13 @@ lemma energy_pos (k_sp : SpatialCoords) : 0 < Real.sqrt (‖k_sp‖^2 + m^2) := 
 /-! ## Part 5: Factorization Helpers -/
 
 omit [Fact (0 < m)] in
+@[blueprint "lem:abs-neg-sum-nonneg"]
 lemma abs_neg_sum_nonneg (x0 y0 : ℝ) (hx : 0 ≤ x0) (hy : 0 ≤ y0) :
     |-x0 - y0| = x0 + y0 := by
   rw [abs_of_nonpos (by linarith : -x0 - y0 ≤ 0)]; ring
 
 omit [Fact (0 < m)] in
+@[blueprint "lem:spatial-dot-sub"]
 lemma spatialDot_sub (k_sp x_sp y_sp : SpatialCoords) :
     spatialDot k_sp (x_sp - y_sp) = spatialDot k_sp x_sp - spatialDot k_sp y_sp := by
   simp only [spatialDot]
@@ -182,24 +195,28 @@ lemma spatialDot_sub (k_sp x_sp y_sp : SpatialCoords) :
   simp_rw [h, Finset.sum_sub_distrib]
 
 omit [Fact (0 < m)] in
+@[blueprint "lem:exp-spatial-phase-factor"]
 lemma exp_spatial_phase_factor (k_sp : SpatialCoords) (x_sp y_sp : SpatialCoords) :
     Complex.exp (-Complex.I * spatialDot k_sp (x_sp - y_sp)) =
     Complex.exp (-Complex.I * spatialDot k_sp x_sp) *
     Complex.exp (Complex.I * spatialDot k_sp y_sp) := by
   rw [← Complex.exp_add, spatialDot_sub]; congr 1; push_cast; ring
-
+@[blueprint "def:x-integral-factor"]
 noncomputable def xIntegralFactor (f : TestFunctionℂ) (ω : ℝ) (k_sp : SpatialCoords) : ℂ :=
   ∫ x : SpaceTime, (starRingEnd ℂ (f x)) *
     Complex.exp (-(ω * x 0)) * Complex.exp (-Complex.I * spatialDot k_sp (spatialPart x))
 
+@[blueprint "def:y-integral-factor"]
 noncomputable def yIntegralFactor (f : TestFunctionℂ) (ω : ℝ) (k_sp : SpatialCoords) : ℂ :=
   ∫ y : SpaceTime, f y *
     Complex.exp (-(ω * y 0)) * Complex.exp (Complex.I * spatialDot k_sp (spatialPart y))
 
 omit [Fact (0 < m)] in
+@[blueprint "lem:norm-neg-eq"]
 lemma norm_neg_eq (k_sp : SpatialCoords) : ‖-k_sp‖ = ‖k_sp‖ := norm_neg k_sp
 
 omit [Fact (0 < m)] in
+@[blueprint "lem:spatial-dot-neg-left"]
 lemma spatialDot_neg_left (k_sp x_sp : SpatialCoords) :
     spatialDot (-k_sp) x_sp = -spatialDot k_sp x_sp := by
   simp only [spatialDot]
@@ -208,6 +225,7 @@ lemma spatialDot_neg_left (k_sp x_sp : SpatialCoords) :
   simp_rw [h, Finset.sum_neg_distrib]
 
 omit [Fact (0 < m)] in
+@[blueprint "lem:x-integral-factor-eq-conj-neg"]
 lemma xIntegralFactor_eq_conj_neg (f : TestFunctionℂ) (k_sp : SpatialCoords)
     (_hf_support : ∀ x : SpaceTime, x 0 < 0 → f x = 0) :
     xIntegralFactor f (Real.sqrt (‖k_sp‖^2 + m^2)) k_sp =
@@ -232,6 +250,7 @@ lemma xIntegralFactor_eq_conj_neg (f : TestFunctionℂ) (k_sp : SpatialCoords)
   · simp only [map_mul, Complex.conj_I, Complex.conj_ofReal]
 
 omit [Fact (0 < m)] in
+@[blueprint "lem:y-integral-factor-eq-neg"]
 lemma yIntegralFactor_eq_neg (f : TestFunctionℂ) (k_sp : SpatialCoords) :
     yIntegralFactor f (Real.sqrt (‖k_sp‖^2 + m^2)) k_sp =
     weightedLaplaceFourier m f (-k_sp) := by
@@ -254,6 +273,8 @@ lemma yIntegralFactor_eq_neg (f : TestFunctionℂ) (k_sp : SpatialCoords) :
     - `exp(-ik_sp·r) = exp(-ik_sp·x_sp) · exp(+ik_sp·y_sp)`
 
     This avoids the round-trip through k₀ space that the old proof used. -/
+@[blueprint "thm:factorization-to-squared-norm-direct"
+  (title := "Factorization to Squared Norm")]
 theorem factorization_to_squared_norm_direct (f : TestFunctionℂ) (k_sp : SpatialCoords)
     (hf_support : ∀ x : SpaceTime, x 0 < 0 → f x = 0) :
     let ω := Real.sqrt (‖k_sp‖^2 + m^2)
@@ -348,6 +369,8 @@ theorem factorization_to_squared_norm_direct (f : TestFunctionℂ) (k_sp : Spati
 
     This follows directly from the mixed representation + factorization,
     without going through the k₀-inside form. -/
+@[blueprint "thm:rp-equals-squared-norm-integral"
+  (title := "RP Equals Squared Norm Integral")]
 theorem rp_equals_squared_norm_integral (f : TestFunctionℂ)
     (hf_supp : ∀ x : SpaceTime, x 0 ≤ 0 → f x = 0) :
     rpInnerProduct m f =
@@ -373,6 +396,8 @@ theorem rp_equals_squared_norm_integral (f : TestFunctionℂ)
     Proof: By `rp_equals_squared_norm_integral`,
       ⟨Θf, f⟩_C = (1/(2(2π)^{d-1})) * ∫_{k_sp} (1/ω) |F_ω(-k_sp)|² dk_sp
     Both the prefactor and integrand are non-negative. -/
+@[blueprint "thm:free-covariance-reflection-positive-direct"
+  (title := "Reflection Positivity (Direct Proof)")]
 theorem freeCovariance_reflection_positive_direct (f : TestFunctionℂ)
     (hf_supp : ∀ x : SpaceTime, x 0 ≤ 0 → f x = 0) :
     0 ≤ (rpInnerProduct m f).re := by
@@ -407,6 +432,7 @@ end RPProof
 
     Both are defined using the same Bessel kernel C(x,y) = (m/(4π²r)) K₁(mr),
     so this equality holds by definition (rfl). -/
+@[blueprint "lem:rp-inner-product-eq-rp-proof"]
 lemma rpInnerProduct_eq_rpProof (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     rpInnerProduct m f = RPProof.rpInnerProduct m f := by
   -- Both sides expand to the same integral using freeCovariance (Bessel)
@@ -425,6 +451,8 @@ lemma rpInnerProduct_eq_rpProof (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
 
     **Proof:** Bridge to RPProof, then apply the direct proof
     via momentum representation and non-negativity of the integrand. -/
+@[blueprint "thm:free-covariance-reflection-positive-bilinear"
+  (title := "Reflection Positivity of Free Covariance (Complex)")]
 theorem freeCovariance_reflection_positive_bilinear (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ)
     (hf_supp : ∀ x : SpaceTime, x 0 ≤ 0 → f x = 0) :
   0 ≤ (rpInnerProduct m f).re := by
@@ -437,6 +465,7 @@ The result extends to real test functions via embedding. -/
 
 /-- For real test functions, `star (toComplex f) = compTimeReflection (toComplex f)`.
     This is because conjugation is identity for real-valued functions. -/
+@[blueprint "lem:star-to-complex-eq-comp-time-reflection"]
 lemma star_toComplex_eq_compTimeReflection (f : TestFunction) :
     star (toComplex f) = compTimeReflection (toComplex f) := by
   ext x
@@ -448,6 +477,7 @@ lemma star_toComplex_eq_compTimeReflection (f : TestFunction) :
 
 /-- The rpInnerProduct of a real test function equals the complex bilinear form
     with compTimeReflection. -/
+@[blueprint "lem:rp-inner-product-to-complex-eq"]
 lemma rpInnerProduct_toComplex_eq (m : ℝ) (f : TestFunction) :
     rpInnerProduct m (toComplex f) =
       freeCovarianceℂ_bilinear m (compTimeReflection (toComplex f)) (toComplex f) := by
@@ -483,6 +513,8 @@ theorem freeCovariance_reflection_positive_bilinear_real (m : ℝ) [Fact (0 < m)
   exact h_complex
 
 /-- Alias for `freeCovariance_reflection_positive_bilinear_real` to match expected name. -/
+@[blueprint "thm:free-covariance-reflection-positive-real"
+  (title := "Reflection Positivity of Free Covariance (Real)")]
 theorem freeCovariance_reflection_positive_real (m : ℝ) [Fact (0 < m)] (f : TestFunction)
     (hf_supp : ∀ x : SpaceTime, x 0 ≤ 0 → f x = 0) :
   0 ≤ ∫ x, ∫ y, (QFT.compTimeReflectionReal f) x * freeCovariance m x y * f y :=

@@ -165,6 +165,7 @@ def OS4_Clustering (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :
 
     This is the standard ergodicity formulation from Glimm-Jaffe.
 -/
+@[blueprint "def:os4-ergodicity"]
 def OS4_Ergodicity (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (n : ℕ) (z : Fin n → ℂ) (f : Fin n → TestFunctionℂ),
     let μ := dμ_config.toMeasure
@@ -187,6 +188,7 @@ def OS4_Ergodicity (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :
     polynomial decay rate. For the GFF in 4D spacetime (d=3 spatial dimensions),
     the natural rate is α = 2d = 6 from the mass gap.
 -/
+@[blueprint "def:os4-polynomial-clustering"]
 def OS4_PolynomialClustering (dμ_config : ProbabilityMeasure FieldConfiguration)
     (α : ℝ) (_hα : α > 0) : Prop :=
   ∀ (f g : TestFunctionℂ), ∃ (c : ℝ), c ≥ 0 ∧

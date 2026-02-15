@@ -53,6 +53,7 @@ open MeasureTheory Complex
 /-- Auxiliary lemma: the complex pairing has an integrable square under the free GFF measure.
 This is the complex analogue of `gaussian_pairing_square_integrable_real` and will serve as the
 base estimate for higher Gaussian moments. -/
+@[blueprint "lem:gaussian-complex-pairing-abs-sq-integrable"]
 lemma gaussian_complex_pairing_abs_sq_integrable
     (m : ℝ) [Fact (0 < m)] (φ : TestFunctionℂ) :
   Integrable (fun ω => ‖distributionPairingℂ_real ω φ‖ ^ 2)
@@ -245,6 +246,7 @@ theorem gaussian_pairing_product_integrable_free_2point
   exact Integrable.add h_real_part h_imag_part
 
 /-- **Corollary**: The complex covariance is well-defined via the general integrability. -/
+@[blueprint "thm:covariance-bilinear-from-general"]
 theorem covariance_bilinear_from_general
   (m : ℝ) [Fact (0 < m)] :
   CovarianceBilinear (gaussianFreeField_free m) := by

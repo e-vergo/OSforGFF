@@ -37,6 +37,7 @@ This uses `MeasurableEquiv.piFinSuccAbove` and `measurePreserving_piFinSuccAbove
 -/
 
 /-- MeasurableEquiv between PiLp and the underlying pi type. -/
+@[blueprint "def:pi-lp-measurable-equiv"]
 def piLpMeasurableEquiv (n : ℕ) : PiLp 2 (fun _ : Fin n => ℝ) ≃ᵐ (Fin n → ℝ) where
   toEquiv := WithLp.equiv 2 _
   measurable_toFun := WithLp.measurable_ofLp 2 _
@@ -95,11 +96,13 @@ theorem spacetimeDecomp_measurePreserving :
   exact h1.trans (h2.trans h3)
 
 /-- Spacetime decomposition maps k to (k 0, spatialPart k). -/
+@[blueprint "thm:spacetime-decomp-apply"]
 theorem spacetimeDecomp_apply (k : SpaceTime) :
     spacetimeDecomp k = (k 0, spatialPart k) := rfl
 
 /-- `spacetimeDecomp.symm` equals `spacetimeOfTimeSpace` (from SchwartzProdIntegrable.lean).
     Both construct a SpaceTime point from time t and spatial coordinates v. -/
+@[blueprint "lem:spacetime-decomp-symm-eq-spacetime-of-time-space"]
 lemma spacetimeDecomp_symm_eq_spacetimeOfTimeSpace (t : ℝ) (v : SpatialCoords) :
     spacetimeDecomp.symm (t, v) = spacetimeOfTimeSpace t v := by
   -- Both definitions construct a point x with x 0 = t and x i = v (i-1) for i > 0
@@ -119,6 +122,7 @@ lemma spacetimeDecomp_symm_eq_spacetimeOfTimeSpace (t : ℝ) (v : SpatialCoords)
     exact spacetimeOfTimeSpace_spatial t v j
 
 /-- The SpaceTime norm decomposes into time and spatial parts: ‖k‖² = k₀² + ‖k_sp‖². -/
+@[blueprint "lem:spacetime-norm-sq-decompose"]
 lemma spacetime_norm_sq_decompose (k : SpaceTime) :
     ‖k‖^2 = (k 0)^2 + ‖spatialPart k‖^2 := by
   -- Expand SpaceTime norm as sum over 4 components
@@ -142,6 +146,7 @@ lemma spacetime_norm_sq_decompose (k : SpaceTime) :
   rw [hST, hSp]; ring
 
 /-- For a product-type integrand f(k₀) × g(k_sp), the integral decomposes as a product. -/
+@[blueprint "lem:integral-spacetime-prod-split"]
 lemma integral_spacetime_prod_split {f : ℝ → ℂ} {g : SpatialCoords → ℂ}
     (_hf : Integrable f) (_hg : Integrable g) :
     ∫ k : SpaceTime, f (k 0) * g (spatialPart k) =
