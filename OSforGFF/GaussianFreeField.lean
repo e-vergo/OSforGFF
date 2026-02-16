@@ -63,7 +63,10 @@ The main proof used by `GFFmaster.lean` is in `OS0_GFF.lean` (holomorphic integr
 namespace OS0_alt
 
 /-- Helper lemma for bilinear expansion with finite sums -/
-@[blueprint "lem:bilin-sum-sum"]
+@[blueprint "lem:bilin-sum-sum"
+  (title := "Bilinear Sum Expansion")
+  (statement := /-- $B\!\bigl(\sum_i z_i J_i,\, \sum_j z_j J_j\bigr) = \sum_{i,j} z_i z_j\, B(J_i, J_j)$ for a bilinear form $B$. -/)
+]
 lemma bilin_sum_sum {E : Type*} [AddCommMonoid E] [Module ℂ E]
   (B : LinearMap.BilinMap ℂ E ℂ) (n : ℕ) (J : Fin n → E) (z : Fin n → ℂ) :
   B (∑ i, z i • J i) (∑ j, z j • J j) = ∑ i, ∑ j, z i * z j * B (J i) (J j) := by
@@ -81,7 +84,9 @@ lemma bilin_sum_sum {E : Type*} [AddCommMonoid E] [Module ℂ E]
 end OS0_alt
 
 /-- Assumption: The complex covariance is continuous bilinear -/
-@[blueprint "def:covariance-continuous"]
+@[blueprint "def:covariance-continuous"
+  (title := "Covariance Continuity")
+  (statement := /-- The complex covariance $S_2(z \cdot J, K)$ is continuous in $z \in \mathbb{C}$ for all test functions $J, K$. -/)]
 def CovarianceContinuous (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (J K : TestFunctionℂ), Continuous (fun z : ℂ =>
     SchwingerFunctionℂ₂ dμ_config (z • J) K)
@@ -96,8 +101,9 @@ Note: The new proof via holomorphic integral theorem is in `OSforGFF/OS0_GFF.lea
 -/
 
 namespace OS0_alt
-@[blueprint "def:g-jcov-bilin"]
-
+@[blueprint "def:g-jcov-bilin"
+  (title := "Covariance Bilinear Map")
+  (statement := /-- Packages the two-point function $S_2$ into a $\mathbb{C}$-bilinear map $B : E \times E \to \mathbb{C}$ using the bilinearity hypothesis. -/)]
 def GJcov_bilin (dμ_config : ProbabilityMeasure FieldConfiguration)
   (h_bilinear : CovarianceBilinear dμ_config) : LinearMap.BilinMap ℂ TestFunctionℂ ℂ :=
   LinearMap.mk₂ ℂ
@@ -115,7 +121,10 @@ def GJcov_bilin (dμ_config : ProbabilityMeasure FieldConfiguration)
     (by intro a x y   -- homogeneity in the 2nd arg
         exact (h_bilinear a x 0 y).2.2.1)
 
-@[blueprint "thm:gaussian-satisfies-os0"]
+@[blueprint "thm:gaussian-satisfies-os0"
+  (title := "Gaussian Measures Satisfy OS0")
+  (statement := /-- For a centered Gaussian measure with bilinear covariance, $Z[\sum_i z_i J_i] = \exp\!\bigl(-\tfrac{1}{2}\sum_{i,j} z_i z_j S_2(J_i, J_j)\bigr)$ is entire in $(z_1,\ldots,z_n)$, proving OS0 analyticity. -/)
+]
 theorem gaussian_satisfies_OS0
   (dμ_config : ProbabilityMeasure FieldConfiguration)
   (h_gaussian : isGaussianGJ dμ_config)
@@ -210,14 +219,18 @@ differences of spacetime points.
 -/
 
 /-- Assumption: The covariance is invariant under Euclidean transformations -/
-@[blueprint "def:covariance-euclidean-invariant"]
+@[blueprint "def:covariance-euclidean-invariant"
+  (title := "Real Covariance Euclidean Invariance")
+  (statement := /-- The real two-point function satisfies $S_2(g \cdot f,\, g \cdot h) = S_2(f, h)$ for all $g \in E(4)$ and real test functions $f, h$. -/)]
 def CovarianceEuclideanInvariant (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (g : QFT.E) (f h : TestFunction),
     SchwingerFunction₂ dμ_config (QFT.euclidean_action_real g f) (QFT.euclidean_action_real g h) =
     SchwingerFunction₂ dμ_config f h
 
 /-- Assumption: The complex covariance is invariant under Euclidean transformations -/
-@[blueprint "def:covariance-euclidean-invariant-2"]
+@[blueprint "def:covariance-euclidean-invariant-2"
+  (title := "Complex Covariance Euclidean Invariance")
+  (statement := /-- The complex two-point function satisfies $S_2(g \cdot f,\, g \cdot h) = S_2(f, h)$ for all $g \in E(4)$ and complex test functions $f, h$. -/)]
 def CovarianceEuclideanInvariantℂ (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (g : QFT.E) (f h : TestFunctionℂ),
     SchwingerFunctionℂ₂ dμ_config (QFT.euclidean_action g f) (QFT.euclidean_action g h) =

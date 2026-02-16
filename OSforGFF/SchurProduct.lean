@@ -40,12 +40,19 @@ notation:100 A "∘ₕ" B => Matrix.hadamard A B
 
 /-- Auxiliary: diagonal embedding of a vector `x : ι → ℝ` into `ι×ι` used for the restriction
 argument: only the diagonal entries are nonzero and equal to `x`. -/
-@[simp] def diagEmbed (x : ι → ℝ) : ι × ι → ℝ := fun p => if p.2 = p.1 then x p.1 else 0
+@[simp, blueprint "def:diag-embed"
+  (skipCrossRef := true)
+] def diagEmbed (x : ι → ℝ) : ι × ι → ℝ := fun p => if p.2 = p.1 then x p.1 else 0
 
-@[simp] lemma diagEmbed_diag (x : ι → ℝ) (i : ι) : diagEmbed (ι:=ι) x (i, i) = x i := by
+@[simp, blueprint "lem:diag-embed-diag"
+  (skipCrossRef := true)
+] lemma diagEmbed_diag (x : ι → ℝ) (i : ι) : diagEmbed (ι:=ι) x (i, i) = x i := by
   simp [diagEmbed]
 
-@[blueprint "lem:diag-embed-ne-zero-of-ne-zero"]
+@[blueprint "lem:diag-embed-ne-zero-of-ne-zero"
+  (statement := /-- If $x \neq 0$ then its diagonal embedding is nonzero. -/)
+  (skipCrossRef := true)
+]
 lemma diagEmbed_ne_zero_of_ne_zero {x : ι → ℝ} (hx : x ≠ 0) : diagEmbed (ι:=ι) x ≠ 0 := by
   classical
   -- If diagEmbed x = 0 then all diagonal entries vanish, hence x = 0, contradiction.
@@ -56,14 +63,17 @@ lemma diagEmbed_ne_zero_of_ne_zero {x : ι → ℝ} (hx : x ≠ 0) : diagEmbed (
   simpa [diagEmbed] using this
 
 /-- Kronecker-like product kernel on the product index: (i,j),(k,l) ↦ A i k * B j l. -/
-@[simp] def kronLike (A B : Matrix ι ι ℝ) : Matrix (ι × ι) (ι × ι) ℝ :=
+@[simp, blueprint] def kronLike (A B : Matrix ι ι ℝ) : Matrix (ι × ι) (ι × ι) ℝ :=
   fun p q => A p.1 q.1 * B p.2 q.2
 
 /-- Column slice of a vector indexed by ι×ι: take j and view i ↦ y (i,j). -/
-@[simp] def colSlice (y : ι × ι → ℝ) (j : ι) : ι → ℝ := fun i => y (i, j)
+@[simp, blueprint] def colSlice (y : ι × ι → ℝ) (j : ι) : ι → ℝ := fun i => y (i, j)
 
 /-- Finite sum over pairs equals iterated double sum over coordinates (binderless sums). -/
-@[blueprint "lem:sum-pairs-eq-double"]
+@[blueprint "lem:sum-pairs-eq-double"
+  (statement := /-- $\sum_{p \in \iota \times \iota} g(p) = \sum_i \sum_j g(i,j)$. Unfolding paired sums. -/)
+  (skipCrossRef := true)
+]
 lemma sum_pairs_eq_double (g : ι × ι → ℝ) :
   (∑ p, g p) = ∑ i, ∑ j, g (i, j) := by
   classical
@@ -83,7 +93,10 @@ lemma sum_pairs_eq_double (g : ι × ι → ℝ) :
       congr
 
 /-- Compute (kronLike A B).mulVec y at a pair (i,j) as a double sum (binderless sums). -/
-@[blueprint "lem:kron-like-mul-vec"]
+@[blueprint "lem:kron-like-mul-vec"
+  (statement := /-- Matrix-vector product for the Kronecker-like product: $(K y)_{(i,j)} = \sum_k \sum_l A_{ik} B_{jl} y_{(k,l)}$. -/)
+  (skipCrossRef := true)
+]
 lemma kronLike_mulVec
   (A B : Matrix ι ι ℝ) (y : ι × ι → ℝ) (i j : ι) :
   ((kronLike (ι:=ι) A B).mulVec y) (i, j)
@@ -96,7 +109,10 @@ lemma kronLike_mulVec
   simpa [Matrix.mulVec, kronLike] using this
 
 /-- Helper: swap sums and factor the `B` term in the Kronecker quadratic expansion. -/
-@[blueprint "lem:swap-sums-factor-b"]
+@[blueprint "lem:swap-sums-factor-b"
+  (statement := /-- Rearranges the quadratic form sum to factor out the $B$ matrix: swaps summation order and groups $A$-quadratic forms. -/)
+  (skipCrossRef := true)
+]
 lemma swap_sums_factor_B
   (A B : Matrix ι ι ℝ) (y : ι × ι → ℝ) :
   (∑ i, ∑ j, y (i, j) * (∑ k, ∑ l, (A i k * B j l) * y (k, l)))
@@ -156,7 +172,10 @@ lemma swap_sums_factor_B
   exact h1.trans (h2.trans (h2a.trans (h2b.trans h4)))
 
 /-- Helper: identify the inner expression with `colSlice` and `A.mulVec`. -/
-@[blueprint "lem:inner-sum-col-slice-mul-vec"]
+@[blueprint "lem:inner-sum-col-slice-mul-vec"
+  (statement := /-- The inner sum $\sum_i y_{ij} \sum_k A_{ik} y_{kl}$ equals the dot product of column slices: $y_j^T A y_l$. -/)
+  (skipCrossRef := true)
+]
 lemma inner_sum_colSlice_mulVec
   (A : Matrix ι ι ℝ) (y : ι × ι → ℝ) (j l : ι) :
   (∑ i, y (i, j) * (∑ k, A i k * y (k, l)))
@@ -165,7 +184,11 @@ lemma inner_sum_colSlice_mulVec
   simp [colSlice, Matrix.mulVec, dotProduct, Finset.mul_sum]
 
 /-- Quadratic form via sums: binderless version. -/
-@[blueprint "lem:kron-like-quadratic-sum"]
+@[blueprint "lem:kron-like-quadratic-sum"
+  (title := "Kronecker-like Quadratic Form Decomposition")
+  (statement := /-- The quadratic form of the Kronecker-like product decomposes as $y^T K y = \sum_{j,l} (y_j^T A y_l) B_{jl}$. Key algebraic identity for the Schur product proof. -/)
+  (skipCrossRef := true)
+]
 lemma kronLike_quadratic_sum
   (A B : Matrix ι ι ℝ) (y : ι × ι → ℝ) :
   (∑ p, y p * ((kronLike (ι:=ι) A B).mulVec y) p)
@@ -204,7 +227,10 @@ lemma kronLike_quadratic_sum
 /-- Frobenius positivity for a nonzero PSD matrix against a PD matrix.
 If `G` is positive semidefinite and nonzero, and `B` is positive definite,
 then the Frobenius inner product `∑ j, ∑ l, G j l * B j l` is strictly positive. -/
-@[blueprint "lem:frobenius-pos-of-psd-posdef"]
+@[blueprint "lem:frobenius-pos-of-psd-posdef"
+  (statement := /-- Frobenius inner product positivity: $\sum_{j,l} G_{jl} B_{jl} > 0$ when $G$ is PSD, nonzero, and $B$ is PD. -/)
+  (skipCrossRef := true)
+]
 lemma frobenius_pos_of_psd_posdef
   (G B : Matrix ι ι ℝ) (hG_psd : G.PosSemidef) (hG_ne_zero : G ≠ 0) (hB : B.PosDef) :
   0 < ∑ j, ∑ l, G j l * B j l := by
@@ -213,7 +239,10 @@ lemma frobenius_pos_of_psd_posdef
 
 /-- Gram-type PSD: if `A` is positive definite, then the matrix
 `G j l = ∑ i, (colSlice y j) i * (A * colSlice y l)_i` is positive semidefinite. -/
-@[blueprint "lem:gram-psd-from-a-posdef"]
+@[blueprint "lem:gram-psd-from-a-posdef"
+  (statement := /-- The Gram-like matrix $G_{jl} = y_j^T A y_l$ is PSD when $A$ is PD. This is the inner kernel of the Schur product proof. -/)
+  (skipCrossRef := true)
+]
 lemma gram_psd_from_A_posdef
   (A : Matrix ι ι ℝ) (hA : A.PosDef) (y : ι × ι → ℝ) :
   Matrix.PosSemidef (fun j l : ι => ∑ i, (colSlice (ι:=ι) y j) i * (A.mulVec (colSlice (ι:=ι) y l)) i) := by

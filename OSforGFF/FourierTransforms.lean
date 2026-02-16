@@ -97,7 +97,8 @@ private lemma measurePreserving_tripleReorder :
     This follows from Fubini-Tonelli: if F is integrable on the product space,
     then we can integrate in any order. -/
 @[blueprint "lem:fubini-triple-reorder"
-  (title := "Fubini Reordering for Triple Integrals")]
+  (title := "Fubini Reordering for Triple Integrals")
+  (statement := /-- Triple integrals can be reordered: $\int_x \int_y \int_k F(x,y,k) = \int_k \int_x \int_y F(x,y,k)$. -/)]
 lemma fubini_triple_reorder {F : α → α → α → ℂ}
     (hF : Integrable (fun p : α × α × α => F p.1 p.2.1 p.2.2)
       (volume.prod (volume.prod volume))) :
@@ -139,7 +140,8 @@ lemma fubini_triple_reorder {F : α → α → α → ℂ}
     - integrableOn_exp_mul_Iic for exp(μx) on (-∞, 0] (since μ > 0)
     - integrableOn_exp_mul_Ioi for exp(-μx) on (0, ∞) (since -μ < 0) -/
 @[blueprint "lem:integrable-exponential-decay"
-  (title := "Integrability of Exponential Decay")]
+  (title := "Integrability of Exponential Decay")
+  (statement := /-- For $\mu > 0$, the function $e^{-\mu|x|}$ is integrable. -/)]
 lemma integrable_exponential_decay (μ : ℝ) (hμ : 0 < μ) :
     Integrable (fun x : ℝ => Real.exp (-μ * |x|)) volume := by
   rw [← integrableOn_univ, ← Set.Iic_union_Ioi (a := (0 : ℝ))]
@@ -163,7 +165,9 @@ lemma integrable_exponential_decay (μ : ℝ) (hμ : 0 < μ) :
 /-- The Fourier integrand of exponential decay is integrable.
     Proof: |exp(ikx)| = 1, so the norm of the integrand equals exp(-μ|x|),
     which is integrable by integrable_exponential_decay. -/
-@[blueprint "lem:integrable-exponential-decay-fourier"]
+@[blueprint "lem:integrable-exponential-decay-fourier"
+  (title := "Integrability of Exponential Decay Fourier Integrand")
+  (statement := /-- For $\mu > 0$, the function $e^{ikx} e^{-\mu|x|}$ is integrable. -/)]
 lemma integrable_exponential_decay_fourier (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
     Integrable (fun x : ℝ => Complex.exp (Complex.I * k * x) * Real.exp (-μ * |x|)) volume := by
   have hint : Integrable (fun x : ℝ => (Real.exp (-μ * |x|) : ℂ)) volume :=
@@ -187,7 +191,9 @@ derive the Lorentzian result.
 -/
 
 /-- The coefficient ik + α is nonzero when α ≠ 0 (since Re(ik + α) = α ≠ 0). -/
-@[blueprint "lem:ik-add-ne-zero"]
+@[blueprint "lem:ik-add-ne-zero"
+  (title := "Nonzero Complex Coefficient (Addition)")
+  (statement := /-- $ik + \alpha \ne 0$ when $\alpha \ne 0$. -/)]
 lemma ik_add_ne_zero (α : ℝ) (hα : α ≠ 0) (k : ℝ) : Complex.I * k + (α : ℂ) ≠ 0 := by
   intro h
   have hre : (Complex.I * k + (α : ℂ)).re = 0 := by simp [h]
@@ -204,7 +210,9 @@ lemma ik_add_ne_zero (α : ℝ) (hα : α ≠ 0) (k : ℝ) : Complex.I * k + (α
     Special cases:
     - α = -μ (μ > 0): gives decay on [0,∞), converges at +∞
     - α = +μ (μ > 0): gives growth on (-∞,0], converges at -∞ -/
-@[blueprint "lem:antideriv-exp-complex-linear"]
+@[blueprint "lem:antideriv-exp-complex-linear"
+  (title := "Antiderivative of Complex Exponential")
+  (statement := /-- $\frac{d}{dx}\left[\frac{e^{(ik+\alpha)x}}{ik+\alpha}\right] = e^{(ik+\alpha)x}$. -/)]
 lemma antideriv_exp_complex_linear (α : ℝ) (hα : α ≠ 0) (k x : ℝ) :
     HasDerivAt (fun t : ℝ => Complex.exp ((Complex.I * k + α) * t) / (Complex.I * k + α))
                (Complex.exp ((Complex.I * k + α) * x))
@@ -230,7 +238,8 @@ lemma antideriv_exp_complex_linear (α : ℝ) (hα : α ≠ 0) (k x : ℝ) :
 /-- Complex exponential e^{cx} tends to 0 as x → +∞ when Re(c) < 0.
     Proof: ‖e^{cx}‖ = e^{Re(c)·x} → 0 since Re(c) < 0 and x → +∞. -/
 @[blueprint "thm:tendsto-cexp-at-top-zero"
-  (title := "Complex Exponential Decay at +Infinity")]
+  (title := "Complex Exponential Decay at +Infinity")
+  (statement := /-- $e^{cx} \to 0$ as $x \to +\infty$ when $\text{Re}(c) < 0$. -/)]
 theorem tendsto_cexp_atTop_zero {c : ℂ} (hc : c.re < 0) :
     Filter.Tendsto (fun x : ℝ => Complex.exp (c * x)) Filter.atTop (nhds 0) := by
   rw [Complex.tendsto_exp_nhds_zero_iff]
@@ -247,7 +256,8 @@ theorem tendsto_cexp_atTop_zero {c : ℂ} (hc : c.re < 0) :
 /-- Complex exponential e^{cx} tends to 0 as x → -∞ when Re(c) > 0.
     Proof: ‖e^{cx}‖ = e^{Re(c)·x} → 0 since Re(c) > 0 and x → -∞. -/
 @[blueprint "thm:tendsto-cexp-at-bot-zero"
-  (title := "Complex Exponential Decay at -Infinity")]
+  (title := "Complex Exponential Decay at -Infinity")
+  (statement := /-- $e^{cx} \to 0$ as $x \to -\infty$ when $\text{Re}(c) > 0$. -/)]
 theorem tendsto_cexp_atBot_zero {c : ℂ} (hc : c.re > 0) :
     Filter.Tendsto (fun x : ℝ => Complex.exp (c * x)) Filter.atBot (nhds 0) := by
   rw [Complex.tendsto_exp_nhds_zero_iff]
@@ -258,7 +268,9 @@ theorem tendsto_cexp_atBot_zero {c : ℂ} (hc : c.re > 0) :
 
 /-- The integrand e^{(ik-μ)x} is integrable on [0, ∞) when μ > 0.
     This follows from the exponential decay since Re(ik - μ) = -μ < 0. -/
-@[blueprint "thm:integrable-on-exp-decay-ioi"]
+@[blueprint "thm:integrable-on-exp-decay-ioi"
+  (title := "Integrability on Positive Half-Line (Decay)")
+  (statement := /-- $e^{(ik-\mu)x}$ is integrable on $[0, \infty)$ when $\mu > 0$. -/)]
 theorem integrableOn_exp_decay_Ioi (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
     MeasureTheory.IntegrableOn
       (fun x : ℝ => Complex.exp ((Complex.I * k - μ) * x))
@@ -279,7 +291,9 @@ theorem integrableOn_exp_decay_Ioi (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
 
 /-- Exponential e^{bx} is integrable on (-∞, a) when b > 0.
     Proved by change of variables from exp_neg_integrableOn_Ioi. -/
-@[blueprint "thm:exp-pos-integrable-on-iio"]
+@[blueprint "thm:exp-pos-integrable-on-iio"
+  (title := "Positive Exponential Integrability on Negative Half-Line")
+  (statement := /-- $e^{bx}$ is integrable on $(-\infty, a)$ when $b > 0$. -/)]
 theorem exp_pos_integrableOn_Iio (a : ℝ) {b : ℝ} (h : 0 < b) :
     MeasureTheory.IntegrableOn (fun x => Real.exp (b * x)) (Set.Iio a) MeasureTheory.volume := by
   have h_neg : MeasureTheory.IntegrableOn (fun x => Real.exp (-b * x)) (Set.Ioi (-a)) MeasureTheory.volume :=
@@ -296,7 +310,9 @@ theorem exp_pos_integrableOn_Iio (a : ℝ) {b : ℝ} (h : 0 < b) :
 
 /-- Exponential e^{bx} is integrable on (-∞, a] when b > 0.
     Follows from Iio version since measure of a point is 0. -/
-@[blueprint "thm:exp-pos-integrable-on-iic"]
+@[blueprint "thm:exp-pos-integrable-on-iic"
+  (title := "Positive Exponential Integrability on Closed Negative Half-Line")
+  (statement := /-- $e^{bx}$ is integrable on $(-\infty, a]$ when $b > 0$. -/)]
 theorem exp_pos_integrableOn_Iic (a : ℝ) {b : ℝ} (h : 0 < b) :
     MeasureTheory.IntegrableOn (fun x => Real.exp (b * x)) (Set.Iic a) MeasureTheory.volume := by
   rw [integrableOn_Iic_iff_integrableOn_Iio]
@@ -304,7 +320,9 @@ theorem exp_pos_integrableOn_Iic (a : ℝ) {b : ℝ} (h : 0 < b) :
 
 /-- The integrand e^{(ik+μ)x} is integrable on (-∞, 0] when μ > 0.
     This follows from the exponential decay since Re(ik + μ) = μ > 0. -/
-@[blueprint "thm:integrable-on-exp-growth-iic"]
+@[blueprint "thm:integrable-on-exp-growth-iic"
+  (title := "Integrability on Negative Half-Line (Growth)")
+  (statement := /-- $e^{(ik+\mu)x}$ is integrable on $(-\infty, 0]$ when $\mu > 0$. -/)]
 theorem integrableOn_exp_growth_Iic (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
     MeasureTheory.IntegrableOn
       (fun x : ℝ => Complex.exp ((Complex.I * k + μ) * x))
@@ -327,7 +345,9 @@ theorem integrableOn_exp_growth_Iic (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
     exact le_refl _
 
 /-- ik - μ is nonzero when μ ≠ 0 (since Re(ik - μ) = -μ ≠ 0). -/
-@[blueprint "lem:ik-sub-ne-zero"]
+@[blueprint "lem:ik-sub-ne-zero"
+  (title := "Nonzero Complex Coefficient (Subtraction)")
+  (statement := /-- $ik - \mu \ne 0$ when $\mu \ne 0$. -/)]
 lemma ik_sub_ne_zero (μ : ℝ) (hμ : μ ≠ 0) (k : ℝ) : Complex.I * k - (μ : ℂ) ≠ 0 := by
   intro h
   have hre : (Complex.I * k - (μ : ℂ)).re = 0 := by simp [h]
@@ -406,7 +426,8 @@ theorem fourier_exp_decay_positive_halfline (μ : ℝ) (hμ : 0 < μ) (k : ℝ) 
     At -∞: e^{(ik+μ)x} → 0 since Re(ik+μ) = μ > 0.
     At 0: e^0/(ik+μ) = 1/(ik+μ) = 1/(μ+ik). -/
 @[blueprint "thm:fourier-exp-decay-negative-halfline"
-  (title := "Fourier Transform of Exponential Decay (Negative Half-Line)")]
+  (title := "Fourier Transform of Exponential Decay (Negative Half-Line)")
+  (statement := /-- $\int_{-\infty}^0 e^{ikx} e^{\mu x}\,dx = \frac{1}{\mu + ik}$. -/)]
 theorem fourier_exp_decay_negative_halfline (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
     ∫ x : ℝ in Set.Iic 0, Complex.exp (Complex.I * k * x) * Real.exp (μ * x) =
       1 / (μ + Complex.I * k) := by
@@ -462,7 +483,8 @@ theorem fourier_exp_decay_negative_halfline (μ : ℝ) (hμ : 0 < μ) (k : ℝ) 
                                    = 1/(μ+ik) + 1/(μ-ik)
                                    = 2μ/(k² + μ²) -/
 @[blueprint "lem:fourier-exponential-decay-split"
-  (title := "Fourier Transform as Sum of Half-Line Integrals")]
+  (title := "Fourier Transform as Sum of Half-Line Integrals")
+  (statement := /-- $\int_{-\infty}^0 + \int_0^\infty e^{ikx} e^{-\mu|x|}\,dx = \frac{2\mu}{k^2 + \mu^2}$. -/)]
 lemma fourier_exponential_decay_split (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
     (∫ x : ℝ in Set.Iic 0, Complex.exp (Complex.I * k * x) * Real.exp (μ * x)) +
     (∫ x : ℝ in Set.Ioi 0, Complex.exp (Complex.I * k * x) * Real.exp (-μ * x)) =
@@ -509,6 +531,9 @@ This is the "forward" direction of the Fourier pair.
 @[blueprint "lem:fourier-exp-decay"
   (title := "Fourier Transform of Exponential Decay")
   (statement := /-- The Fourier transform of $e^{-\mu|t|}$ equals $\frac{2\mu}{\mu^2 + k^2}$, the Lorentzian. -/)
+  (proof := /--
+    The integral is evaluated by splitting at $0$. On each half-line, $e^{ikx \mp \mu x}$ has a decaying exponential factor whose antiderivative is computed explicitly. The results combine via $|x| = \pm x$ on each half-line.
+  -/)
   (latexEnv := "lemma")
   (latexLabel := "lem:fourier-exp-decay")]
 lemma fourier_exponential_decay' (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
@@ -550,7 +575,8 @@ lemma fourier_exponential_decay' (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
 
 /-- Variant with negative frequency convention e^{-ikx}. -/
 @[blueprint "lem:fourier-exponential-decay"
-  (title := "Fourier Transform of Exponential Decay (Negative Phase)")]
+  (title := "Fourier Transform of Exponential Decay (Negative Phase)")
+  (statement := /-- $\int e^{-ikx} e^{-\mu|x|}\,dx = \frac{2\mu}{k^2 + \mu^2}$. -/)]
 lemma fourier_exponential_decay (μ : ℝ) (hμ : 0 < μ) (k : ℝ) :
     ∫ x : ℝ, Complex.exp (-Complex.I * k * x) * Real.exp (-μ * |x|) =
       2 * μ / (k^2 + μ^2) := by
@@ -587,11 +613,15 @@ If f is integrable, FT(f) is integrable, and f is continuous at x, then
 -/
 
 /-- The exponential decay function e^{-μ|x|} as a function ℝ → ℂ. -/
-@[blueprint "def:exp-decay-fun"]
+@[blueprint "def:exp-decay-fun"
+  (title := "Exponential Decay Function")
+  (statement := /-- The exponential decay function $e^{-\mu|x|}$. -/)]
 noncomputable def expDecayFun (μ : ℝ) : ℝ → ℂ := fun x => Real.exp (-μ * |x|)
 
 /-- The exponential decay function is continuous. -/
-@[blueprint "lem:continuous-exp-decay-fun"]
+@[blueprint "lem:continuous-exp-decay-fun"
+  (title := "Continuity of Exponential Decay Function")
+  (statement := /-- The exponential decay function $e^{-\mu|x|}$ is continuous. -/)]
 lemma continuous_expDecayFun (μ : ℝ) : Continuous (expDecayFun μ) := by
   unfold expDecayFun
   refine Continuous.comp continuous_ofReal ?_
@@ -599,7 +629,9 @@ lemma continuous_expDecayFun (μ : ℝ) : Continuous (expDecayFun μ) := by
   exact continuous_const.mul continuous_abs
 
 /-- The exponential decay function is integrable over ℝ. -/
-@[blueprint "lem:integrable-exp-decay-fun"]
+@[blueprint "lem:integrable-exp-decay-fun"
+  (title := "Integrability of Exponential Decay Function")
+  (statement := /-- The exponential decay function $e^{-\mu|x|}$ is integrable when $\mu > 0$. -/)]
 lemma integrable_expDecayFun (μ : ℝ) (hμ : 0 < μ) : Integrable (expDecayFun μ) volume := by
   unfold expDecayFun
   exact Integrable.ofReal (integrable_exponential_decay μ hμ)
@@ -608,7 +640,8 @@ lemma integrable_expDecayFun (μ : ℝ) (hμ : 0 < μ) : Integrable (expDecayFun
     FT_mathlib(e^{-μ|x|})(ξ) = 2μ/(4π²ξ² + μ²)
     This follows from fourier_exponential_decay' via the substitution k = -2πξ. -/
 @[blueprint "lem:fourier-integral-exp-decay-fun-eq"
-  (title := "Mathlib Fourier Transform of Exponential Decay")]
+  (title := "Mathlib Fourier Transform of Exponential Decay")
+  (statement := /-- $\mathcal{F}(e^{-\mu|x|})(\xi) = \frac{2\mu}{4\pi^2\xi^2 + \mu^2}$. -/)]
 lemma fourierIntegral_expDecayFun_eq (μ : ℝ) (hμ : 0 < μ) (ξ : ℝ) :
     𝓕 (expDecayFun μ) ξ = 2 * μ / (4 * π^2 * ξ^2 + μ^2) := by
   rw [Real.fourier_eq']
@@ -638,7 +671,9 @@ lemma fourierIntegral_expDecayFun_eq (μ : ℝ) (hμ : 0 < μ) (ξ : ℝ) :
   · push_cast; ring
 
 /-- The Mathlib Fourier transform of expDecayFun is integrable. -/
-@[blueprint "lem:integrable-fourier-integral-exp-decay-fun"]
+@[blueprint "lem:integrable-fourier-integral-exp-decay-fun"
+  (title := "Integrability of Fourier Transform of Exponential Decay")
+  (statement := /-- $\mathcal{F}(e^{-\mu|x|})$ is integrable. -/)]
 lemma integrable_fourierIntegral_expDecayFun (μ : ℝ) (hμ : 0 < μ) :
     Integrable (𝓕 (expDecayFun μ)) volume := by
   have h_eq : 𝓕 (expDecayFun μ) =
@@ -680,6 +715,9 @@ lemma integrable_fourierIntegral_expDecayFun (μ : ℝ) (hμ : 0 < μ) :
 @[blueprint "thm:fourier-inversion-exp"
   (title := "Fourier Inversion for Exponential Decay")
   (statement := /-- Fourier inversion: the inverse Fourier transform of $\frac{2\mu}{\mu^2 + k^2}$ recovers $e^{-\mu|x|}$. -/)
+  (proof := /--
+    Applies Mathlib's Fourier inversion theorem to the exponential decay function, combined with the explicit formula for its Fourier transform and a change of variables from physics to Mathlib Fourier conventions.
+  -/)
   (mathlibReady := true)
   (message := "Clean Fourier inversion result for Lorentzian; useful for Mathlib")
   (latexEnv := "theorem")
@@ -817,7 +855,8 @@ theorem fourier_lorentzian_1d (μ : ℝ) (hμ : 0 < μ) (x : ℝ) :
     For x, y with x ≥ 0 and y ≤ 0, we have |x - y| = x - y = x + |y|,
     so e^{-μ|x-y|} = e^{-μx} · e^{-μ|y|} = e^{-μx} · e^{μy}. -/
 @[blueprint "lem:exp-factorization-reflection"
-  (title := "Exponential Factorization for Reflection Positivity")]
+  (title := "Exponential Factorization for Reflection Positivity")
+  (statement := /-- For $x \ge 0$ and $y \le 0$: $e^{-\mu|x-y|} = e^{-\mu x} \cdot e^{\mu y}$. -/)]
 lemma exp_factorization_reflection (μ : ℝ) (x y : ℝ) (hx : 0 ≤ x) (hy : y ≤ 0) :
     Real.exp (-μ * |x - y|) = Real.exp (-μ * x) * Real.exp (μ * y) := by
   have h_diff : |x - y| = x - y := abs_of_nonneg (by linarith)
@@ -833,7 +872,8 @@ end
     This follows from `fourier_lorentzian_1d` by the substitution k ↦ -k.
     Since (-k)² = k² and the integral over ℝ is symmetric, we get the same result. -/
 @[blueprint "thm:fourier-lorentzian-1d-neg"
-  (title := "1D Fourier-Lorentzian Identity (Negative Phase)")]
+  (title := "1D Fourier-Lorentzian Identity (Negative Phase)")
+  (statement := /-- $\int \frac{e^{-ikx}}{k^2 + \mu^2} dk = \frac{\pi}{\mu} e^{-\mu|x|}$. -/)]
 theorem fourier_lorentzian_1d_neg (μ : ℝ) (hμ : 0 < μ) (x : ℝ) :
     ∫ k : ℝ, Complex.exp (-Complex.I * k * x) / (k^2 + μ^2) =
       (π / μ) * Real.exp (-μ * |x|) := by

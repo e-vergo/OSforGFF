@@ -22,13 +22,18 @@ open Complex BigOperators Real InnerProductSpace Matrix
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
 
 /-- Definition of a positive definite kernel K : α × α → ℂ. -/
-@[blueprint "def:is-positive-definite-kernel"]
+@[blueprint "def:is-positive-definite-kernel"
+  (title := "Positive Definite Kernel")
+  (statement := /-- A kernel $K : \alpha \times \alpha \to \mathbb{C}$ is positive definite if $\sum_{i,j} \overline{c_i} c_j K(x_i, x_j) \geq 0$ for all finite collections and coefficients. -/)]
 def IsPositiveDefiniteKernel {α : Type*} (K : α → α → ℂ) : Prop :=
   ∀ (m : ℕ) (x : Fin m → α) (c : Fin m → ℂ),
     0 ≤ (∑ i : Fin m, ∑ j : Fin m, (star (c i)) * (c j) * K (x i) (x j)).re
 
 /-- Step 2: The inner product kernel is positive definite. -/
-@[blueprint "lem:inner-product-is-pd-kernel"]
+@[blueprint "lem:inner-product-is-pd-kernel"
+  (title := "Inner Product Kernel is PD")
+  (statement := /-- The inner product kernel $(x, y) \mapsto \langle x, y \rangle$ is positive definite on any real inner product space. -/)
+]
 lemma innerProduct_is_pd_kernel :
     IsPositiveDefiniteKernel (fun (x y : H) => (⟪x, y⟫_ℝ : ℂ)) := by
   -- Strategy:
@@ -115,7 +120,10 @@ lemma innerProduct_is_pd_kernel :
 
 /-- Helper: For a real-valued PD kernel, the kernel matrix is PSD.
     Forward direction of the bridge between complex kernels and real matrices. -/
-@[blueprint "lem:real-valued-pd-kernel-gives-psd-matrix"]
+@[blueprint "lem:real-valued-pd-kernel-gives-psd-matrix"
+  (title := "Real PD Kernel Gives PSD Matrix")
+  (statement := /-- For a real-valued symmetric positive definite kernel $K$, the kernel matrix $(K(x_i, x_j))_{ij}$ is positive semidefinite. -/)
+]
 lemma real_valued_PD_kernel_gives_PSD_matrix {α : Type*} (K : α → α → ℂ)
     (h_real : ∀ x y, (K x y).im = 0)
     (h_symm : ∀ x y, K x y = K y x)  -- Symmetric (automatic for inner product kernels)

@@ -78,7 +78,10 @@ export TimeTranslation (
 /-! ## Time Translation Decomposition Lemmas -/
 
 /-- Time translation commutes with real part extraction for complex Schwartz functions. -/
-@[blueprint "lem:time-translation-schwartz-4"]
+@[blueprint "lem:time-translation-schwartz-4"
+  (title := "Time Translation Commutes with Real Part")
+  (statement := /-- Time translation commutes with real part extraction: $\Re(T_s g) = T_s(\Re g)$ for complex Schwartz functions. -/)
+]
 lemma timeTranslationSchwartzℂ_decompose_fst (s : ℝ) (g : TestFunctionℂ) :
     (complex_testfunction_decompose (timeTranslationSchwartzℂ s g)).1 =
     timeTranslationSchwartz s (complex_testfunction_decompose g).1 := by
@@ -87,7 +90,10 @@ lemma timeTranslationSchwartzℂ_decompose_fst (s : ℝ) (g : TestFunctionℂ) :
     timeTranslationSchwartzℂ_apply]
 
 /-- Time translation commutes with imaginary part extraction for complex Schwartz functions. -/
-@[blueprint "lem:time-translation-schwartz-5"]
+@[blueprint "lem:time-translation-schwartz-5"
+  (title := "Time Translation Commutes with Imaginary Part")
+  (statement := /-- Time translation commutes with imaginary part extraction: $\Im(T_s g) = T_s(\Im g)$ for complex Schwartz functions. -/)
+]
 lemma timeTranslationSchwartzℂ_decompose_snd (s : ℝ) (g : TestFunctionℂ) :
     (complex_testfunction_decompose (timeTranslationSchwartzℂ s g)).2 =
     timeTranslationSchwartz s (complex_testfunction_decompose g).2 := by
@@ -97,7 +103,10 @@ lemma timeTranslationSchwartzℂ_decompose_snd (s : ℝ) (g : TestFunctionℂ) :
 
 /-- Time translation on distributions is compatible with complex pairing.
     ⟨T_s ω, g⟩_ℂ = ⟨ω, T_{-s} g⟩_ℂ -/
-@[blueprint "lem:time-translation-distribution-pairing"]
+@[blueprint "lem:time-translation-distribution-pairing"
+  (title := "Time Translation Distribution Pairing")
+  (statement := /-- Time translation duality for distributions: $\langle T_s \omega, g \rangle_{\mathbb{C}} = \langle \omega, T_{-s} g \rangle_{\mathbb{C}}$. -/)
+]
 lemma timeTranslationDistribution_pairingℂ (s : ℝ) (ω : FieldConfiguration)
     (g : TestFunctionℂ) :
     distributionPairingℂ_real (timeTranslationDistribution s ω) g =
@@ -115,7 +124,10 @@ lemma timeTranslationDistribution_pairingℂ (s : ℝ) (ω : FieldConfiguration)
 /-! ## Continuity of Complex Pairing under Time Translation -/
 
 /-- s ↦ ⟨T_s ω, g⟩_ℂ is continuous. Uses the proved `continuous_timeTranslationSchwartz`. -/
-@[blueprint "lem:continuous-distribution-pairing"]
+@[blueprint "lem:continuous-distribution-pairing"
+  (title := "Continuity of Complex Pairing under Time Translation")
+  (statement := /-- The map $s \mapsto \langle T_s \omega, g \rangle_{\mathbb{C}}$ is continuous. -/)
+]
 lemma continuous_distributionPairingℂ_timeTranslation (ω : FieldConfiguration)
     (g : TestFunctionℂ) :
     Continuous (fun s => distributionPairingℂ_real (timeTranslationDistribution s ω) g) := by
@@ -147,11 +159,16 @@ lemma continuous_distributionPairingℂ_timeTranslation (ω : FieldConfiguration
 
 /-- Time translation as a Euclidean group element.
     timeTranslationE t = (1, -timeShiftConst t) where 1 is the identity rotation. -/
-@[blueprint "def:time-translation-e"]
+@[blueprint "def:time-translation-e"
+  (title := "Time Translation as Euclidean Group Element")
+  (statement := /-- Time translation as a Euclidean group element: $T_t = (1, -t\hat{e}_0) \in E(4)$ where $1$ is the identity rotation. -/)]
 def timeTranslationE (t : ℝ) : QFT.E := ⟨1, -timeShiftConst t⟩
 
 /-- The Euclidean action of timeTranslationE equals timeTranslationSchwartzℂ. -/
-@[blueprint "lem:euclidean-action-time-translation-e"]
+@[blueprint "lem:euclidean-action-time-translation-e"
+  (title := "Euclidean Action of Time Translation")
+  (statement := /-- The Euclidean action of $T_t^E$ equals time translation on Schwartz space: $\alpha(T_t^E) f = T_t f$. -/)
+]
 lemma euclidean_action_timeTranslationE (t : ℝ) (f : TestFunctionℂ) :
     QFT.euclidean_action (timeTranslationE t) f = timeTranslationSchwartzℂ t f := by
   ext x
@@ -168,7 +185,11 @@ lemma euclidean_action_timeTranslationE (t : ℝ) (f : TestFunctionℂ) :
 /-! ## GFF Covariance Invariance -/
 
 /-- The GFF covariance is invariant under simultaneous time translation. -/
-@[blueprint "lem:free-covariance-4"]
+@[blueprint "lem:free-covariance-4"
+  (title := "Covariance Time Translation Invariance")
+  (statement := /-- The GFF covariance is invariant under simultaneous time translation: $C(T_t f, T_t g) = C(f, g)$. -/)
+  (above := /-- Time translation invariance: $C(T_sf, T_sg) = C(f,g)$, hence $Z[T_sf] = Z[f]$. Key structural result for OS4 clustering and ergodicity. -/)
+]
 lemma freeCovarianceℂ_bilinear_timeTranslation_invariant (m : ℝ) [Fact (0 < m)] (t : ℝ)
     (f g : TestFunctionℂ) :
     freeCovarianceℂ_bilinear m (timeTranslationSchwartzℂ t f) (timeTranslationSchwartzℂ t g) =
@@ -180,7 +201,11 @@ lemma freeCovarianceℂ_bilinear_timeTranslation_invariant (m : ℝ) [Fact (0 < 
 
 /-- MGF formula for GFF: ∫ exp(⟨ω,J⟩) dμ = exp(+(1/2) * C(J,J)).
     This follows from the characteristic function formula via substitution J → (-I)•J. -/
-@[blueprint "lem:gff-mgf-formula"]
+@[blueprint "lem:gff-mgf-formula"
+  (title := "GFF Moment Generating Function")
+  (keyDeclaration := true)
+  (statement := /-- MGF formula for the GFF: $\int e^{\langle\omega, J\rangle} \, d\mu = \exp\bigl(\tfrac{1}{2} C(J,J)\bigr)$. Follows from the characteristic function via $J \mapsto (-i)J$. -/)
+]
 lemma gff_mgf_formula (m : ℝ) [Fact (0 < m)] (J : TestFunctionℂ) :
     (∫ ω, Complex.exp (distributionPairingℂ_real ω J) ∂(gaussianFreeField_free m).toMeasure) =
     Complex.exp ((1/2 : ℂ) * freeCovarianceℂ_bilinear m J J) := by
@@ -212,7 +237,10 @@ lemma gff_mgf_formula (m : ℝ) [Fact (0 < m)] (J : TestFunctionℂ) :
   ring_nf
 
 /-- The GFF generating function is invariant under time translation. -/
-@[blueprint "lem:gff-generating-time-invariant"]
+@[blueprint "lem:gff-generating-time-invariant"
+  (title := "GFF Generating Function Time Invariance")
+  (statement := /-- The GFF generating function is invariant under time translation: $\int e^{\langle\omega, T_s f\rangle} d\mu = \int e^{\langle\omega, f\rangle} d\mu$. -/)
+]
 lemma gff_generating_time_invariant (m : ℝ) [Fact (0 < m)] (s : ℝ) (f : TestFunctionℂ) :
     ∫ ω, Complex.exp (distributionPairingℂ_real ω (timeTranslationSchwartzℂ s f))
       ∂(gaussianFreeField_free m).toMeasure =
@@ -226,7 +254,12 @@ lemma gff_generating_time_invariant (m : ℝ) [Fact (0 < m)] (s : ℝ) (f : Test
 /-- Joint MGF factorization for GFF.
     E[e^{⟨ω,f⟩+⟨ω,g⟩}] = E[e^{⟨ω,f⟩}] E[e^{⟨ω,g⟩}] e^{C(f,g)}
     This follows from the GFF being Gaussian. -/
-@[blueprint "lem:gff-joint-mgf-factorization"]
+@[blueprint "lem:gff-joint-mgf-factorization"
+  (title := "Joint MGF Factorization")
+  (keyDeclaration := true)
+  (statement := /-- Joint MGF factorization: $\mathbb{E}[e^{\langle\omega,f\rangle + \langle\omega,g\rangle}] = \mathbb{E}[e^{\langle\omega,f\rangle}]\,\mathbb{E}[e^{\langle\omega,g\rangle}]\,e^{C(f,g)}$. -/)
+  (above := /-- Joint MGF factorization: $\mathbb{E}[e^{\langle\phi,f+g\rangle}] = M[f] \cdot M[g] \cdot e^{C(f,g)}$. Key structural result used in both clustering and ergodicity proofs. -/)
+]
 lemma gff_joint_mgf_factorization (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) :
     (∫ ω, Complex.exp (distributionPairingℂ_real ω f + distributionPairingℂ_real ω g)
       ∂(gaussianFreeField_free m).toMeasure) =
@@ -259,7 +292,11 @@ lemma gff_joint_mgf_factorization (m : ℝ) [Fact (0 < m)] (f g : TestFunction�
 /-! ## Exponential Bound -/
 
 /-- ‖e^x - 1‖ ≤ ‖x‖ · e^{‖x‖} for complex x. -/
-@[blueprint "lem:exp-sub-one-bound-general"]
+@[blueprint "lem:exp-sub-one-bound-general"
+  (title := "Exponential Bound")
+  (statement := /-- $\|e^x - 1\| \leq \|x\| \cdot e^{\|x\|}$ for complex $x$. -/)
+  (above := /-- Exponential estimate: $|e^x - 1| \le |x| e^{|x|}$. Technical result used in the clustering proof. -/)
+]
 lemma exp_sub_one_bound_general (x : ℂ) : ‖Complex.exp x - 1‖ ≤ ‖x‖ * Real.exp ‖x‖ := by
   have h1 : ‖Complex.exp x - 1‖ ≤ Real.exp ‖x‖ - 1 := by
     have h := Complex.norm_exp_sub_sum_le_exp_norm_sub_sum x 1

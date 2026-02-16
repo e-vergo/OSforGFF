@@ -68,7 +68,13 @@ attribute [local simp] inner_sub_right inner_sub_left
     This is the real analogue of covariance reflection positivity. -/
 @[blueprint "lem:free-covariance-form-r-reflection-matrix-pos-semidef"
   (title := "Reflection Covariance Matrix is PSD")
-  (statement := /-- The matrix $R_{ij} = C_m(\theta f_i, f_j)$ built from reflected positive-time test functions is positive semidefinite. -/)]
+  (statement := /-- The matrix $R_{ij} = C_m(\theta f_i, f_j)$ built from reflected positive-time test functions is positive semidefinite. -/)
+  (proof := /--
+    Define $R_{ij} = C_m(\theta f_i, f_j)$. For any real vector $c$:
+    $\sum_{ij} c_i c_j R_{ij} = C_m(\theta g, g) \ge 0$ where $g = \sum_i c_i f_i$,
+    using bilinearity of the covariance form and the single-function reflection positivity
+    result from the Fourier analysis proof.
+  -/)]
 lemma freeCovarianceFormR_reflection_matrix_posSemidef
     (m : ℝ) [Fact (0 < m)]
     {n : ℕ} (f : Fin n → PositiveTimeTestFunction) :
@@ -218,7 +224,12 @@ lemma freeCovarianceFormR_reflection_matrix_posSemidef
 /-- Quadratic expansion identity for reflected arguments. -/
 @[blueprint "lem:free-covariance-form-r-reflection-expansion"
   (title := "Quadratic Expansion for Reflected Arguments")
-  (statement := /-- $C_m(f - \theta g, f - \theta g) = C_m(f,f) + C_m(g,g) - 2\,C_m(\theta f, g)$ for test functions $f, g$. -/)]
+  (statement := /-- $C_m(f - \theta g, f - \theta g) = C_m(f,f) + C_m(g,g) - 2\,C_m(\theta f, g)$ for test functions $f, g$. -/)
+  (proof := /--
+    Expand $C_m(f - \theta g, f - \theta g)$ using bilinearity and symmetry of the covariance
+    form. The cross terms simplify via $C_m(f, \theta g) = C_m(\theta f, g)$ (reflection
+    symmetry of the kernel), yielding the stated identity.
+  -/)]
 lemma freeCovarianceFormR_reflection_expansion
     (m : ℝ) [Fact (0 < m)] (f g : TestFunction) :
     freeCovarianceFormR m
@@ -358,7 +369,15 @@ lemma gaussianFreeField_real_generating_re
 /-- Factorisation of OS3 matrix entries in the purely real setting. -/
 @[blueprint "lem:gaussian-free-field-real-entry-factor"
   (title := "OS3 Matrix Entry Factorisation")
-  (statement := /-- $\mathrm{Re}\,Z[f - \theta g] = \mathrm{Re}\,Z[f]\;\mathrm{Re}\,Z[g]\;\exp\!\bigl(C_m(\theta f, g)\bigr)$ for positive-time test functions $f, g$. -/)]
+  (statement := /-- $\mathrm{Re}\,Z[f - \theta g] = \mathrm{Re}\,Z[f]\;\mathrm{Re}\,Z[g]\;\exp\!\bigl(C_m(\theta f, g)\bigr)$ for positive-time test functions $f, g$. -/)
+  (proof := /--
+    Using the Gaussian form $Z[h] = \exp(-C(h,h)/2)$ and the quadratic expansion
+    $C(f - \theta g, f - \theta g) = C(f,f) + C(g,g) - 2C(\theta f, g)$, the exponential
+    factors as
+    $\exp(-C(f - \theta g, f - \theta g)/2) = \exp(-C(f,f)/2) \cdot \exp(-C(g,g)/2) \cdot \exp(C(\theta f, g))$.
+    Since all terms are real for real test functions, taking $\mathrm{Re}$ gives the stated
+    factorization.
+  -/)]
 lemma gaussianFreeField_real_entry_factor
     (m : ℝ) [Fact (0 < m)]
     {f g : PositiveTimeTestFunction} :
@@ -452,7 +471,15 @@ variable (m : ℝ) [Fact (0 < m)]
 /-- Matrix formulation of the real OS3 inequality for the Gaussian free field. -/
 @[blueprint "lem:gaussian-free-field-os3-matrix-real"
   (title := "Matrix Formulation of Real OS3")
-  (statement := /-- For positive-time test functions $f_i$ and real coefficients $c_i$, $\sum_{i,j} c_i c_j\,\mathrm{Re}\,Z[f_i - \theta f_j] \ge 0$. -/)]
+  (statement := /-- For positive-time test functions $f_i$ and real coefficients $c_i$, $\sum_{i,j} c_i c_j\,\mathrm{Re}\,Z[f_i - \theta f_j] \ge 0$. -/)
+  (proof := /--
+    By the Schur product theorem, the entrywise exponential $E_{ij} = e^{R_{ij}}$ of the PSD
+    reflection covariance matrix is PSD. The entry factorization
+    $\mathrm{Re}\,Z[f_i - \theta f_j] = Z[f_i]\,Z[f_j]\,e^{R_{ij}}$
+    (where $Z[f] = \exp(-C(f,f)/2) > 0$) then yields:
+    $\sum_{ij} c_i c_j\,\mathrm{Re}\,Z[f_i - \theta f_j] = y^T E y \ge 0$
+    with $y_i = c_i \cdot Z[f_i]$.
+  -/)]
 lemma gaussianFreeField_OS3_matrix_real
     {n : ℕ} (f : Fin n → PositiveTimeTestFunction) (c : Fin n → ℝ) :
     0 ≤ (∑ i, ∑ j, c i * c j *
@@ -526,6 +553,33 @@ lemma gaussianFreeField_OS3_matrix_real
   (title := "GFF Satisfies OS3")
   (keyDeclaration := true)
   (statement := /-- The Gaussian Free Field satisfies the real reflection positivity axiom: for positive-time test functions $f_i$ and real coefficients $c_i$, $\sum_{i,j} c_i c_j \mathrm{Re}\,Z[f_i - \theta f_j] \ge 0$. -/)
+  (proof := /--
+    The proof has two main parts:
+
+    \textbf{Part 1 (Covariance RP via Fourier analysis):} Show
+    $\mathrm{Re}\langle \Theta f, Cf \rangle \ge 0$ for each positive-time $f$ by rewriting
+    the bilinear form in momentum space and factorizing into a squared norm
+    (Steps 1--5, see `freeCovariance_reflection_positive_direct`).
+
+    \textbf{Part 2 (Matrix assembly via Hadamard product theorem):}
+
+    \textbf{Step 6 (Reflection covariance matrix is PSD):} Define
+    $R_{ij} = \langle\Theta f_i, C f_j\rangle$. For any real vector $c$:
+    $\sum_{ij} c_i c_j R_{ij} = \langle\Theta g, Cg\rangle \ge 0$ where
+    $g = \sum_i c_i f_i$, using bilinearity and the single-function result.
+
+    \textbf{Step 7 (Hadamard exponential preserves PSD):} By the Schur product theorem,
+    the entrywise exponential $E_{ij} = e^{R_{ij}}$ is PSD. The proof uses the Hadamard
+    series $e^{R_{ij}} = \sum_{k=0}^\infty (R_{ij})^k/k!$, where each term is PSD by
+    iterated Hadamard products, and the convergent sum of PSD matrices is PSD.
+
+    \textbf{Step 8 (Entry factorization):} The quadratic expansion gives:
+    $C(f - \Theta g, f - \Theta g) = C(f,f) + C(g,g) - 2\langle\Theta f, Cg\rangle$,
+    yielding the entry factorization:
+    $\mathrm{Re}(Z[f_i - \Theta f_j]) = Z[f_i] \cdot Z[f_j] \cdot e^{R_{ij}}$
+    where $Z[f] = \exp(-C(f,f)/2) > 0$. Setting $y_i = c_i \cdot Z[f_i]$ and assembling:
+    $\sum_{ij} c_i c_j\, \mathrm{Re}\, Z[f_i - \Theta f_j] = y^T E y \ge 0$.
+  -/)
   (uses := [OS3_ReflectionPositivity, gaussianFreeField_free, gaussianFreeField_OS3_matrix_real])
   (latexEnv := "theorem")
   (latexLabel := "thm:gff-os3")]

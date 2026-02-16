@@ -61,33 +61,45 @@ The time coordinate is index 0 in our 4D spacetime.
 -/
 
 /-- The time coordinate index in spacetime (index 0). -/
-@[blueprint "def:time-index"]
+@[blueprint "def:time-index"
+  (title := "Time Coordinate Index")
+  (statement := /-- The time coordinate is index $0$ in spacetime. -/)]
 def timeIndex : Fin STDimension := ⟨0, by norm_num⟩
 
 /-- Extract the time component from a spacetime point. -/
-@[blueprint "def:get-time"]
+@[blueprint "def:get-time"
+  (title := "Get Time Component")
+  (statement := /-- Extract the time component from a spacetime point $u$. -/)]
 def getTime (u : SpaceTime) : ℝ := u timeIndex
 
 /-- Time translation on spacetime points: shifts the time coordinate by s.
     (timeShift s u)_0 = u_0 + s, and (timeShift s u)_i = u_i for i ≠ 0. -/
-@[blueprint "def:time-shift"]
+@[blueprint "def:time-shift"
+  (title := "Time Shift on Spacetime")
+  (statement := /-- Time shift on spacetime points: $(T_s u)_0 = u_0 + s$ and $(T_s u)_i = u_i$ for $i \neq 0$. -/)]
 def timeShift (s : ℝ) (u : SpaceTime) : SpaceTime :=
   WithLp.toLp 2 (fun i => if i.val = 0 then u.ofLp i + s else u.ofLp i)
 
-@[simp, blueprint "lem:time-shift-time"]
+@[simp, blueprint "lem:time-shift-time"
+  (title := "Time Shift Time Component")
+  (statement := /-- Time shift preserves the time component relation: $t(T_s u) = t(u) + s$. -/)]
 lemma timeShift_time (s : ℝ) (u : SpaceTime) :
     getTime (timeShift s u) = getTime u + s := by
   simp only [getTime, timeIndex, timeShift]
   rfl
 
-@[simp, blueprint "lem:time-shift-spatial"]
+@[simp, blueprint "lem:time-shift-spatial"
+  (title := "Time Shift Spatial Component")
+  (statement := /-- Time shift preserves spatial components: $(T_s u)_i = u_i$ for $i \neq 0$. -/)]
 lemma timeShift_spatial (s : ℝ) (u : SpaceTime) (i : Fin STDimension) (hi : i.val ≠ 0) :
     (timeShift s u) i = u i := by
   simp only [timeShift]
   exact if_neg hi
 
 /-- Time shift is a group action: T_{s+t} = T_s ∘ T_t -/
-@[blueprint "lem:time-shift-add"]
+@[blueprint "lem:time-shift-add"
+  (title := "Time Shift Group Action")
+  (statement := /-- Time shift is a group action: $T_{s+t} = T_s \circ T_t$. -/)]
 lemma timeShift_add (s t : ℝ) (u : SpaceTime) :
     timeShift (s + t) u = timeShift s (timeShift t u) := by
   simp only [timeShift]
@@ -98,7 +110,9 @@ lemma timeShift_add (s t : ℝ) (u : SpaceTime) :
   · rfl
 
 /-- Time shift by zero is identity -/
-@[simp, blueprint "lem:time-shift-zero"]
+@[simp, blueprint "lem:time-shift-zero"
+  (title := "Time Shift Zero Identity")
+  (statement := /-- Time shift by zero is the identity: $T_0 = \text{id}$. -/)]
 lemma timeShift_zero (u : SpaceTime) : timeShift 0 u = u := by
   simp only [timeShift]
   congr 1
@@ -106,14 +120,18 @@ lemma timeShift_zero (u : SpaceTime) : timeShift 0 u = u := by
   split_ifs <;> ring
 
 /-- Time shifts commute: T_s ∘ T_t = T_t ∘ T_s -/
-@[blueprint "lem:time-shift-comm"]
+@[blueprint "lem:time-shift-comm"
+  (title := "Time Shift Commutativity")
+  (statement := /-- Time shifts commute: $T_s \circ T_t = T_t \circ T_s$. -/)]
 lemma timeShift_comm (s t : ℝ) (u : SpaceTime) :
     timeShift s (timeShift t u) = timeShift t (timeShift s u) := by
   rw [← timeShift_add, ← timeShift_add, add_comm]
 
 /-- Time shift is smooth as a map SpaceTime → SpaceTime.
     This is because it's an affine map (linear + constant). -/
-@[blueprint "lem:time-shift-cont-diff"]
+@[blueprint "lem:time-shift-cont-diff"
+  (title := "Time Shift Smoothness")
+  (statement := /-- Time shift is smooth: $T_s \in C^\infty(\text{SpaceTime})$. -/)]
 lemma timeShift_contDiff (s : ℝ) : ContDiff ℝ (⊤ : ℕ∞) (timeShift s) := by
   unfold timeShift
   apply contDiff_piLp'
@@ -126,7 +144,9 @@ lemma timeShift_contDiff (s : ℝ) : ContDiff ℝ (⊤ : ℕ∞) (timeShift s) :
   · exact hcoord
 
 /-- Time shift preserves the Euclidean distance (it's an isometry) -/
-@[blueprint "lem:time-shift-dist"]
+@[blueprint "lem:time-shift-dist"
+  (title := "Time Shift Distance Preservation")
+  (statement := /-- Time shift preserves distance: $d(T_s u, T_s v) = d(u, v)$. -/)]
 lemma timeShift_dist (s : ℝ) (u v : SpaceTime) :
     dist (timeShift s u) (timeShift s v) = dist u v := by
   simp only [EuclideanSpace.dist_eq, timeShift]
@@ -138,23 +158,31 @@ lemma timeShift_dist (s : ℝ) (u v : SpaceTime) :
   · rfl
 
 /-- Time shift is an isometry -/
-@[blueprint "lem:time-shift-isometry"]
+@[blueprint "lem:time-shift-isometry"
+  (title := "Time Shift Isometry")
+  (statement := /-- Time shift is an isometry on spacetime. -/)]
 lemma timeShift_isometry (s : ℝ) : Isometry (timeShift s) := by
   rw [isometry_iff_dist_eq]
   exact fun u v => timeShift_dist s u v
 
 /-- Time shift is antilipschitz (follows from being an isometry). -/
-@[blueprint "lem:time-shift-antilipschitz"]
+@[blueprint "lem:time-shift-antilipschitz"
+  (title := "Time Shift Antilipschitz")
+  (statement := /-- Time shift is antilipschitz with constant $1$. -/)]
 lemma timeShift_antilipschitz (s : ℝ) : AntilipschitzWith 1 (timeShift s) :=
   (timeShift_isometry s).antilipschitz
 
 /-- The constant vector used to express timeShift as id + const. -/
-@[blueprint "def:time-shift-const"]
+@[blueprint "def:time-shift-const"
+  (title := "Time Shift Constant Vector")
+  (statement := /-- The constant vector representing the time shift. -/)]
 def timeShiftConst (s : ℝ) : SpaceTime :=
   WithLp.toLp 2 (fun i => if i.val = 0 then s else 0)
 
 /-- timeShift s equals addition of a constant. -/
-@[blueprint "lem:time-shift-eq-add-const"]
+@[blueprint "lem:time-shift-eq-add-const"
+  (title := "Time Shift as Constant Addition")
+  (statement := /-- Time shift equals translation: $T_s u = u + c_s$ where $c_s$ is constant. -/)]
 lemma timeShift_eq_add_const (s : ℝ) (u : SpaceTime) :
     timeShift s u = u + timeShiftConst s := by
   simp only [timeShift, timeShiftConst]
@@ -164,7 +192,9 @@ lemma timeShift_eq_add_const (s : ℝ) (u : SpaceTime) :
 
 /-- Time shift has temperate growth (key for Schwartz composition).
     This follows because timeShift is an affine map (id + constant). -/
-@[blueprint "lem:time-shift-has-temperate-growth"]
+@[blueprint "lem:time-shift-has-temperate-growth"
+  (title := "Time Shift Temperate Growth")
+  (statement := /-- Time shift has temperate growth (affine map). -/)]
 lemma timeShift_hasTemperateGrowth (s : ℝ) : Function.HasTemperateGrowth (timeShift s) := by
   -- The derivative is constant (= id), so has temperate growth
   have h_fderiv_temperate : Function.HasTemperateGrowth (fderiv ℝ (timeShift s)) := by
@@ -209,7 +239,9 @@ is a linear map on the Schwartz space.
     Uses mathlib's `compCLMOfAntilipschitz` which requires:
     1. The composition function has temperate growth
     2. The composition function is antilipschitz -/
-@[blueprint "def:time-translation-schwartz-clm"]
+@[blueprint "def:time-translation-schwartz-clm"
+  (title := "Time Translation CLM (Real)")
+  (statement := /-- Time translation as a continuous linear map on real-valued Schwartz functions. -/)]
 def timeTranslationSchwartzCLM (s : ℝ) : TestFunction →L[ℝ] TestFunction :=
   SchwartzMap.compCLMOfAntilipschitz ℝ (timeShift_hasTemperateGrowth s) (timeShift_antilipschitz s)
 
@@ -224,12 +256,16 @@ def timeTranslationSchwartzCLM (s : ℝ) : TestFunction →L[ℝ] TestFunction :
     1. timeShift s has temperate growth (affine map)
     2. timeShift s is antilipschitz (isometry)
 -/
-@[blueprint "def:time-translation-schwartz"]
+@[blueprint "def:time-translation-schwartz"
+  (title := "Time Translation on Schwartz Space (Real)")
+  (statement := /-- Time translation on real-valued Schwartz functions: $(T_s f)(u) = f(t+s, \vec{x})$. -/)]
 def timeTranslationSchwartz (s : ℝ) (f : TestFunction) : TestFunction :=
   timeTranslationSchwartzCLM s f
 
 /-- Time translation as a continuous linear map on complex-valued Schwartz functions. -/
-@[blueprint "def:time-translation-schwartz-2"]
+@[blueprint "def:time-translation-schwartz-2"
+  (title := "Time Translation CLM (Complex)")
+  (statement := /-- Time translation as a continuous linear map on complex-valued Schwartz functions. -/)]
 def timeTranslationSchwartzℂCLM (s : ℝ) : TestFunctionℂ →L[ℂ] TestFunctionℂ :=
   SchwartzMap.compCLMOfAntilipschitz ℂ (timeShift_hasTemperateGrowth s) (timeShift_antilipschitz s)
 
@@ -243,56 +279,72 @@ def timeTranslationSchwartzℂ (s : ℝ) (f : TestFunctionℂ) : TestFunctionℂ
   timeTranslationSchwartzℂCLM s f
 
 /-- Time translation evaluated at a point. -/
-@[simp]
+@[simp, blueprint
+  (title := "Time Translation Pointwise (Real)")
+  (statement := /-- Time translation evaluated pointwise: $(T_s f)(u) = f(T_s u)$. -/)]
 lemma timeTranslationSchwartz_apply (s : ℝ) (f : TestFunction) (u : SpaceTime) :
     (timeTranslationSchwartz s f) u = f (timeShift s u) := by
   simp only [timeTranslationSchwartz, timeTranslationSchwartzCLM,
     SchwartzMap.compCLMOfAntilipschitz_apply, Function.comp_apply]
 
 /-- Time translation on complex functions evaluated at a point. -/
-@[simp, blueprint "lem:time-translation-schwartz-6"]
+@[simp, blueprint "lem:time-translation-schwartz-6"
+  (title := "Time Translation Pointwise (Complex)")
+  (statement := /-- Complex time translation evaluated pointwise: $(T_s f)(u) = f(T_s u)$. -/)]
 lemma timeTranslationSchwartzℂ_apply (s : ℝ) (f : TestFunctionℂ) (u : SpaceTime) :
     (timeTranslationSchwartzℂ s f) u = f (timeShift s u) := by
   simp only [timeTranslationSchwartzℂ, timeTranslationSchwartzℂCLM,
     SchwartzMap.compCLMOfAntilipschitz_apply, Function.comp_apply]
 
 /-- Time translation is a group homomorphism: T_{s+t} = T_s ∘ T_t -/
-@[blueprint "lem:time-translation-schwartz-add"]
+@[blueprint "lem:time-translation-schwartz-add"
+  (title := "Time Translation Group Homomorphism (Real)")
+  (statement := /-- Time translation is a group homomorphism: $T_{s+t} = T_s \circ T_t$. -/)]
 lemma timeTranslationSchwartz_add (s t : ℝ) (f : TestFunction) :
     timeTranslationSchwartz (s + t) f = timeTranslationSchwartz s (timeTranslationSchwartz t f) := by
   ext u
   simp only [timeTranslationSchwartz_apply, timeShift_add, timeShift_comm]
 
 /-- Time translation on complex functions: T_{s+t} = T_s ∘ T_t -/
-@[blueprint "lem:time-translation-schwartz-7"]
+@[blueprint "lem:time-translation-schwartz-7"
+  (title := "Time Translation Group Homomorphism (Complex)")
+  (statement := /-- Complex time translation group property: $T_{s+t} = T_s \circ T_t$. -/)]
 lemma timeTranslationSchwartzℂ_add (s t : ℝ) (f : TestFunctionℂ) :
     timeTranslationSchwartzℂ (s + t) f = timeTranslationSchwartzℂ s (timeTranslationSchwartzℂ t f) := by
   ext u
   simp only [timeTranslationSchwartzℂ_apply, timeShift_add, timeShift_comm]
 
 /-- Time translation by zero is identity -/
-@[simp, blueprint "lem:time-translation-schwartz-zero"]
+@[simp, blueprint "lem:time-translation-schwartz-zero"
+  (title := "Time Translation Zero Identity (Real)")
+  (statement := /-- Time translation by zero is the identity: $T_0 = \text{id}$. -/)]
 lemma timeTranslationSchwartz_zero (f : TestFunction) :
     timeTranslationSchwartz 0 f = f := by
   ext u
   simp only [timeTranslationSchwartz_apply, timeShift_zero]
 
 /-- Time translation by zero is identity (complex) -/
-@[simp, blueprint "lem:time-translation-schwartz-8"]
+@[simp, blueprint "lem:time-translation-schwartz-8"
+  (title := "Time Translation Zero Identity (Complex)")
+  (statement := /-- Complex time translation by zero is the identity: $T_0 = \text{id}$. -/)]
 lemma timeTranslationSchwartzℂ_zero (f : TestFunctionℂ) :
     timeTranslationSchwartzℂ 0 f = f := by
   ext u
   simp only [timeTranslationSchwartzℂ_apply, timeShift_zero]
 
 /-- Time translation preserves addition of Schwartz functions -/
-@[blueprint "lem:time-translation-schwartz-add-fun"]
+@[blueprint "lem:time-translation-schwartz-add-fun"
+  (title := "Time Translation Preserves Addition")
+  (statement := /-- Time translation preserves addition: $T_s(f + g) = T_s f + T_s g$. -/)]
 lemma timeTranslationSchwartz_add_fun (s : ℝ) (f g : TestFunction) :
     timeTranslationSchwartz s (f + g) = timeTranslationSchwartz s f + timeTranslationSchwartz s g := by
   ext u
   simp only [timeTranslationSchwartz_apply, SchwartzMap.add_apply]
 
 /-- Time translation preserves scalar multiplication of Schwartz functions -/
-@[blueprint "lem:time-translation-schwartz-smul"]
+@[blueprint "lem:time-translation-schwartz-smul"
+  (title := "Time Translation Preserves Scalar Multiplication")
+  (statement := /-- Time translation preserves scalar multiplication: $T_s(c \cdot f) = c \cdot T_s f$. -/)]
 lemma timeTranslationSchwartz_smul (s : ℝ) (c : ℝ) (f : TestFunction) :
     timeTranslationSchwartz s (c • f) = c • timeTranslationSchwartz s f := by
   ext u
@@ -307,11 +359,15 @@ This provides the mathematical foundation for the Lipschitz bound theorem below.
 -/
 
 /-- The unit time direction vector in SpaceTime. -/
-@[blueprint "def:unit-time-dir"]
+@[blueprint "def:unit-time-dir"
+  (title := "Unit Time Direction Vector")
+  (statement := /-- The unit vector in the time direction: $e_0$. -/)]
 def unitTimeDir : SpaceTime := EuclideanSpace.single timeIndex (1 : ℝ)
 
 /-- timeShift is continuous in the time parameter s -/
-@[blueprint "lem:continuous-time-shift-param"]
+@[blueprint "lem:continuous-time-shift-param"
+  (title := "Time Shift Continuous in Parameter")
+  (statement := /-- Time shift is continuous in the time parameter: $s \mapsto T_s x$ is continuous. -/)]
 lemma continuous_timeShift_param (x : SpaceTime) : Continuous (fun s : ℝ => timeShift s x) := by
   have h_shift : (fun s : ℝ => timeShift s x) = (fun s => x + s • unitTimeDir) := by
     funext s; simp only [timeShift, unitTimeDir, EuclideanSpace.single]
@@ -325,7 +381,9 @@ lemma continuous_timeShift_param (x : SpaceTime) : Continuous (fun s : ℝ => ti
     (1 + ‖x‖)^k ≤ (1 + ‖x + y‖)^k * (1 + ‖y‖)^k
 
     This handles weight shifting when translating between seminorms at different points. -/
-@[blueprint "lem:peetre-weight-bound"]
+@[blueprint "lem:peetre-weight-bound"
+  (title := "Peetre's Inequality")
+  (statement := /-- Peetre's inequality: $(1 + \|x\|)^k \le (1 + \|x + y\|)^k (1 + \|y\|)^k$. -/)]
 lemma peetre_weight_bound (x y : SpaceTime) (k : ℕ) :
     (1 + ‖x‖) ^ k ≤ (1 + ‖x + y‖) ^ k * (1 + ‖y‖) ^ k := by
   have h1 : ‖x‖ ≤ ‖x + y‖ + ‖y‖ := by
@@ -342,7 +400,9 @@ lemma peetre_weight_bound (x y : SpaceTime) (k : ℕ) :
 
 /-- The iterated derivative commutes with time translation.
     D^n(T_h f)(x) = D^n f(x + h·e₀) -/
-@[blueprint "lem:iterated-f-deriv-time-translation-schwartz"]
+@[blueprint "lem:iterated-f-deriv-time-translation-schwartz"
+  (title := "Derivative Commutes with Time Translation")
+  (statement := /-- Iterated derivative commutes with time translation: $D^n(T_h f)(x) = D^n f(x + h e_0)$. -/)]
 lemma iteratedFDeriv_timeTranslationSchwartz (n : ℕ) (h : ℝ) (f : TestFunction) (x : SpaceTime) :
     iteratedFDeriv ℝ n (timeTranslationSchwartz h f) x =
     iteratedFDeriv ℝ n f (x + h • unitTimeDir) := by
@@ -384,7 +444,12 @@ lemma iteratedFDeriv_timeTranslationSchwartz (n : ℕ) (h : ℝ) (f : TestFuncti
     3. Apply MVT: ‖D^n f(x+h·e₀) - D^n f(x)‖ ≤ |h| · sup ‖D^{n+1} f(path)‖
     4. Apply Peetre: ‖x‖^k ≤ (1+|h|)^k · (1+‖w‖)^k for path points w
     5. Bound (1+‖w‖)^k ≤ 2^k · max(1, ‖w‖^k) and use seminorms -/
-@[blueprint "thm:schwartz-time-translation-lipschitz-seminorm"]
+@[blueprint "thm:schwartz-time-translation-lipschitz-seminorm"
+  (title := "Lipschitz Seminorm Bound for Time Translation")
+  (statement := /-- The Lipschitz seminorm bound: $\|T_h f - f\|_{k,n} \le |h|(1+|h|)^k 2^k(\|f\|_{k,n+1}+\|f\|_{0,n+1}+1)$. -/)
+  (proof := /--
+    The Lipschitz seminorm bound is proved using the mean value theorem, Peetre's inequality for polynomial weight shifting, and careful norm estimates on iterated derivatives.
+  -/)]
 theorem schwartz_timeTranslation_lipschitz_seminorm
     (k n : ℕ) (f : TestFunction) (h : ℝ) :
     (SchwartzMap.seminorm ℝ k n) (timeTranslationSchwartz h f - f) ≤
@@ -902,17 +967,23 @@ for all f ∈ S(ℝ × ℝ³).
 
     Continuity is automatic since composition of continuous linear maps is continuous.
 -/
-@[blueprint "def:time-translation-distribution"]
+@[blueprint "def:time-translation-distribution"
+  (title := "Time Translation on Distributions")
+  (statement := /-- Time translation on tempered distributions: $\langle T_s \omega, f \rangle = \langle \omega, T_{-s} f \rangle$. -/)]
 def timeTranslationDistribution (s : ℝ) (ω : FieldConfiguration) : FieldConfiguration :=
   ω.comp (timeTranslationSchwartzCLM (-s))
 
 /-- The defining property of time translation on distributions. -/
-@[simp, blueprint "lem:time-translation-distribution-apply"]
+@[simp, blueprint "lem:time-translation-distribution-apply"
+  (title := "Time Translation Distribution Pointwise")
+  (statement := /-- Time translation on distributions evaluated: $(T_s \omega)(f) = \omega(T_{-s} f)$. -/)]
 lemma timeTranslationDistribution_apply (s : ℝ) (ω : FieldConfiguration) (f : TestFunction) :
     (timeTranslationDistribution s ω) f = ω (timeTranslationSchwartz (-s) f) := rfl
 
 /-- Time translation on distributions is a group homomorphism: T_{s+t} = T_s ∘ T_t -/
-@[blueprint "lem:time-translation-distribution-add"]
+@[blueprint "lem:time-translation-distribution-add"
+  (title := "Distribution Time Translation Group Property")
+  (statement := /-- Time translation on distributions is a group homomorphism: $T_{s+t} = T_s \circ T_t$. -/)]
 lemma timeTranslationDistribution_add (s t : ℝ) (ω : FieldConfiguration) :
     timeTranslationDistribution (s + t) ω =
     timeTranslationDistribution s (timeTranslationDistribution t ω) := by
@@ -930,7 +1001,9 @@ lemma timeTranslationDistribution_add (s t : ℝ) (ω : FieldConfiguration) :
   rw [h]
 
 /-- Time translation by zero is identity on distributions -/
-@[simp, blueprint "lem:time-translation-distribution-zero"]
+@[simp, blueprint "lem:time-translation-distribution-zero"
+  (title := "Distribution Time Translation Zero Identity")
+  (statement := /-- Time translation by zero is the identity on distributions: $T_0 = \text{id}$. -/)]
 lemma timeTranslationDistribution_zero (ω : FieldConfiguration) :
     timeTranslationDistribution 0 ω = ω := by
   apply DFunLike.ext

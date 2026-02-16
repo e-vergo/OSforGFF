@@ -32,7 +32,10 @@ open MeasureTheory MeasureSpace FiniteDimensional Real
 
 /-- Norm bound: ‖spacetimeDecomp.symm (t, v)‖ ≥ ‖v‖.
     This follows from: ‖x‖² = t² + ‖v‖² ≥ ‖v‖². -/
-@[blueprint "lem:spacetime-decomp-symm-norm-ge"]
+@[blueprint "lem:spacetime-decomp-symm-norm-ge"
+  (statement := /-- $\|\mathrm{decomp}^{-1}(t, v)\| \geq \|v\|$ since $\|x\|^2 = t^2 + \|v\|^2 \geq \|v\|^2$. -/)
+  (skipCrossRef := true)
+]
 lemma spacetimeDecomp_symm_norm_ge (t : ℝ) (v : SpatialCoords) :
     ‖spacetimeDecomp.symm (t, v)‖ ≥ ‖v‖ := by
   have h_spatial : spatialPart (spacetimeDecomp.symm (t, v)) = v :=
@@ -48,7 +51,10 @@ lemma spacetimeDecomp_symm_norm_ge (t : ℝ) (v : SpatialCoords) :
   nlinarith [sq_nonneg (‖spacetimeDecomp.symm (t, v)‖ - ‖v‖)]
 
 /-- Slice integrability: for fixed t, the slice is integrable over SpatialCoords. -/
-@[blueprint "lem:schwartz-slice-integrable"]
+@[blueprint "lem:schwartz-slice-integrable"
+  (title := "Schwartz Slice Integrability")
+  (statement := /-- For fixed $t$, the spatial slice $v \mapsto \|f(\mathrm{decomp}^{-1}(t, v))\|$ is integrable over $\mathbb{R}^3$. -/)
+]
 lemma schwartz_slice_integrable (f : SchwartzMap SpaceTime ℂ) (t : ℝ) :
     Integrable (fun v : SpatialCoords => ‖f (spacetimeDecomp.symm (t, v))‖) volume := by
   have hST_dim : Module.finrank ℝ SpaceTime < 5 := by
@@ -91,7 +97,10 @@ lemma schwartz_slice_integrable (f : SchwartzMap SpaceTime ℂ) (t : ℝ) :
     exact h_bound v
 
 /-- Schwartz composed with spacetimeDecomp.symm is integrable on the product. -/
-@[blueprint "lem:schwartz-integrable-on-prod"]
+@[blueprint "lem:schwartz-integrable-on-prod"
+  (statement := /-- Schwartz functions composed with $\mathrm{decomp}^{-1}$ are integrable on $\mathbb{R} \times \mathbb{R}^3$. -/)
+  (skipCrossRef := true)
+]
 lemma schwartz_integrable_on_prod' (f : SchwartzMap SpaceTime ℂ) :
     Integrable (fun p : ℝ × SpatialCoords => ‖f (spacetimeDecomp.symm p)‖) := by
   have h_mp : MeasurePreserving spacetimeDecomp (volume : Measure SpaceTime) volume :=
@@ -119,7 +128,8 @@ This is a key tool for establishing reflection positivity (OS3) bounds. -/
   (statement := /-- Double integrals over SpaceTime factorize when the kernel depends only on time coordinates: $\int\!\!\int \|f\| \|g\| K(x_0, y_0) = \int\!\!\int K(t_1, t_2) G_f(t_1) G_g(t_2)$ where $G_f(t) = \int \|f(t,v)\| \, dv$. -/)
   (uses := [schwartz_slice_integrable, spacetimeDecomp])
   (latexEnv := "theorem")
-  (latexLabel := "thm:schwartz-tonelli")]
+  (latexLabel := "thm:schwartz-tonelli")
+]
 theorem schwartz_tonelli_spacetime
     (f g : SchwartzMap SpaceTime ℂ)
     (K : ℝ → ℝ → ℝ)

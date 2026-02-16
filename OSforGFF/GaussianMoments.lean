@@ -53,7 +53,10 @@ open MeasureTheory Complex
 /-- Auxiliary lemma: the complex pairing has an integrable square under the free GFF measure.
 This is the complex analogue of `gaussian_pairing_square_integrable_real` and will serve as the
 base estimate for higher Gaussian moments. -/
-@[blueprint "lem:gaussian-complex-pairing-abs-sq-integrable"]
+@[blueprint "lem:gaussian-complex-pairing-abs-sq-integrable"
+  (title := "Complex Pairing Square Integrability")
+  (statement := /-- $\|\langle\omega, \varphi\rangle_{\mathbb{C}}\|^2$ is integrable under the free GFF measure for any complex test function $\varphi$. -/)
+]
 lemma gaussian_complex_pairing_abs_sq_integrable
     (m : ℝ) [Fact (0 < m)] (φ : TestFunctionℂ) :
   Integrable (fun ω => ‖distributionPairingℂ_real ω φ‖ ^ 2)
@@ -117,6 +120,12 @@ end GaussianMoments
 @[blueprint "thm:gaussian-2pt-integrable"
   (title := "Two-Point Pairing Product Integrability")
   (statement := /-- For the GFF measure, $\langle\omega, \varphi\rangle \cdot \langle\omega, \psi\rangle$ is integrable for any complex test functions $\varphi, \psi$. Uses H\"older's inequality with $L^2 \times L^2 \to L^1$. -/)
+  (proof := /--
+The integrability of $\langle\omega,\phi\rangle\langle\omega,\psi\rangle$ for complex test functions follows from:
+1. Fernique's theorem gives $e^{\alpha\langle\omega,\phi\rangle^2}$ integrable for small $\alpha > 0$.
+2. From exp-square integrability, derive $L^p$ membership for all $p < \infty$ via H\"older's inequality.
+3. Cauchy--Schwarz: $|\langle\omega,\phi\rangle\langle\omega,\psi\rangle| \le \tfrac{1}{2}(|\langle\omega,\phi\rangle|^2 + |\langle\omega,\psi\rangle|^2)$.
+  -/)
   (uses := [gaussianFreeField_pairing_memLp, gaussianFreeField_free])
   (latexEnv := "theorem")
   (latexLabel := "thm:gaussian-2pt-integrable")]
@@ -246,7 +255,10 @@ theorem gaussian_pairing_product_integrable_free_2point
   exact Integrable.add h_real_part h_imag_part
 
 /-- **Corollary**: The complex covariance is well-defined via the general integrability. -/
-@[blueprint "thm:covariance-bilinear-from-general"]
+@[blueprint "thm:covariance-bilinear-from-general"
+  (title := "Covariance Bilinear from General Integrability")
+  (statement := /-- The complex covariance bilinear form is well-defined for the free GFF, following from 2-point integrability. -/)
+]
 theorem covariance_bilinear_from_general
   (m : ℝ) [Fact (0 < m)] :
   CovarianceBilinear (gaussianFreeField_free m) := by

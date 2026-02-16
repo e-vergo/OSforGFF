@@ -161,7 +161,10 @@ variable (m : ℝ) [Fact (0 < m)]
 
 /-- The complex pairing is continuous in ω.
     This follows from the continuity of the evaluation map on WeakDual. -/
-@[blueprint "thm:distribution-pairing"]
+@[blueprint "thm:distribution-pairing"
+  (title := "Continuity of Distribution Pairing")
+  (statement := /-- The complex distribution pairing $\omega \mapsto \langle \omega, f\rangle$ is continuous in $\omega$ for each fixed test function $f$. -/)
+]
 theorem distributionPairingℂ_real_continuous (f : TestFunctionℂ) :
     Continuous (fun ω : FieldConfiguration => distributionPairingℂ_real ω f) := by
   -- distributionPairingℂ_real ω f = ω f_re + I * ω f_im
@@ -177,7 +180,10 @@ theorem distributionPairingℂ_real_continuous (f : TestFunctionℂ) :
   exact h_re.add (continuous_const.mul h_im)
 
 /-- The GFF integrand for the generating functional is measurable in ω for each z. -/
-@[blueprint "thm:gff-integrand-measurable"]
+@[blueprint "thm:gff-integrand-measurable"
+  (title := "GFF Integrand Measurability")
+  (statement := /-- The GFF integrand $\omega \mapsto \exp(i\langle\omega, \sum_k z_k J_k\rangle)$ is measurable in $\omega$ for each $z$, since it is the composition of continuous maps. -/)
+]
 theorem gff_integrand_measurable
     (n : ℕ) (J : Fin n → TestFunctionℂ) (z : Fin n → ℂ) :
     AEStronglyMeasurable
@@ -283,7 +289,10 @@ theorem gff_integrand_analytic
     - I * distributionPairingℂ_real ω f = I * (ω f_re) - (ω f_im)
     - Re(I * distributionPairingℂ_real ω f) = -(ω f_im)
     - ‖exp(z)‖ = exp(Re(z)), so ‖exp(I * ...)‖ = exp(-(ω f_im)) -/
-@[blueprint "lem:norm-exp-i-distribution-pairing"]
+@[blueprint "lem:norm-exp-i-distribution-pairing"
+  (title := "Norm of Exponential Pairing")
+  (statement := /-- $\|\exp(i\langle\omega, f\rangle)\| = \exp(-\omega(f_{\mathrm{im}}))$ where $f_{\mathrm{im}}$ is the imaginary part of the complex test function. -/)
+]
 lemma norm_exp_I_distributionPairingℂ_real (f : TestFunctionℂ) (ω : FieldConfiguration) :
     ‖Complex.exp (Complex.I * distributionPairingℂ_real ω f)‖ =
       Real.exp (-(ω (complex_testfunction_decompose f).2)) := by
@@ -302,7 +311,10 @@ lemma norm_exp_I_distributionPairingℂ_real (f : TestFunctionℂ) (ω : FieldCo
 /-- Integrability of exp(-ω f) for a real test function f under the GFF measure.
     This follows from the Gaussian nature: for centered Gaussian X with variance σ²,
     E[exp(-X)] = exp(σ²/2). -/
-@[blueprint "lem:gff-exp-neg-pairing-integrable"]
+@[blueprint "lem:gff-exp-neg-pairing-integrable"
+  (title := "Integrability of Negative Exponential Pairing")
+  (statement := /-- $\exp(-\langle\omega, f\rangle)$ is integrable under the GFF measure for real test functions $f$, by Fernique-type exponential square integrability. -/)
+]
 lemma gff_exp_neg_pairing_integrable (f : TestFunction) :
     Integrable (fun ω : FieldConfiguration => Real.exp (-(ω f)))
       (μ_GFF m).toMeasure := by
@@ -480,7 +492,10 @@ lemma gff_exp_abs_pairing_memLp (f : TestFunction) (p : ENNReal) (hp : p ≠ ⊤
 
 /-- Integrability of exp(|ω f|) under the GFF measure.
     This is the L¹ special case of gff_exp_abs_pairing_memLp. -/
-@[blueprint "lem:gff-exp-abs-pairing-integrable"]
+@[blueprint "lem:gff-exp-abs-pairing-integrable"
+  (title := "Integrability of Absolute Exponential Pairing")
+  (statement := /-- $\exp(|\langle\omega, f\rangle|)$ is integrable under the GFF measure, as the $L^1$ special case of $\exp(|\langle\omega,f\rangle|) \in L^p$ for all $p < \infty$. -/)
+]
 lemma gff_exp_abs_pairing_integrable (f : TestFunction) :
     Integrable (fun ω : FieldConfiguration => Real.exp |ω f|) (μ_GFF m).toMeasure :=
   memLp_one_iff_integrable.mp (gff_exp_abs_pairing_memLp m f 1 ENNReal.one_ne_top)
@@ -489,7 +504,10 @@ lemma gff_exp_abs_pairing_integrable (f : TestFunction) :
     If we have k test functions g₁, ..., gₖ, then exp(∑ᵢ |ω gᵢ|) = ∏ᵢ exp(|ω gᵢ|).
     Each exp(|ω gᵢ|) ∈ L^(2k) by gff_exp_abs_pairing_memLp.
     By generalized Hölder (MemLp.prod'), a product of k functions in L^(2k) is in L². -/
-@[blueprint "lem:gff-exp-abs-sum-mem-lp"]
+@[blueprint "lem:gff-exp-abs-sum-mem-lp"
+  (title := "Product of Exponential Pairings in L2")
+  (statement := /-- $\exp(\sum_i |\langle\omega, g_i\rangle|) \in L^2(\mu_{\mathrm{GFF}})$ via generalised Holder: each factor $\exp(|\langle\omega, g_i\rangle|) \in L^{2k}$ and a product of $k$ such factors lies in $L^2$. -/)
+]
 lemma gff_exp_abs_sum_memLp {ι : Type*} (s : Finset ι) (g : ι → TestFunction) :
     MemLp (fun ω : FieldConfiguration => Real.exp (∑ i ∈ s, |ω (g i)|)) 2 (μ_GFF m).toMeasure := by
   -- Rewrite exp(sum) as product of exp
@@ -543,7 +561,10 @@ lemma gff_exp_abs_sum_memLp {ι : Type*} (s : Finset ι) (g : ι → TestFunctio
 
 /-- The integral of ‖exp(I * distributionPairingℂ_real ω f)‖ is finite for any complex test function.
     This follows from the Gaussian exponential integrability applied to the imaginary part. -/
-@[blueprint "lem:gff-integrand-norm-integrable"]
+@[blueprint "lem:gff-integrand-norm-integrable"
+  (title := "Norm of GFF Integrand is Integrable")
+  (statement := /-- $\|\exp(i\langle\omega, f\rangle)\|$ is integrable under the GFF measure for any complex test function $f$, reducing to $\exp(-\omega(f_{\mathrm{im}}))$. -/)
+]
 lemma gff_integrand_norm_integrable (f : TestFunctionℂ) :
     Integrable (fun ω : FieldConfiguration =>
         ‖Complex.exp (Complex.I * distributionPairingℂ_real ω f)‖)
@@ -587,7 +608,10 @@ theorem gff_integrand_integrable (n : ℕ) (J : Fin n → TestFunctionℂ) (z : 
     - So fderiv = exp(I * ⟨ω, ∑ᵢ z₀ᵢJᵢ⟩) • (I • ∑ᵢ ⟨ω, Jᵢ⟩ • proj_i)
     - This is continuous in ω (each pairing is continuous, exp is continuous)
     - Continuous implies measurable -/
-@[blueprint "thm:gff-integrand-fderiv-measurable"]
+@[blueprint "thm:gff-integrand-fderiv-measurable"
+  (title := "GFF Integrand Frechet Derivative Measurability")
+  (statement := /-- The Frechet derivative $\nabla_z \exp(i\langle\omega, \sum_k z_k J_k\rangle)$ is measurable in $\omega$, since it equals $\exp(i\langle\omega,\cdot\rangle) \cdot g(\omega)$ where $g$ is a continuous linear map in $\omega$. -/)
+]
 theorem gff_integrand_fderiv_measurable (n : ℕ) (J : Fin n → TestFunctionℂ) (z₀ : Fin n → ℂ) :
     AEStronglyMeasurable
       (fun ω : FieldConfiguration =>
@@ -1153,6 +1177,37 @@ theorem gff_integrand_fderiv_bound (n : ℕ) (J : Fin n → TestFunctionℂ) (z�
   (title := "GFF Satisfies OS0")
   (keyDeclaration := true)
   (statement := /-- The generating functional of the Gaussian Free Field is analytic: $Z[\sum_i z_i J_i]$ is analytic in $(z_1, \ldots, z_n) \in \mathbb{C}^n$. -/)
+  (proof := /--
+    The proof applies a \emph{holomorphic integral theorem}: if the integrand
+    $f(z, \omega) = \exp(i\sum_i z_i \langle\omega, J_i\rangle)$ satisfies appropriate
+    measurability, analyticity, integrability, and derivative bound conditions in $z$ and $\omega$,
+    then the integral $F(z) = \int f(z, \omega)\, d\mu(\omega)$ is holomorphic.
+    Goursat's theorem in $n$ dimensions then converts holomorphy to analyticity.
+
+    The five hypotheses verified are:
+    1. \emph{Measurability} of $\omega \mapsto f(z, \omega)$ for each $z$: the evaluation
+       functional $\omega \mapsto \langle\omega, f\rangle$ is continuous on the weak-$*$ dual
+       $\mathcal{S}'$, so compositions with measurable operations preserve measurability.
+    2. \emph{Analyticity} of $z \mapsto f(z, \omega)$ for each $\omega$: the sum
+       $\sum_i z_i \langle\omega, J_i\rangle$ is linear in $z$ (hence analytic),
+       multiplication by $i$ and the exponential are entire, and compositions of analytic
+       functions are analytic.
+    3. \emph{Integrability} of $f(z, \cdot)$ for each $z$: for complex test functions
+       $f = f_{\mathrm{re}} + i f_{\mathrm{im}}$, we have
+       $\|\exp(i\langle\omega, f\rangle)\| = \exp(-\omega(f_{\mathrm{im}}))$.
+       Integrability requires Fernique's theorem: for Gaussian measures,
+       $\exp(\alpha \langle\omega, g\rangle^2)$ is integrable for sufficiently small $\alpha > 0$.
+    4. \emph{Measurability of the Fr\'echet derivative} in $\omega$: the derivative has
+       explicit form involving continuous operations, hence is measurable.
+    5. \emph{Local integrable bound on the derivative}: an integrable dominating function is
+       constructed using H\"older's inequality ($L^2 \times L^2 \to L^1$), Gaussian exponential
+       integrability, and Gaussian polynomial moments.
+
+    With all five hypotheses verified, the holomorphic integral theorem establishes analyticity.
+    The proof requires one project-specific axiom: Goursat's theorem in $n$ dimensions
+    (holomorphic implies analytic in $\mathbb{C}^n$), which is standard in several complex
+    variables but not yet available in Mathlib.
+  -/)
   (uses := [OS0_Analyticity, gaussianFreeField_free, holomorphic_integral_of_locally_L1_bound, differentiable_analyticAt_finDim])
   (latexEnv := "theorem")
   (latexLabel := "thm:gff-os0")]

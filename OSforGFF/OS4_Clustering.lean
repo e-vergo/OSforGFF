@@ -133,7 +133,10 @@ lemma gff_generating_sum_factorization (m : ℝ) [Fact (0 < m)] (f g : TestFunct
 /-! ## Translation as Euclidean Action -/
 
 /-- The inverse of the identity linear isometry is itself. -/
-@[blueprint "lem:linear-isometry-inv-one"]
+@[blueprint "lem:linear-isometry-inv-one"
+  (title := "Inverse of Identity Isometry")
+  (statement := /-- The inverse of the identity linear isometry is itself: $1^{-1} = 1$ in $O(4)$. -/)
+]
 lemma LinearIsometry_inv_one : LinearIsometry.inv (1 : O4) = 1 := by
   -- Use comp_inv: R.comp (inv R) = 1
   -- For R = 1: 1.comp (inv 1) = 1, so inv 1 = 1 (since 1.comp x = x)
@@ -144,7 +147,10 @@ lemma LinearIsometry_inv_one : LinearIsometry.inv (1 : O4) = 1 := by
 /-! ## Translation Invariance from OS2 -/
 
 /-- For OS2-invariant measures, Z[euclidean_action g f] = Z[f] for any g ∈ E. -/
-@[blueprint "lem:generating-euclidean-invariant"]
+@[blueprint "lem:generating-euclidean-invariant"
+  (title := "Generating Functional Euclidean Invariance")
+  (statement := /-- For OS2-invariant measures, $Z[g \cdot f] = Z[f]$ for any $g \in E(4)$. -/)
+]
 lemma generating_euclidean_invariant
     (dμ_config : ProbabilityMeasure FieldConfiguration)
     (h_inv : OS2_EuclideanInvariance dμ_config)
@@ -494,6 +500,22 @@ theorem schwartz_cross_covariance_decay_real (m : ℝ) [Fact (0 < m)]
   (title := "GFF Satisfies OS4 Clustering")
   (keyDeclaration := true)
   (statement := /-- The GFF satisfies clustering: $Z[f + T_a g] \to Z[f] \cdot Z[g]$ as $\|a\| \to \infty$. Uses Gaussian factorization and cross-covariance decay. -/)
+  (proof := /--
+    The clustering proof exploits the Gaussian factorization formula:
+    1. For the GFF, $Z[f] = \exp(-\tfrac{1}{2}C(f,f))$ for real test functions, so the
+       bilinear expansion gives:
+       $Z[f + T_a g] = Z[f] \cdot Z[T_a g] \cdot \exp(-S_2(f, T_a g))$
+       where $S_2(f, T_a g) = C(f, T_a g)$ is the cross covariance.
+    2. By Euclidean invariance (OS2): $Z[T_a g] = Z[g]$.
+    3. The cross term decays as $\|a\| \to \infty$ because the propagator
+       $C(x-y) \sim 1/\|x-y\|^2$ at large distances, and the Schwartz test functions
+       provide rapid localization.
+    4. Since $|Z[f]| \le 1$ for real test functions and $|e^{-z} - 1| \le 2|z|$ for
+       $|z| \le 1$, we conclude $|Z[f + T_ag] - Z[f]Z[g]| \le 2|S_2(f, T_ag)| \to 0$.
+
+    The polynomial clustering variant with decay exponent $\alpha = 6$ uses the exponential
+    decay of the massive propagator $C(z) \sim e^{-m\|z\|}$ combined with Schwartz decay.
+  -/)
   (uses := [OS4_Clustering, gaussianFreeField_free, schwartz_cross_covariance_decay_real])
   (latexEnv := "theorem")
   (latexLabel := "thm:gff-os4-clustering")]
@@ -540,14 +562,19 @@ These are not used in the main OS4 proof path (which goes through `OS4_Polynomia
 but kept as an alternative qualitative formulation of clustering. -/
 
 /-- Covariance clustering property: the 2-point function decays at large separations. -/
-@[blueprint "def:covariance-clustering-real"]
+@[blueprint "def:covariance-clustering-real"
+  (title := "Covariance Clustering (Real)")
+  (statement := /-- The two-point function $S_2(f, T_a g) \to 0$ as $\|a\| \to \infty$ for all real Schwartz functions $f, g$. -/)]
 def CovarianceClustering_real (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (f g : TestFunction) (ε : ℝ), ε > 0 →
     ∃ R > 0, ∀ a : SpaceTime, ‖a‖ > R →
       ‖SchwingerFunction₂ dμ_config f (g.translate a)‖ < ε
 
 /-- The free covariance has the clustering property. -/
-@[blueprint "thm:free-covariance-clustering-real"]
+@[blueprint "thm:free-covariance-clustering-real"
+  (title := "Free Covariance has Clustering Property")
+  (statement := /-- The free covariance satisfies clustering: $S_2(f, T_a g) \to 0$ as $\|a\| \to \infty$ for all real Schwartz $f, g$. -/)
+]
 theorem freeCovarianceClustering_real (m : ℝ) [Fact (0 < m)] :
     CovarianceClustering_real (gaussianFreeField_free m) := by
   intro f g ε hε
@@ -574,7 +601,9 @@ This connects time translation of distributions to translation of test functions
 
 /-- Time translation vector: shifts only the time coordinate by s.
     timeVector s = (s, 0, 0, 0) in coordinates. -/
-@[blueprint "def:time-vector"]
+@[blueprint "def:time-vector"
+  (title := "Time Translation Vector")
+  (statement := /-- The time translation vector $\mathrm{timeVector}(s) = (s, 0, 0, 0)$, shifting only the time coordinate. -/)]
 def timeVector (s : ℝ) : SpaceTime :=
   EuclideanSpace.equiv (Fin STDimension) ℝ |>.symm
     (fun i => if i = 0 then s else 0)
@@ -589,7 +618,10 @@ def timeVector (s : ℝ) : SpaceTime :=
     The proof follows from:
     1. timeTranslationDistribution_apply: (T_s ω)(f) = ω(T_{-s} f) for real test functions
     2. Time translation commutes with taking real/imaginary parts of complex Schwartz functions -/
-@[blueprint "lem:time-translation-pairing-duality"]
+@[blueprint "lem:time-translation-pairing-duality"
+  (title := "Time Translation Pairing Duality")
+  (statement := /-- $\langle T_s \omega, g\rangle = \langle \omega, T_{-s} g\rangle$: time translation of distributions is dual to time translation of test functions. -/)
+]
 lemma time_translation_pairing_duality (s : ℝ) (ω : FieldConfiguration) (g : TestFunctionℂ) :
     distributionPairingℂ_real (TimeTranslation.timeTranslationDistribution s ω) g =
     distributionPairingℂ_real ω (TimeTranslation.timeTranslationSchwartzℂ (-s) g) := by
@@ -599,7 +631,10 @@ lemma time_translation_pairing_duality (s : ℝ) (ω : FieldConfiguration) (g : 
 /-! ### Key Lemmas for Connecting Bilinear Decay to Schwinger Function -/
 
 /-- The time shift constant vector (s, 0, 0, 0) has norm |s|. -/
-@[blueprint "lem:time-shift-const-norm"]
+@[blueprint "lem:time-shift-const-norm"
+  (title := "Time Shift Constant Norm")
+  (statement := /-- $\|(s,0,0,0)\| = |s|$: the norm of the time shift vector equals the absolute value of the shift. -/)
+]
 lemma timeShiftConst_norm (s : ℝ) : ‖TimeTranslation.timeShiftConst s‖ = |s| := by
   simp only [TimeTranslation.timeShiftConst, EuclideanSpace.norm_eq, STDimension, Fin.sum_univ_four,
     (by decide : (0 : Fin 4).val = 0), (by decide : (1 : Fin 4).val ≠ 0),
@@ -607,19 +642,28 @@ lemma timeShiftConst_norm (s : ℝ) : ‖TimeTranslation.timeShiftConst s‖ = |
     Real.norm_eq_abs, sq_abs, zero_pow (by norm_num : 2 ≠ 0), add_zero, Real.sqrt_sq_eq_abs]
 
 /-- Time translation of Schwartz function at a point equals function evaluated at shifted point. -/
-@[blueprint "lem:time-translation-schwartz"]
+@[blueprint "lem:time-translation-schwartz"
+  (title := "Time Translation at a Point")
+  (statement := /-- $(T_s g)(y) = g(\mathrm{timeShift}(s, y))$: time translation of a Schwartz function equals evaluation at the shifted point. -/)
+]
 lemma timeTranslationSchwartzℂ_at_point (s : ℝ) (g : TestFunctionℂ) (y : SpaceTime) :
     TimeTranslation.timeTranslationSchwartzℂ s g y = g (TimeTranslation.timeShift s y) := by
   rfl
 
 /-- Time shift by s equals adding the time shift constant. -/
-@[blueprint "lem:time-shift-eq-add"]
+@[blueprint "lem:time-shift-eq-add"
+  (title := "Time Shift as Addition")
+  (statement := /-- $\mathrm{timeShift}(s, y) = y + (s, 0, 0, 0)$. -/)
+]
 lemma timeShift_eq_add (s : ℝ) (y : SpaceTime) :
     TimeTranslation.timeShift s y = y + TimeTranslation.timeShiftConst s := by
   exact TimeTranslation.timeShift_eq_add_const s y
 
 /-- Time translation by -s gives g(y - timeShiftConst(s)). -/
-@[blueprint "lem:time-translation-schwartz-2"]
+@[blueprint "lem:time-translation-schwartz-2"
+  (title := "Negative Time Translation as Subtraction")
+  (statement := /-- $(T_{-s} g)(y) = g(y - (s, 0, 0, 0))$: negative time translation equals subtraction of the shift vector. -/)
+]
 lemma timeTranslationSchwartzℂ_neg_eq_sub (s : ℝ) (g : TestFunctionℂ) (y : SpaceTime) :
     TimeTranslation.timeTranslationSchwartzℂ (-s) g y = g (y - TimeTranslation.timeShiftConst s) := by
   rw [timeTranslationSchwartzℂ_at_point, timeShift_eq_add]
@@ -631,7 +675,10 @@ lemma timeTranslationSchwartzℂ_neg_eq_sub (s : ℝ) (g : TestFunctionℂ) (y :
   split_ifs <;> ring
 
 /-- freeCovariance is translation-invariant: C(x,y) = C(0, x-y) = freeCovarianceKernel(x-y). -/
-@[blueprint "lem:free-covariance-eq-kernel"]
+@[blueprint "lem:free-covariance-eq-kernel"
+  (title := "Free Covariance Equals Kernel")
+  (statement := /-- $C_m(x, y) = C_m(x - y)$: the free covariance is translation-invariant, depending only on the difference. -/)
+]
 lemma freeCovariance_eq_kernel (m : ℝ) (x y : SpaceTime) :
     freeCovariance m x y = freeCovarianceKernel m (x - y) := by
   -- freeCovariance m x y = freeCovarianceBessel m x y = (m / (4π²r)) K₁(mr) where r = ‖x - y‖
@@ -644,7 +691,10 @@ lemma freeCovariance_eq_kernel (m : ℝ) (x y : SpaceTime) :
 
 /-- The Schwinger 2-point function for time-translated test function equals
     the bilinear integral with translated argument. -/
-@[blueprint "lem:schwinger2-time-translated-eq-bilinear"]
+@[blueprint "lem:schwinger2-time-translated-eq-bilinear"
+  (title := "Schwinger Function of Time-Translated Test Function")
+  (statement := /-- $S_2(f, T_{-s} g) = \int\!\!\int f(x)\, C_m(x-y)\, g(y - (s,0,0,0))\,dx\,dy$: the Schwinger function with time-translated argument reduces to a bilinear kernel integral. -/)
+]
 lemma schwinger2_time_translated_eq_bilinear (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) (s : ℝ) :
     SchwingerFunctionℂ₂ (gaussianFreeField_free m) f (TimeTranslation.timeTranslationSchwartzℂ (-s) g) =
     ∫ x : SpaceTime, ∫ y : SpaceTime,
@@ -670,7 +720,14 @@ lemma schwinger2_time_translated_eq_bilinear (m : ℝ) [Fact (0 < m)] (f g : Tes
     Therefore the GFF satisfies OS4_PolynomialClustering for all α > 0. -/
 @[blueprint "thm:gaussian-free-field-satisfies-os4-polynomial-clustering"
   (title := "GFF Satisfies Polynomial Clustering")
-  (statement := /-- The GFF satisfies OS4 polynomial clustering for any $\alpha > 0$: $\|E[e^{\langle\omega,f\rangle + \langle T_s\omega,g\rangle}] - E[e^{\langle\omega,f\rangle}]\cdot E[e^{\langle\omega,g\rangle}]\| \le c\,(1+s)^{-\alpha}$. -/)]
+  (statement := /-- The GFF satisfies OS4 polynomial clustering for any $\alpha > 0$: $\|E[e^{\langle\omega,f\rangle + \langle T_s\omega,g\rangle}] - E[e^{\langle\omega,f\rangle}]\cdot E[e^{\langle\omega,g\rangle}]\| \le c\,(1+s)^{-\alpha}$. -/)
+  (proof := /--
+    The polynomial clustering variant uses the exponential decay of the massive propagator
+    $C(z) \sim e^{-m\|z\|}$ combined with Schwartz decay. The bilinear translation decay
+    theorem gives a polynomial bound $c(1+\|a\|)^{-\alpha}$ for any $\alpha > 0$.
+    The mass gap $m > 0$ ensures exponential decay, which is stronger than any polynomial
+    rate.
+  -/)]
 theorem gaussianFreeField_satisfies_OS4_PolynomialClustering (m : ℝ) [Fact (0 < m)]
     (α : ℝ) (hα : α > 0) :
     OS4_PolynomialClustering (gaussianFreeField_free m) α hα := by

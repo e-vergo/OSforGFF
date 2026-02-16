@@ -62,7 +62,6 @@ This is an unconditional theorem with no assumptions beyond m > 0. -/
   (below := /-- Each OS axiom is proved in its own file; this file simply bundles them. -/)
   -- Dependencies auto-inferred from proof term
   -- Status fields (3): `ready` is the one we haven't used yet
-  (ready := true)
   -- Metadata fields (7)
   (keyDeclaration := true)
   (message := "Unconditional: no assumptions beyond m > 0. Uses three axioms transitively: schwartz_nuclear, minlos_theorem, differentiable_analyticAt_finDim.")

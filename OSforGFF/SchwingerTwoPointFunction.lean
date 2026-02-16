@@ -72,7 +72,9 @@ theorem bumpToSchwartz_apply (φ : ContDiffBump (0 : SpaceTime)) (x : SpaceTime)
 
     Translation preserves smoothness and decay properties.
     See `SchwartzMap.translate` in FunctionalAnalysis.lean for the general version. -/
-@[blueprint "def:translate-schwartz"]
+@[blueprint "def:translate-schwartz"
+  (title := "Translation of Schwartz Functions")
+  (statement := /-- The translated Schwartz function $(f_a)(x) = f(x - a)$ for $f \in \mathcal{S}(\mathbb{R}^4)$. -/)]
 noncomputable def translateSchwartz (f : TestFunction) (a : SpaceTime) : TestFunction :=
   f.translate a
 

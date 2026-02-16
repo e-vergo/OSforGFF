@@ -130,7 +130,9 @@ theorem sq_setIntegral_le_measure_mul_setIntegral_sq_proved
 
 omit [MeasurableSpace Ω] in
 /-- Cauchy-Schwarz for the time integral, pointwise in ω. -/
-@[blueprint "lem:cauchy-schwarz-time-integral-pointwise"]
+@[blueprint "lem:cauchy-schwarz-time-integral-pointwise"
+  (statement := /-- Pointwise Cauchy-Schwarz: $\|\int_0^T A_s(\omega) ds\|^2 \leq T \int_0^T \|A_s(\omega)\|^2 ds$. -/)
+]
 lemma cauchy_schwarz_time_integral_pointwise (A : ℝ → Ω → ℂ) (T : ℝ) (hT : T > 0) (ω : Ω)
     (hf_sq : IntegrableOn (fun s => ‖A s ω‖^2) (Icc 0 T) volume) :
     ‖∫ s in Icc 0 T, A s ω‖^2 ≤ T * ∫ s in Icc 0 T, ‖A s ω‖^2 := by
@@ -141,7 +143,9 @@ lemma cauchy_schwarz_time_integral_pointwise (A : ℝ → Ω → ℂ) (T : ℝ) 
 
 omit [MeasurableSpace Ω] in
 /-- The scaled time average satisfies a pointwise L² bound. -/
-@[blueprint "lem:scaled-time-average-pointwise-bound"]
+@[blueprint "lem:scaled-time-average-pointwise-bound"
+  (statement := /-- $\|(1/T) \int_0^T A_s(\omega) ds\|^2 \leq (1/T) \int_0^T \|A_s(\omega)\|^2 ds$. Scaled version of Cauchy-Schwarz. -/)
+]
 lemma scaled_time_average_pointwise_bound (A : ℝ → Ω → ℂ) (T : ℝ) (hT : T > 0) (ω : Ω)
     (hf_sq : IntegrableOn (fun s => ‖A s ω‖^2) (Icc 0 T) volume) :
     ‖(1/T : ℂ) * ∫ s in Icc 0 T, A s ω‖^2 ≤ (1/T) * ∫ s in Icc 0 T, ‖A s ω‖^2 := by
@@ -172,7 +176,9 @@ and swapping the order of integration via Fubini.
 -/
 
 /-- Helper: Fubini swap for ℝ × Ω with restricted measure. -/
-@[blueprint "lem:integral-swap-icc"]
+@[blueprint "lem:integral-swap-icc"
+  (statement := /-- Fubini for $[0, T] \times \Omega$: $\int_\Omega \int_0^T f \, ds \, d\mu = \int_0^T \int_\Omega f \, d\mu \, ds$. -/)
+]
 lemma integral_swap_Icc (μ : Measure Ω) [SFinite μ]
     (f : ℝ × Ω → ℝ) (T : ℝ)
     (hf : Integrable f ((volume.restrict (Icc 0 T)).prod μ)) :
@@ -185,7 +191,9 @@ lemma integral_swap_Icc (μ : Measure Ω) [SFinite μ]
   rw [← h1, h2]
 
 /-- Helper: setIntegral bound using uniform L² bound. -/
-@[blueprint "lem:set-integral-l2-bound"]
+@[blueprint "lem:set-integral-l2-bound"
+  (statement := /-- If $\int_\Omega \|A_s\|^2 d\mu \leq M^2$ for all $s \in [0,T]$, then $\int_0^T \int_\Omega \|A_s\|^2 d\mu \, ds \leq T M^2$. -/)
+]
 lemma setIntegral_L2_bound (μ : Measure Ω) [SFinite μ] (M_sq T : ℝ) (hT : T > 0)
     (A : ℝ → Ω → ℂ)
     (h_L2_bound : ∀ s, s ∈ Icc 0 T → ∫ ω, ‖A s ω‖^2 ∂μ ≤ M_sq)
@@ -313,7 +321,10 @@ Key insight: Use `integrable_prod_iff` (Tonelli) to split product integrability 
 /-- **L² on product from uniform slicewise bounds** (Theorem, was Axiom 8)
 
 By Tonelli: ∫∫ |A|² = ∫₀ᵀ (∫_Ω |A_s|² dμ) ds = ∫₀ᵀ C ds = TC -/
-@[blueprint "thm:mem-lp-prod-of-uniform-slicewise-bound"]
+@[blueprint "thm:mem-lp-prod-of-uniform-slicewise-bound"
+  (title := "Product L2 from Uniform Slicewise Bounds")
+  (statement := /-- If each slice $A_s$ is in $L^2(\mu)$ with uniform bound, then $A$ is in $L^2(\mathrm{vol}_{[0,T]} \otimes \mu)$. -/)
+]
 theorem memLp_prod_of_uniform_slicewise_bound (μ : Measure Ω) [SFinite μ]
     (A : ℝ → Ω → ℂ) (T : ℝ)
     -- AEStronglyMeasurable on product
@@ -364,7 +375,9 @@ This is a corollary using Theorem 3 + Integrable.mono. -/
 /-- **Time average is in L²** (Corollary of memLp_prod)
 
 This follows from product integrability + Integrable.mono with the pointwise bound. -/
-@[blueprint "thm:time-average-mem-lp-two"]
+@[blueprint "thm:time-average-mem-lp-two"
+  (statement := /-- The time average $(1/T)\int_0^T A_s \, ds$ is in $L^2(\mu)$ when each $A_s \in L^2(\mu)$ with uniform bound. -/)
+]
 theorem time_average_memLp_two (μ : Measure Ω) [SFinite μ]
     (A : ℝ → Ω → ℂ) (T : ℝ) (hT : T > 0)
     -- Each A_s is in L²
@@ -437,7 +450,9 @@ the time integral ω ↦ (1/T) * ∫ₛ (A s ω - EA) ds is AEStronglyMeasurable
 
 Proof: continuous-in-s + measurable-in-ω → jointly StronglyMeasurable (Mathlib),
 then swap product measure and integrate out s via `integral_prod_right'`. -/
-@[blueprint "thm:gff-time-integral-aestrongly-measurable-proved"]
+@[blueprint "thm:gff-time-integral-aestrongly-measurable-proved"
+  (statement := /-- The parametric time integral $\omega \mapsto \int_0^T A_s(\omega) ds$ is ae-strongly measurable when each $A_s$ is measurable and $s \mapsto A_s(\omega)$ is continuous. -/)
+]
 theorem gff_time_integral_aestronglyMeasurable_proved
     (μ : Measure Ω) [IsProbabilityMeasure μ]
     (A : ℝ → Ω → ℂ) (EA : ℂ) (T : ℝ)
@@ -477,7 +492,9 @@ is integrable. This is immediate from continuity on compact sets.
 If the covariance (s,u) ↦ ∫ A_s · conj(A_u) - EA·conj(EA) is continuous,
 then u ↦ ‖Cov(s,u)‖ is integrable on [0,T] since continuous functions on
 compact sets are integrable. -/
-@[blueprint "thm:gff-covariance-norm-integrable-on-slice-proved"]
+@[blueprint "thm:gff-covariance-norm-integrable-on-slice-proved"
+  (statement := /-- The covariance norm is integrable on time slices $[0, T]$ when the covariance function is continuous. -/)
+]
 theorem gff_covariance_norm_integrableOn_slice_proved
     (μ : Measure Ω) [IsProbabilityMeasure μ]
     (A : ℝ → Ω → ℂ) (EA : ℂ) (s T : ℝ)
@@ -514,7 +531,10 @@ where C = ∫_ℝ (1+|t|)^{-α} dt is the integral of the kernel over all of ℝ
 **Key tools:** `integrableOn_add_rpow_Ioi_of_lt` (decay integral), `integral_sub_left_eq_self`
 (translation invariance), `setIntegral_le_integral` (set ≤ full for nonneg integrable functions),
 `MeasurePreserving.integrableOn_comp_preimage` (negation symmetry for even functions). -/
-@[blueprint "thm:double-integral-polynomial-decay-bound-proved"]
+@[blueprint "thm:double-integral-polynomial-decay-bound-proved"
+  (title := "Double Integral Polynomial Decay Bound")
+  (statement := /-- For $\alpha > 1$, $\int_0^T \int_0^T (1 + |s - u|)^{-\alpha} \, du \, ds \leq C T$ with $C$ independent of $T$. -/)
+]
 theorem double_integral_polynomial_decay_bound_proved (α : ℝ) (hα : α > 1) :
     ∃ C : ℝ, C > 0 ∧ ∀ T : ℝ, T > 0 →
       ∫ s in Icc (0 : ℝ) T, ∫ u in Icc (0 : ℝ) T,
@@ -686,7 +706,10 @@ private lemma integrable_sq_of_memLp_two {f : α → ℝ} (hf : MemLp f 2 μ) :
     √(∫ (∑ⱼ wⱼfⱼ)² dμ) ≤ ∑ⱼ wⱼ √(∫ fⱼ² dμ)
 
     Proof by induction on n, using Cauchy-Schwarz for integrals at each step. -/
-@[blueprint "thm:minkowski-weighted-l2-sum-proved"]
+@[blueprint "thm:minkowski-weighted-l2-sum-proved"
+  (title := "Minkowski Inequality for Weighted L2 Sums")
+  (statement := /-- $\sqrt{\int (\sum_j w_j f_j)^2 \, d\mu} \leq \sum_j w_j \sqrt{\int f_j^2 \, d\mu}$ for nonneg weights and functions. -/)
+]
 theorem minkowski_weighted_L2_sum_proved {n : ℕ} {w : Fin n → ℝ} {f : Fin n → α → ℝ}
     (hw : ∀ j, 0 ≤ w j) (hf : ∀ j ω, 0 ≤ f j ω)
     (hf_int : ∀ j, Integrable (fun ω => (f j ω)^2) μ)
@@ -746,7 +769,11 @@ For an L² stationary process A with constant mean EA:
   ‖E[‖T⁻¹∫₀ᵀ A_s ds - EA‖²]‖ ≤ T⁻² · ‖∫₀ᵀ∫₀ᵀ Cov(s,u) ds du‖
 
 The proof actually gives equality (the bound is tight). -/
-@[blueprint "thm:l2-variance-time-average-bound"]
+@[blueprint "thm:l2-variance-time-average-bound"
+  (title := "L2 Variance of Time Averages")
+  (keyDeclaration := true)
+  (statement := /-- The variance of time averages decays: $\operatorname{Var}_\mu((1/T)\int_0^T A_s \, ds) \leq (1/T) \int_0^T \int_0^T |C(s,u)| \, du \, ds$ where $C$ is the covariance kernel. -/)
+]
 theorem L2_variance_time_average_bound (μ : Measure Ω) [IsProbabilityMeasure μ]
     (A : ℝ → Ω → ℂ) (EA : ℂ)
     (T : ℝ) (hT : T > 0)
@@ -897,7 +924,9 @@ private lemma memLp_two_lintegral_nnnorm_sq {α ε : Type*} [MeasurableSpace α]
   norm_cast
 
 set_option maxHeartbeats 800000 in
-@[blueprint "thm:l2-process-covariance-fubini-integrable"]
+@[blueprint "thm:l2-process-covariance-fubini-integrable"
+  (statement := /-- Fubini integrability for the covariance triple integral: if $A$ is $L^2$ on the product, then the covariance integrand is integrable for Fubini swaps. -/)
+]
 theorem L2_process_covariance_fubini_integrable {Ω : Type*} [MeasurableSpace Ω]
     (μ : Measure Ω) [IsProbabilityMeasure μ]
     (A : ℝ → Ω → ℂ) (c : ℂ) (T : ℝ) (_hT : T > 0)

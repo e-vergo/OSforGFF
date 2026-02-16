@@ -41,7 +41,10 @@ variable (m : ℝ) [Fact (0 < m)]
 
 /-- For the Gaussian Free Field measure, the product of two complex pairings with test functions
     is integrable. Uses the direct 2-point theorem from GaussianMoments. -/
-@[blueprint "lem:gaussian-pairing-product-integrable-free-core"]
+@[blueprint "lem:gaussian-pairing-product-integrable-free-core"
+  (title := "Complex Pairing Product Integrability")
+  (statement := /-- The product $\langle\omega,\varphi\rangle_{\mathbb{C}}\,\langle\omega,\psi\rangle_{\mathbb{C}}$ is integrable under the free GFF measure for all complex test functions $\varphi, \psi$. -/)
+]
 lemma gaussian_pairing_product_integrable_free_core
     (φ ψ : TestFunctionℂ) :
     Integrable (fun ω => distributionPairingℂ_real ω φ * distributionPairingℂ_real ω ψ)
@@ -103,7 +106,10 @@ lemma gff_cf_two_testfunctions (f g : TestFunction) (t s : ℝ) :
 The following lemmas use OS0's analyticity to compute mixed derivatives. -/
 
 /-- OS0 specialized to two test functions gives analyticity of Z[tf + sg] in (t,s) ∈ ℂ² -/
-@[blueprint "lem:gff-two-param-analytic"]
+@[blueprint "lem:gff-two-param-analytic"
+  (title := "Two-Parameter Analyticity of GFF CF")
+  (statement := /-- The map $(z_0, z_1) \mapsto Z[z_0 f + z_1 g]$ is analytic on $\mathbb{C}^2$ for any real test functions $f, g$. Direct application of OS0 with $n = 2$. -/)
+]
 lemma gff_two_param_analytic (f g : TestFunction) :
     AnalyticOn ℂ (fun z : Fin 2 → ℂ =>
       GJGeneratingFunctionalℂ (gaussianFreeField_free m) (z 0 • toComplex f + z 1 • toComplex g))
@@ -131,7 +137,10 @@ This eliminates the need for the `twoD_line_from_realCF` axiom from MinlosAnalyt
 /-- Key technical lemma: fixing one coordinate, the slice is analytic in the other.
     For z₀ ↦ Z[z₀•f + t•g] where t is a fixed complex number.
     Derived from OS0 by composition with linear embedding z₀ ↦ ![z₀, t]. -/
-@[blueprint "lem:gff-slice-analytic-z0"]
+@[blueprint "lem:gff-slice-analytic-z0"
+  (title := "GFF CF Slice Analytic in First Variable")
+  (statement := /-- For fixed $t \in \mathbb{C}$, the slice $z_0 \mapsto Z[z_0 f + t g]$ is entire. Derived from two-parameter analyticity by composing with the linear embedding $z_0 \mapsto (z_0, t)$. -/)
+]
 lemma gff_slice_analytic_z0 (f g : TestFunction) (t : ℂ) :
     AnalyticOnNhd ℂ (fun z₀ : ℂ =>
       GJGeneratingFunctionalℂ (gaussianFreeField_free m) (z₀ • toComplex f + t • toComplex g))
@@ -160,7 +169,10 @@ lemma gff_slice_analytic_z0 (f g : TestFunction) (t : ℂ) :
   exact hcomp x (Set.mem_univ x)
 
 /-- Derived from gff_slice_analytic_z0 by swapping f ↔ g and using add_comm. -/
-@[blueprint "lem:gff-slice-analytic-z1"]
+@[blueprint "lem:gff-slice-analytic-z1"
+  (title := "GFF CF Slice Analytic in Second Variable")
+  (statement := /-- For fixed $z_0 \in \mathbb{C}$, the slice $z_1 \mapsto Z[z_0 f + z_1 g]$ is entire. Derived from the first-variable case by swapping $f \leftrightarrow g$. -/)
+]
 lemma gff_slice_analytic_z1 (f g : TestFunction) (z₀ : ℂ) :
     AnalyticOnNhd ℂ (fun z₁ : ℂ =>
       GJGeneratingFunctionalℂ (gaussianFreeField_free m) (z₀ • toComplex f + z₁ • toComplex g))
@@ -171,7 +183,10 @@ lemma gff_slice_analytic_z1 (f g : TestFunction) (z₀ : ℂ) :
 
 omit [Fact (0 < m)] in
 /-- Slice of Gaussian RHS is analytic (exp of polynomial). -/
-@[blueprint "lem:gaussian-rhs-slice-analytic-z0"]
+@[blueprint "lem:gaussian-rhs-slice-analytic-z0"
+  (title := "Gaussian RHS Slice Analytic in First Variable")
+  (statement := /-- The Gaussian formula $z_0 \mapsto \exp\!\bigl(-\tfrac{1}{2}(z_0^2 Q(f,f) + 2 z_0 t\, Q(f,g) + t^2 Q(g,g))\bigr)$ is entire for fixed $t$. -/)
+]
 lemma gaussian_rhs_slice_analytic_z0 (f g : TestFunction) (t : ℂ) :
     AnalyticOnNhd ℂ (fun z₀ : ℂ =>
       Complex.exp (-(1/2 : ℂ) * (z₀^2 * freeCovarianceFormR m f f +
@@ -194,7 +209,10 @@ lemma gaussian_rhs_slice_analytic_z0 (f g : TestFunction) (t : ℂ) :
 
 omit [Fact (0 < m)] in
 /-- Slice of Gaussian RHS is analytic in the second variable. -/
-@[blueprint "lem:gaussian-rhs-slice-analytic-z1"]
+@[blueprint "lem:gaussian-rhs-slice-analytic-z1"
+  (title := "Gaussian RHS Slice Analytic in Second Variable")
+  (statement := /-- The Gaussian formula $z_1 \mapsto \exp\!\bigl(-\tfrac{1}{2}(z_0^2 Q(f,f) + 2 z_0 z_1\, Q(f,g) + z_1^2 Q(g,g))\bigr)$ is entire for fixed $z_0$. -/)
+]
 lemma gaussian_rhs_slice_analytic_z1 (f g : TestFunction) (z₀ : ℂ) :
     AnalyticOnNhd ℂ (fun z₁ : ℂ =>
       Complex.exp (-(1/2 : ℂ) * (z₀^2 * freeCovarianceFormR m f f +
@@ -217,7 +235,10 @@ lemma gaussian_rhs_slice_analytic_z1 (f g : TestFunction) (z₀ : ℂ) :
 
 /-- The GFF CF and Gaussian formula agree on ℝ².
     This follows from gff_cf_two_testfunctions by converting between types. -/
-@[blueprint "lem:gff-cf-agrees-on-reals-os0"]
+@[blueprint "lem:gff-cf-agrees-on-reals-os0"
+  (title := "GFF CF Agrees with Gaussian on Reals")
+  (statement := /-- For real parameters $t, s \in \mathbb{R}$, $Z[t f + s g] = \exp\!\bigl(-\tfrac{1}{2}(t^2 Q(f,f) + 2ts\, Q(f,g) + s^2 Q(g,g))\bigr)$. Converts from real characteristic functional to complex form. -/)
+]
 lemma gff_cf_agrees_on_reals_OS0 (f g : TestFunction) (t s : ℝ) :
     GJGeneratingFunctionalℂ (gaussianFreeField_free m) ((t : ℂ) • toComplex f + (s : ℂ) • toComplex g) =
       Complex.exp (-(1/2 : ℂ) * ((t : ℂ)^2 * freeCovarianceFormR m f f +
@@ -235,7 +256,15 @@ lemma gff_cf_agrees_on_reals_OS0 (f g : TestFunction) (t s : ℝ) :
 /-- Complex generating functional for the free GFF via OS0 + identity theorem.
     This proves the result WITHOUT using twoD_line_from_realCF. -/
 @[blueprint "thm:gff-complex-characteristic-os0"
-  (title := "Complex Characteristic Functional via OS0")]
+  (title := "Complex Characteristic Functional via OS0")
+  (proof := /--
+For fixed real test functions $f, g$, both sides of the identity $Z(z_0, z_1) = e^{-\frac{1}{2}C(z_0 f + z_1 g,\, z_0 f + z_1 g)}$ are entire functions of $(z_0, z_1) \in \mathbb{C}^2$.
+\begin{itemize}
+\item \emph{Left side:} The integral $\int \exp(i\langle\omega, z_0 f + z_1 g\rangle)\, d\mu$ is analytic by Fernique's theorem (sub-Gaussian integrability).
+\item \emph{Right side:} Analytic because it is the composition of the exponential with a polynomial.
+\end{itemize}
+They agree on $\mathbb{R}^2$ by the real characteristic functional identity. By analytic continuation (the identity theorem, applied slice by slice), they agree on $\mathbb{C}^2$. Any complex test function $J$ can be decomposed as $z_0 f + z_1 g$ where $f = \mathrm{Re}(J)$, $g = \mathrm{Im}(J)$, $z_0 = 1$, $z_1 = i$.
+  -/)]
 theorem gff_complex_characteristic_OS0 :
     ∀ J : TestFunctionℂ,
       GJGeneratingFunctionalℂ (gaussianFreeField_free m) J =

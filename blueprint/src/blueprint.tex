@@ -35,70 +35,20 @@ This chapter develops the mathematical infrastructure needed for the GFF constru
 
 \section{Functional Analysis}\label{sec:functional-analysis}
 
-This section develops $L^2$ space infrastructure and properties of bilinear forms involving Schwartz functions and singular kernels. The key results include:
-
-\begin{itemize}
-\item \textbf{$L^p$ embeddings:} Schwartz functions embed continuously into $L^2$ spaces. The embedding sends $\calS(\R^d, \C)$ into $L^2(\R^d, \C)$.
-\item \textbf{Bounded multiplier operators:} If $|g(x)| \le C$ a.e., then $f \mapsto gf$ is a continuous linear map on $L^2$ with $\|gf\|_2 \le C\|f\|_2$.
-\item \textbf{Local integrability:} Functions with $|f(x)| \le C\|x\|^{-\alpha}$ and $\alpha < d$ are locally integrable in dimension $d \ge 3$.
-\item \textbf{Double mollifier convergence:} For a kernel $C$ continuous away from the origin, the double convolution with approximate identities converges to $C(a)$ as the support shrinks to zero.
-\end{itemize}
-
-The double mollifier convergence theorem is a key technical ingredient for connecting the abstract Schwinger 2-point functional to the concrete position-space kernel. Given $C$ continuous on $\{x \ne 0\}$ and $a \ne 0$, with a sequence of bump functions $\varphi_i$ whose support shrinks to zero, the proof proceeds as follows:
-\begin{enumerate}
-\item Rewrite the double convolution as a single integral against the self-convolution of the bump function.
-\item Show the self-convolution is a non-negative approximate identity with integral 1 and support in $B(0, 2r_{\mathrm{out}})$.
-\item Apply the general approximate identity convergence theorem for continuous functions.
-\end{enumerate}
+This section develops $L^2$ space infrastructure and properties of bilinear forms involving Schwartz functions and singular kernels, including $L^p$ embeddings, bounded multiplier operators, local integrability of singular kernels, and double mollifier convergence.
 
 \inputleanmodule{OSforGFF.FunctionalAnalysis}
 
 \section{Schwartz Functions and Decay Estimates}\label{sec:schwartz-decay}
 
-This section establishes quantitative decay estimates for Schwartz functions and their bilinear pairings with singular kernels. The main results concern:
-
-\begin{itemize}
-\item \textbf{Polynomial decay bounds:} Every $f \in \calS$ satisfies $\|f(x)\| \le C(1+\|x\|)^{-N}$ for any $N > 0$.
-\item \textbf{Convolution decay:} Convolutions of Schwartz functions with locally integrable kernels decay at any polynomial rate.
-\item \textbf{Bilinear translation decay:} $\iint f(x)\, K(x-y)\, g(y-a)\, dx\, dy \to 0$ as $\|a\| \to \infty$, with polynomial rate when $K$ has exponential tail decay.
-\end{itemize}
-
-The bilinear decay proofs decompose the kernel $K$ into a singular part (supported on a ball) and a tail part:
-$$K(z) = K_{\mathrm{sing}}(z) + K_{\mathrm{tail}}(z)$$
-where $K_{\mathrm{sing}}$ is compactly supported and $K_{\mathrm{tail}}$ is bounded. Each piece is handled separately:
-\begin{itemize}
-\item \emph{Singular part:} Compact support means the convolution with a Schwartz function inherits any polynomial decay rate.
-\item \emph{Tail part:} Exponential decay of $K_{\mathrm{tail}}$ combined with polynomial decay of $f$ gives polynomial decay of the convolution.
-\end{itemize}
-The final result combines both pieces using the triangle inequality.
+This section establishes quantitative decay estimates for Schwartz functions and their bilinear pairings with singular kernels, including polynomial decay bounds, convolution decay, and bilinear translation decay.
 
 \inputleanmodule{OSforGFF.QuantitativeDecay}
 \inputleanmodule{OSforGFF.SchwartzTranslationDecay}
 
 \section{Special Functions and Integrals}\label{sec:special-functions}
 
-This section provides closed-form evaluations of special integrals arising in quantum field theory, particularly Fourier transforms of Lorentzian and exponential decay functions, and the Laplace-type integral appearing in the Schwinger representation. The key identities proved are:
-
-\begin{itemize}
-\item \textbf{Fourier transform of exponential decay:}
-$$\int_{-\infty}^{\infty} e^{ikx}\, e^{-\mu|x|}\, dx = \frac{2\mu}{k^2+\mu^2}$$
-
-\item \textbf{Fourier inversion for Lorentzian:}
-$$\int_{-\infty}^{\infty} \frac{e^{ikx}}{k^2+\mu^2}\, dk = \frac{\pi}{\mu}\, e^{-\mu|x|}$$
-
-\item \textbf{Laplace integral (Glasser's identity):}
-$$\int_0^{\infty} s^{-1/2}\, e^{-a/s - bs}\, ds = \sqrt{\pi/b}\, e^{-2\sqrt{ab}}$$
-\end{itemize}
-
-\paragraph{Fourier transforms.} The integrals are evaluated by splitting at 0. On each half-line, $e^{ikx \mp \mu x}$ has a decaying exponential factor whose antiderivative is computed explicitly. The results combine via $|x| = \pm x$ on each half-line.
-
-\paragraph{Laplace integral.} The proof chain is:
-\begin{enumerate}
-\item Substitution $s = t^2$ reduces to an integral over $(0, \infty)$.
-\item Complete the square: $a/t^2 + bt^2 = (\sqrt{a}/t - \sqrt{b}\, t)^2 + 2\sqrt{ab}$.
-\item Factor out $e^{-2\sqrt{ab}}$.
-\item Glasser's master theorem (a change-of-variables identity) evaluates the remaining Gaussian-like integral as $\sqrt{\pi}/(2\sqrt{b})$.
-\end{enumerate}
+This section provides closed-form evaluations of special integrals arising in quantum field theory, particularly Fourier transforms of Lorentzian and exponential decay functions, and the Laplace-type integral appearing in the Schwinger representation.
 
 \inputleanmodule{OSforGFF.FourierTransforms}
 \inputleanmodule{OSforGFF.LaplaceIntegral}
@@ -106,34 +56,13 @@ $$\int_0^{\infty} s^{-1/2}\, e^{-a/s - bs}\, ds = \sqrt{\pi/b}\, e^{-2\sqrt{ab}}
 
 \section{$L^2$ Time Integral Estimates}\label{sec:l2-time-integral}
 
-This section provides measure-theoretic estimates for time averages of stochastic processes, used in the ergodicity arguments (OS axiom 4). The main results are:
-
-\begin{itemize}
-\item \textbf{Cauchy--Schwarz for set integrals:}
-$$\left\|\int_{[a,b]} f\right\|^2 \le (b-a)\int_{[a,b]}\|f\|^2$$
-
-\item \textbf{$L^2$ time average bound:} If $\int \|A(s)\|^2\, d\mu \le M$ for all $s \in [0,T]$, then $\int \|T^{-1}\int_0^T A(s)\, ds\|^2\, d\mu \le M$.
-
-\item \textbf{Product $L^2$ membership:} Joint measurability combined with uniform slice $L^2$ bounds implies $L^2$ membership on the product.
-
-\item \textbf{Double integral polynomial decay:}
-$$\int_0^T\int_0^T (1+|s-u|)^{-\alpha}\, ds\, du \le CT \quad\text{for } \alpha > 1.$$
-\end{itemize}
+This section provides measure-theoretic estimates for time averages of stochastic processes, used in the ergodicity arguments (OS axiom 4).
 
 \inputleanmodule{OSforGFF.L2TimeIntegral}
 
 \section{Positive-Definite Kernels and Matrix Theory}\label{sec:positive-definite-kernels}
 
-This section develops the theory of positive-definite functions and matrices needed for the Gaussian measure construction. The main results are:
-
-\begin{itemize}
-\item \textbf{Schur product theorem:} $A \circ B \succeq 0$ when $A, B \succeq 0$ (Hadamard product of positive semidefinite matrices).
-\item \textbf{Hadamard exponential:} $\exp_\circ(R) \succeq 0$ when $R \succeq 0$, proved via the series expansion $\exp_\circ = \sum R^{\circ k}/k!$ and the Schur product theorem.
-\item \textbf{Gaussian RBF positive definiteness:} $h \mapsto e^{-\|h\|^2/2}$ is positive definite on any inner product space.
-\item \textbf{Abstract positive definiteness:} The type class for translation-invariant positive-definite functions on groups.
-\end{itemize}
-
-The Schur product theorem is proved by showing that the Hadamard product of two PSD matrices can be expressed as a principal submatrix of the Kronecker product, which inherits positive semidefiniteness. The Hadamard exponential result then follows by observing that each term $R^{\circ k}/k!$ in the series expansion is PSD (by iterated application of the Schur product theorem), and a convergent sum of PSD matrices is PSD.
+This section develops the theory of positive-definite functions and matrices needed for the Gaussian measure construction, including the Schur product theorem, Hadamard exponentials, Gaussian RBF positive definiteness, and abstract positive-definite function type classes.
 
 \inputleanmodule{OSforGFF.FrobeniusPositivity}
 \inputleanmodule{OSforGFF.SchurProduct}
@@ -156,26 +85,7 @@ This chapter introduces the core type definitions and infrastructure for the Euc
 
 \section{Spacetime and Symmetries}\label{sec:spacetime-symmetries}
 
-The spacetime is $\R^4$ with the standard Euclidean metric, modeled as $\texttt{EuclideanSpace}\ \R\ (\texttt{Fin}\ 4)$. The coordinate index 0 is the time direction. The Euclidean symmetry group $E(4) = O(4) \rtimes \R^4$ acts on spacetime by rotations and translations.
-
-Key structures:
-\begin{itemize}
-\item \textbf{Spacetime:} $\R^4$ with the standard Euclidean inner product.
-\item \textbf{Time coordinate:} The projection $x \mapsto x_0$.
-\item \textbf{Euclidean group:} $E(4) = O(4) \rtimes \R^4$ acting on spacetime and test functions.
-\item \textbf{Time reflection:} $\Theta: (t,\mathbf{x}) \mapsto (-t,\mathbf{x})$, a distinguished involution in $E(4)$.
-\item \textbf{Spacetime decomposition:} The measurable equivalence $\R^4 \cong \R \times \R^3$ separating time and spatial coordinates.
-\item \textbf{Positive time set:} The open half-space $\{x \in \R^4 : x_0 > 0\}$.
-\end{itemize}
-
-The Euclidean group is formalized as a structure containing an orthogonal matrix $R \in O(4)$ and a translation vector $t \in \R^4$. The group operations are:
-\begin{itemize}
-\item \emph{Multiplication:} $(R_1, t_1) \cdot (R_2, t_2) = (R_1 R_2,\, R_1 t_2 + t_1)$
-\item \emph{Identity:} $(I, 0)$
-\item \emph{Inverse:} $(R, t)^{-1} = (R^{-1},\, -R^{-1} t)$
-\item \emph{Action:} $g \cdot x = Rx + t$
-\end{itemize}
-The formalization proves that this forms a group and that the action preserves Lebesgue measure.
+The spacetime is $\R^4$ with the standard Euclidean metric, modeled as $\texttt{EuclideanSpace}\ \R\ (\texttt{Fin}\ 4)$. The coordinate index 0 is the time direction. The Euclidean symmetry group $E(4) = O(4) \rtimes \R^4$ acts on spacetime by rotations and translations, with time reflection $\Theta: (t,\mathbf{x}) \mapsto (-t,\mathbf{x})$ as a distinguished involution.
 
 \inputleanmodule{OSforGFF.Basic}
 \inputleanmodule{OSforGFF.Euclidean}
@@ -184,24 +94,7 @@ The formalization proves that this forms a group and that the action preserves L
 
 \section{Test Function Spaces}\label{sec:test-function-spaces}
 
-Test functions are Schwartz-class functions on $\R^4$, serving as the ``smearing functions'' that pair with distributional field configurations. The formalization uses Mathlib's \texttt{SchwartzMap} type. Key types:
-\begin{itemize}
-\item $\texttt{TestFunction} = \calS(\R^4, \R)$: Real Schwartz functions.
-\item $\texttt{TestFunctionC} = \calS(\R^4, \C)$: Complex Schwartz functions.
-\item $\texttt{PositiveTimeTestFunction}$: Real Schwartz functions supported in $\{x_0 > 0\}$.
-\item $\texttt{FieldConfiguration} = \mathrm{WeakDual}\ \R\ \texttt{TestFunction}$: Distributional field configurations.
-\end{itemize}
-
-The complex test function space carries additional structure: complex conjugation, a star operation, and decomposition into real and imaginary parts.
-
-Time translation is the one-parameter subgroup of the Euclidean group that shifts the time coordinate. It is formalized in detail because of its role in the ergodicity axiom (OS4). The key properties are:
-\begin{itemize}
-\item $T_{s+t} = T_s \circ T_t$ (semigroup law).
-\item $T_0 = \mathrm{id}$ (identity).
-\item $s \mapsto T_s f$ is continuous $\R \to \calS$ in the Schwartz topology.
-\item The Lipschitz seminorm bound: $\|T_h f - f\|_{k,n} \le |h|(1+|h|)^k 2^k(\|f\|_{k,n+1}+\|f\|_{0,n+1}+1)$.
-\end{itemize}
-The Lipschitz seminorm bound is a fully proved result (no axioms) central to proving continuity of the time translation in the Schwartz topology. The proof uses the mean value theorem, Peetre's inequality for polynomial weight shifting, and careful norm estimates on iterated derivatives.
+Test functions are Schwartz-class functions on $\R^4$, serving as the ``smearing functions'' that pair with distributional field configurations. The formalization uses Mathlib's \texttt{SchwartzMap} type, with real, complex, and positive-time variants. Time translation is formalized in detail because of its role in the ergodicity axiom (OS4).
 
 \inputleanmodule{OSforGFF.ComplexTestFunction}
 \inputleanmodule{OSforGFF.PositiveTimeTestFunction_real}
@@ -252,15 +145,6 @@ In 4D, this evaluates to the Bessel function representation:
 $$C(x, y) = \frac{m}{4\pi^2 \|x - y\|} K_1(m\|x - y\|)$$
 where $K_1$ is the modified Bessel function of the second kind.
 
-Key properties of the propagator:
-\begin{itemize}
-\item \emph{Positivity:} $C(x, y) > 0$ for $x \ne y$.
-\item \emph{Symmetry:} $C(x, y) = C(y, x)$.
-\item \emph{Euclidean invariance:} $C(gx, gy) = C(x, y)$ for all $g \in E(4)$.
-\item \emph{Singularity:} $C(x, y) \sim \mathrm{const}/\|x-y\|^2$ as $x \to y$.
-\item \emph{Exponential decay:} $C(x, y) \sim \mathrm{const} \cdot e^{-m\|x-y\|}/\|x-y\|^{3/2}$ as $\|x-y\| \to \infty$.
-\end{itemize}
-
 The propagator admits a proper-time (Schwinger) representation:
 $$\frac{1}{\|k\|^2 + m^2} = \int_0^{\infty} e^{-t(\|k\|^2 + m^2)}\, dt$$
 Performing the Fourier transform under the proper-time integral yields the heat kernel representation:
@@ -270,15 +154,6 @@ where $H_t(r) = \frac{1}{16\pi^2 t^2} e^{-r^2/(4t)}$ is the 4D heat kernel.
 To rigorously justify Fubini-type exchanges of integration, a Gaussian regulator $e^{-\alpha\|k\|^2}$ is introduced:
 $$C_\alpha(x, y) = \int \frac{e^{-\alpha\|k\|^2} e^{ik\cdot(x-y)}}{\|k\|^2 + m^2} \frac{dk}{(2\pi)^4}$$
 This makes all integrals absolutely convergent. The true covariance is recovered as $\alpha \to 0^+$.
-
-The Schwinger representation is proved in five steps:
-\begin{enumerate}
-\item Evaluate $\int_0^\infty e^{-t(a^2+m^2)}\, dt = 1/(a^2+m^2)$ for $a^2 = \|k\|^2$.
-\item Exchange the $k$-integral and $t$-integral (Fubini, justified by the regulator).
-\item The inner $k$-integral is a Gaussian integral giving the heat kernel: $\int e^{-t\|k\|^2 - ik\cdot z}\, dk = (2\pi)^d H_t(\|z\|)$.
-\item Complete the square to obtain the Schwinger representation of $C(x,y)$.
-\item Evaluate via the Laplace integral to get the Bessel form.
-\end{enumerate}
 
 \inputleanmodule{OSforGFF.CovarianceMomentum}
 
@@ -290,14 +165,6 @@ The \emph{Parseval identity} relates this to momentum space:
 $$\mathrm{Re}\langle f, Cf\rangle = \int \frac{|\hat{f}(k)|^2}{\|k\|^2 + m^2}\, dk$$
 This immediately gives positive semi-definiteness: $\mathrm{Re}\langle f, Cf\rangle \ge 0$ since the integrand is non-negative.
 
-The Parseval identity is proved in four stages:
-\begin{enumerate}
-\item \emph{Regulated Fubini factorization.} For the regulated integral $\langle f, C_\alpha f\rangle$, the Gaussian regulator $e^{-\alpha\|k\|^2}$ makes the triple integral $(x, y, k)$ absolutely convergent. Apply Fubini to reorder integration.
-\item \emph{Change of variables.} Rescale from physics Fourier conventions ($\int e^{ikx}$) to Mathlib conventions ($\int e^{-2\pi i k \cdot x}$), absorbing factors of $(2\pi)^d$.
-\item \emph{Monotone convergence.} As $\alpha \to 0^+$, the regulated integrand increases monotonically to the unregulated integrand. The dominated convergence theorem (with dominator $|\hat{f}|^2/m^2$) gives convergence.
-\item \emph{Bilinear extension.} Extend from $\langle f, Cf\rangle$ to $\langle f, Cg\rangle$ via the polarization identity.
-\end{enumerate}
-
 \inputleanmodule{OSforGFF.Parseval}
 
 \section{Covariance Properties and Hilbert Space Embedding}\label{sec:covariance-properties}
@@ -307,13 +174,6 @@ The covariance bilinear form has important structural properties: it is symmetri
 The covariance form factors through a Hilbert space. Define the map $T\colon \texttt{TestFunction} \to L^2$ by
 $$Tf(k) = \hat{f}(k) \sqrt{\frac{1}{\|k\|^2 + m^2}}$$
 Then $C(f, f) = \|Tf\|^2$, establishing the Hilbert space embedding required by the Minlos theorem.
-
-For reflection positivity (Chapter~\ref{ch:os3}), the covariance restricted to real test functions has additional properties:
-\begin{itemize}
-\item $C(\Theta f, \Theta g) = C(f, g)$ (reflection invariance).
-\item $C(\Theta f, g) = C(\Theta g, f)$ (reflection cross-symmetry).
-\item Linearity of $\sum_i c_i\, C(\Theta f_i, g)$ in the coefficients $c_i$.
-\end{itemize}
 
 \inputleanmodule{OSforGFF.Covariance}
 \inputleanmodule{OSforGFF.CovarianceR}
@@ -331,13 +191,6 @@ where $C(f, g)$ is the free covariance bilinear form.
 
 The construction uses the \emph{Minlos theorem}: a continuous, positive-definite functional on a nuclear space is the characteristic functional of a unique probability measure on the dual space.
 
-The Minlos theorem requires three inputs:
-\begin{enumerate}
-\item \textbf{Positive definiteness of $e^{-\frac{1}{2}C(f,f)}$:} This follows from the Hilbert space embedding $C(f,f) = \|Tf\|^2$, combined with the abstract result that $e^{-\frac{1}{2}\|h\|^2}$ is positive-definite on any inner product space (proved via the Schur product theorem and Hadamard exponential).
-\item \textbf{Nuclearity of Schwartz space:} Assumed as an axiom. This is a standard result whose proof requires the Hilbert--Schmidt theory of Schwartz seminorms.
-\item \textbf{Continuity of $f \mapsto C(f,f)$:} Proved via the continuity of the embedding map $T$ and the fact that the $L^2$ norm is continuous.
-\end{enumerate}
-
 \inputleanmodule{OSforGFF.Minlos}
 
 \section{Analytic Properties}\label{sec:analytic-properties}
@@ -348,25 +201,13 @@ The negation map $\omega \mapsto -\omega$ is measurable, and the GFF measure is 
 
 \section{GFF Measure Construction}\label{sec:gff-construction}
 
-Apply the Minlos theorem to the free covariance to obtain a probability measure $\mu$ on $\texttt{FieldConfiguration}$ satisfying the characteristic function identity. The construction yields:
-\begin{itemize}
-\item \textbf{Centered:} $\int\langle\omega,f\rangle\, d\mu = 0$ for all $f$.
-\item \textbf{Second moment:} $\int\langle\omega,\phi\rangle^2\, d\mu = C(\phi,\phi)$.
-\item \textbf{Gaussian pairing:} The law of $\langle\omega,\phi\rangle$ is $\mathcal{N}(0, C(\phi,\phi))$.
-\item \textbf{Moment finiteness:} $\langle\omega,\phi\rangle \in L^p$ for all $p < \infty$.
-\item \textbf{Exponential integrability:} $e^{\alpha\langle\omega,\phi\rangle^2}$ is integrable for small $\alpha > 0$ (Fernique's theorem).
-\end{itemize}
+Apply the Minlos theorem to the free covariance to obtain a probability measure $\mu$ on $\texttt{FieldConfiguration}$ satisfying the characteristic function identity.
 
 \inputleanmodule{OSforGFF.GFFMconstruct}
 
 \section{Gaussian Moments}\label{sec:gaussian-moments}
 
-The integrability of $\langle\omega,\phi\rangle\langle\omega,\psi\rangle$ for complex test functions follows from:
-\begin{enumerate}
-\item Fernique's theorem gives $e^{\alpha\langle\omega,\phi\rangle^2}$ integrable for small $\alpha > 0$.
-\item From exp-square integrability, derive $L^p$ membership for all $p < \infty$ via H\"older's inequality.
-\item Cauchy--Schwarz: $|\langle\omega,\phi\rangle\langle\omega,\psi\rangle| \le \tfrac{1}{2}(|\langle\omega,\phi\rangle|^2 + |\langle\omega,\psi\rangle|^2)$.
-\end{enumerate}
+The integrability of $\langle\omega,\phi\rangle\langle\omega,\psi\rangle$ for complex test functions follows from Fernique's theorem, $L^p$ membership via H\"older's inequality, and the Cauchy--Schwarz inequality.
 
 \inputleanmodule{OSforGFF.GaussianMoments}
 
@@ -444,22 +285,7 @@ OS0 (Analyticity) is the first Osterwalder--Schrader axiom. It states that the g
 
 \section{Proof Strategy}\label{sec:os0-strategy}
 
-The proof applies a \emph{holomorphic integral theorem}: if the integrand $f(z, \omega) = \exp(i\sum_i z_i \langle\omega, J_i\rangle)$ satisfies appropriate measurability, analyticity, integrability, and derivative bound conditions in $z$ and $\omega$, then the integral $F(z) = \int f(z, \omega)\, d\mu(\omega)$ is holomorphic. Goursat's theorem in $n$ dimensions then converts holomorphy to analyticity.
-
-The five hypotheses verified are:
-\begin{enumerate}
-\item \emph{Measurability} of $\omega \mapsto f(z, \omega)$ for each $z$: The evaluation functional $\omega \mapsto \langle\omega, f\rangle$ is continuous on the weak-$*$ dual $\calS'$, so compositions with measurable operations preserve measurability.
-
-\item \emph{Analyticity} of $z \mapsto f(z, \omega)$ for each $\omega$: The sum $\sum_i z_i \langle\omega, J_i\rangle$ is linear in $z$ (hence analytic), multiplication by $i$ and the exponential are entire, and compositions of analytic functions are analytic.
-
-\item \emph{Integrability} of $f(z, \cdot)$ for each $z$: For complex test functions $f = f_{\mathrm{re}} + i f_{\mathrm{im}}$, we have $\|\exp(i\langle\omega, f\rangle)\| = \exp(-\omega(f_{\mathrm{im}}))$. Integrability requires Fernique's theorem: for Gaussian measures, $\exp(\alpha \langle\omega, g\rangle^2)$ is integrable for sufficiently small $\alpha > 0$.
-
-\item \emph{Measurability of the Fr\'echet derivative} in $\omega$: The derivative has explicit form involving continuous operations, hence is measurable.
-
-\item \emph{Local integrable bound on the derivative}: An integrable dominating function is constructed using H\"older's inequality ($L^2 \times L^2 \to L^1$), Gaussian exponential integrability, and Gaussian polynomial moments.
-\end{enumerate}
-
-With all five hypotheses verified, the holomorphic integral theorem establishes analyticity. The proof requires one project-specific axiom: Goursat's theorem in $n$ dimensions (holomorphic implies analytic in $\C^n$), which is standard in several complex variables but not yet available in Mathlib.
+The proof applies a \emph{holomorphic integral theorem}: if the integrand $f(z, \omega) = \exp(i\sum_i z_i \langle\omega, J_i\rangle)$ satisfies appropriate measurability, analyticity, integrability, and derivative bound conditions in $z$ and $\omega$, then the integral $F(z) = \int f(z, \omega)\, d\mu(\omega)$ is holomorphic. Goursat's theorem in $n$ dimensions then converts holomorphy to analyticity. The proof requires one project-specific axiom: Goursat's theorem in $n$ dimensions, which is standard in several complex variables but not yet available in Mathlib.
 
 \inputleanmodule{OSforGFF.OS0_GFF}
 
@@ -472,34 +298,7 @@ OS1 (Regularity) establishes that the generating functional $Z[f]$ has controlle
 
 \section{Exponential Bound}\label{sec:os1-exponential}
 
-The GFF generating functional has the closed form $Z[f] = \exp(-\tfrac{1}{2}\langle f, Cf\rangle_{\C})$. The proof proceeds in four steps.
-
-\paragraph{Step 1: Norm via complex exponential.} Taking norms:
-$$|Z[f]| = \exp\left(-\tfrac{1}{2}\mathrm{Re}\langle f, Cf\rangle_{\C}\right)$$
-using $|e^z| = e^{\mathrm{Re}(z)}$ and the Gaussian structure of the GFF.
-
-\paragraph{Step 2: Bound by imaginary part.} Decomposing $f = f_{\mathrm{re}} + if_{\mathrm{im}}$ and expanding the sesquilinear form:
-$$\mathrm{Re}\langle f, Cf\rangle = \mathrm{Re}\langle f_{\mathrm{re}}, Cf_{\mathrm{re}}\rangle - \mathrm{Re}\langle f_{\mathrm{im}}, Cf_{\mathrm{im}}\rangle$$
-The cross terms vanish because the covariance is real-valued and symmetric on real test functions. Since the covariance is positive semi-definite, $\mathrm{Re}\langle f_{\mathrm{re}}, Cf_{\mathrm{re}}\rangle \ge 0$, giving:
-$$-\mathrm{Re}\langle f, Cf\rangle \le \mathrm{Re}\langle f_{\mathrm{im}}, Cf_{\mathrm{im}}\rangle$$
-
-\paragraph{Step 3: Momentum space bound.} In momentum space, the covariance becomes multiplicative:
-$$\langle g, Cg\rangle = \int \frac{|\hat{g}(k)|^2}{(2\pi)^2 \|k\|^2 + m^2}\, dk$$
-The free propagator satisfies $1/((2\pi)^2\|k\|^2 + m^2) \le 1/m^2$. By the Plancherel theorem:
-$$\langle g, Cg\rangle \le \frac{1}{m^2}\|g\|_{L^2}^2$$
-Since $\|f_{\mathrm{im}}\|_{L^2} \le \|f\|_{L^2}$, combining gives:
-$$|Z[f]| \le \exp\left(\frac{1}{2m^2}\|f\|_{L^2}^2\right)$$
-
-\paragraph{Step 4: Add $L^1$ term.} Since $\|f\|_{L^1} \ge 0$, the bound is strengthened to match the OS1 form:
-$$|Z[f]| \le \exp\left(\frac{1}{2m^2}\left(\|f\|_{L^1} + \|f\|_{L^2}^2\right)\right)$$
-
-\section{Two-Point Local Integrability}\label{sec:os1-local-integ}
-
-The GFF two-point function satisfies $|S_2(x)| \le C/\|x\|^2$ from Bessel function asymptotics ($K_1(z) \sim 1/z$ near the origin, exponential decay at infinity). Since $\|x\|^{-2}$ is locally integrable in 4 dimensions ($2 < 4$):
-$$\int_{\|x\| < R} \|x\|^{-2}\, dx = |S^3| \cdot \int_0^R r^{-2} \cdot r^3\, dr = 2\pi^2 \cdot R^2/2 < \infty$$
-Combined with the decay bound and measurability, this establishes the two-point integrability requirement.
-
-The OS1 proof uses zero project-specific axioms. The decay bound and measurability are proved theorems derived from Bessel function analysis.
+The GFF generating functional has the closed form $Z[f] = \exp(-\tfrac{1}{2}\langle f, Cf\rangle_{\C})$. The proof decomposes the sesquilinear form, applies the Parseval identity in momentum space, and uses the Plancherel theorem to obtain the $L^2$ bound. The two-point local integrability follows from Bessel function asymptotics. The OS1 proof uses zero project-specific axioms.
 
 \inputleanmodule{OSforGFF.OS1_GFF}
 
@@ -512,22 +311,7 @@ OS2 (Euclidean Invariance) requires that the quantum field theory has no preferr
 
 \section{Proof Strategy}\label{sec:os2-strategy}
 
-The proof factors into two parts:
-\begin{enumerate}
-\item \emph{General Gaussian result:} For any Gaussian measure whose covariance is Euclidean-invariant, $Z[g \cdot f] = Z[f]$.
-\item \emph{GFF-specific:} The free GFF covariance depends only on $\|x - y\|$, which is preserved by Euclidean transformations.
-\end{enumerate}
-
-The free covariance kernel is $C(x, y) = \frac{m}{4\pi^2 \|x - y\|} K_1(m\|x - y\|)$. This depends only on $\|x - y\|$. Since Euclidean transformations preserve distances ($\|g \cdot x - g \cdot y\| = \|R(x - y)\| = \|x - y\|$), we have $C(g \cdot x, g \cdot y) = C(x, y)$.
-
-Lebesgue measure on $\R^4$ is invariant under Euclidean transformations (translation invariance plus $|\det R| = 1$ for $R \in O(4)$). The proof constructs a measurable equivalence for each group element and proves it is measure-preserving, enabling the change of variables in integration.
-
-The bilinear form invariance $\langle g \cdot f, C(g \cdot h)\rangle = \langle f, Ch\rangle$ proceeds by substituting the pullback, rewriting the kernel using Euclidean invariance, recognizing the integrand as a composition, and applying the measure-preserving change of variables.
-
-The general theorem then derives OS2 from Gaussianity and covariance invariance:
-$$Z[g \cdot f] = \exp\left(-\tfrac{1}{2}\langle g \cdot f, C(g \cdot f)\rangle\right) = \exp\left(-\tfrac{1}{2}\langle f, Cf\rangle\right) = Z[f]$$
-
-This is the cleanest OS axiom proof, requiring zero project-specific axioms.
+The proof factors into a general Gaussian result (any Gaussian measure with Euclidean-invariant covariance satisfies OS2) and the GFF-specific verification that the free covariance depends only on $\|x - y\|$. This is the cleanest OS axiom proof, requiring zero project-specific axioms.
 
 \inputleanmodule{OSforGFF.OS2_GFF}
 
@@ -546,25 +330,7 @@ The proof has two main parts:
 
 \section{Covariance Reflection Positivity}\label{sec:os3-covariance-rp}
 
-The goal is to show $\mathrm{Re}\langle\Theta f, f\rangle_C \ge 0$ for any complex test function $f$ with $f(x) = 0$ when $x_0 \le 0$.
-
-\paragraph{Step 1: Schwinger representation.} Replace $C(\Theta x, y)$ by its proper-time (Schwinger) representation:
-$$C(\Theta x, y) = \int_0^\infty e^{-sm^2} H(s, \|\Theta x - y\|)\, ds$$
-where $H(s, r) = (4\pi s)^{-d/2} e^{-r^2/(4s)}$ is the heat kernel.
-
-\paragraph{Step 2: Fourier decomposition.} Write the heat kernel as a Fourier integral and decompose $k = (k_0, \vec{k})$ to separate the time and spatial contributions. Three Fubini interchanges are proved with explicit integrability bounds.
-
-\paragraph{Step 3: Evaluate the proper-time integral.} After separating momentum components, the $s$-integral evaluates analytically:
-$$\int_0^\infty \sqrt{\pi/s}\, e^{-t^2/(4s)}\, e^{-s\omega^2}\, ds = \frac{\pi}{\omega}\, e^{-\omega|t|}$$
-where $\omega = \sqrt{\|\vec{k}\|^2 + m^2}$. This yields the \emph{mixed representation}:
-$$\langle\Theta f, f\rangle_C = \frac{1}{2(2\pi)^3} \int_{\R^3} \frac{1}{\omega}\, (\text{inner integral})\, d\vec{k}$$
-
-\paragraph{Step 4: Factorization using positive-time support.} For positive-time test functions ($x_0 > 0$, $y_0 > 0$), we have $|-x_0 - y_0| = x_0 + y_0$, giving the key factorization $e^{-\omega(x_0 + y_0)} = e^{-\omega x_0} \cdot e^{-\omega y_0}$. The double $(x,y)$-integral then factors into $|F_\omega(\vec{k})|^2$ where $F_\omega$ is the \emph{weighted Laplace--Fourier transform}:
-$$F_\omega(\vec{k}) = \int_{\R^4} f(x)\, e^{-\omega x_0}\, e^{-i\vec{k}\cdot\vec{x}}\, dx$$
-
-\paragraph{Step 5: Non-negativity.} The final form is:
-$$\langle\Theta f, f\rangle_C = \frac{1}{2(2\pi)^3} \int_{\R^3} \frac{1}{\omega(\vec{k})}\, |F_\omega(-\vec{k})|^2\, d\vec{k}$$
-Since $\omega > 0$ (because $m > 0$) and $|F_\omega|^2 \ge 0$, the integrand is pointwise non-negative.
+The goal is to show $\mathrm{Re}\langle\Theta f, f\rangle_C \ge 0$ for any complex test function $f$ with $f(x) = 0$ when $x_0 \le 0$. The proof proceeds via the Schwinger representation, Fourier decomposition, evaluation of the proper-time integral to obtain a mixed representation, and factorization using positive-time support to express the result as an integral of $|F_\omega|^2/\omega$, which is pointwise non-negative.
 
 \inputleanmodule{OSforGFF.OS3_MixedRepInfra}
 \inputleanmodule{OSforGFF.OS3_MixedRep}
@@ -572,18 +338,7 @@ Since $\omega > 0$ (because $m > 0$) and $|F_\omega|^2 \ge 0$, the integrand is 
 
 \section{Matrix Assembly}\label{sec:os3-matrix-assembly}
 
-\paragraph{Step 6: Reflection covariance matrix is PSD.} Define $R_{ij} = \langle\Theta f_i, C f_j\rangle$. For any real vector $c$:
-$$\sum_{ij} c_i c_j R_{ij} = \langle\Theta g, Cg\rangle \ge 0 \quad\text{where } g = \sum_i c_i f_i$$
-using bilinearity and the single-function result.
-
-\paragraph{Step 7: Hadamard exponential preserves PSD.} By the Schur product theorem, the entrywise exponential $E_{ij} = e^{R_{ij}}$ is PSD. The proof uses the Hadamard series $e^{R_{ij}} = \sum_{k=0}^\infty (R_{ij})^k/k!$, where each term is PSD by iterated Hadamard products, and the convergent sum of PSD matrices is PSD.
-
-\paragraph{Step 8: Entry factorization.} The quadratic expansion gives:
-$$C(f - \Theta g, f - \Theta g) = C(f,f) + C(g,g) - 2\langle\Theta f, Cg\rangle$$
-yielding the entry factorization:
-$$\mathrm{Re}\left(Z[f_i - \Theta f_j]\right) = Z[f_i] \cdot Z[f_j] \cdot e^{R_{ij}}$$
-where $Z[f] = \exp(-C(f,f)/2) > 0$. Setting $y_i = c_i \cdot Z[f_i]$ and assembling:
-$$\sum_{ij} c_i c_j\, \mathrm{Re}\, Z[f_i - \Theta f_j] = \sum_{ij} y_i y_j\, E_{ij} = y^T E y \ge 0$$
+The extension from a single test function to the general $n$-function case uses bilinearity to show the reflection covariance matrix is PSD, the Hadamard exponential to preserve PSD under entrywise exponentiation, and Gaussian entry factorization to assemble the final quadratic form inequality.
 
 \inputleanmodule{OSforGFF.OS3_GFF}
 
@@ -598,31 +353,11 @@ The OS4 axiom comes in two related forms: \emph{clustering} (distant regions bec
 
 The moment generating functional $M[f] = \mathbb{E}[e^{\langle\phi, f\rangle}]$ is related to the characteristic functional by analytic continuation. For the GFF, $M[f] = e^{\frac{1}{2}C(f,f)}$.
 
-Key structural results:
-\begin{itemize}
-\item Time translation invariance: $C(T_sf, T_sg) = C(f,g)$, hence $Z[T_sf] = Z[f]$.
-\item Joint MGF factorization: $\mathbb{E}[e^{\langle\phi,f+g\rangle}] = M[f] \cdot M[g] \cdot e^{C(f,g)}$.
-\item Exponential estimate: $|e^x - 1| \le |x| e^{|x|}$.
-\end{itemize}
-
 \inputleanmodule{OSforGFF.OS4_MGF}
 
 \section{Clustering}\label{sec:os4-clustering}
 
-The clustering proof exploits the Gaussian factorization formula:
-\begin{enumerate}
-\item For the GFF, $Z[f] = \exp(-\tfrac{1}{2}C(f,f))$ for real test functions, so the bilinear expansion gives:
-$$Z[f + T_a g] = Z[f] \cdot Z[T_a g] \cdot \exp(-S_2(f, T_a g))$$
-where $S_2(f, T_a g) = C(f, T_a g)$ is the cross covariance.
-
-\item By Euclidean invariance (OS2): $Z[T_a g] = Z[g]$.
-
-\item The cross term decays as $\|a\| \to \infty$ because the propagator $C(x-y) \sim 1/\|x-y\|^2$ at large distances, and the Schwartz test functions provide rapid localization.
-
-\item Since $|Z[f]| \le 1$ for real test functions and $|e^{-z} - 1| \le 2|z|$ for $|z| \le 1$, we conclude $|Z[f + T_ag] - Z[f]Z[g]| \le 2|S_2(f, T_ag)| \to 0$.
-\end{enumerate}
-
-The polynomial clustering variant with decay exponent $\alpha = 6$ uses the exponential decay of the massive propagator $C(z) \sim e^{-m\|z\|}$ combined with Schwartz decay. The bilinear translation decay theorem gives a polynomial bound $c(1+\|a\|)^{-\alpha}$ for any $\alpha > 0$.
+The clustering proof exploits the Gaussian factorization formula to reduce the problem to showing the cross covariance $C(f, T_a g) \to 0$ as $\|a\| \to \infty$, which follows from propagator decay. The polynomial clustering variant uses the bilinear translation decay theorem from Chapter~\ref{ch:general-mathematics}.
 
 \inputleanmodule{OSforGFF.OS4_Clustering}
 
@@ -631,27 +366,7 @@ The polynomial clustering variant with decay exponent $\alpha = 6$ uses the expo
 The ergodicity proof proceeds through intermediate formulations:
 $$\text{OS4'' (Polynomial Clustering, } \alpha=6\text{)} \implies \text{OS4' (Single-function Ergodicity)} \implies \text{OS4 (Full Ergodicity)}$$
 
-The key steps from clustering to ergodicity are:
-\begin{enumerate}
-\item \textbf{Variance bound:} The variance of the time average is bounded by the double time integral of the covariance:
-$$\mathrm{Var}\left(\frac{1}{T}\int_0^T A(T_s\phi)\, ds\right) \le \frac{1}{T^2}\int_0^T\int_0^T |\mathrm{Cov}(s,u)|\, ds\, du$$
-
-\item \textbf{Polynomial decay of covariance:} From clustering, $|\mathrm{Cov}(s,u)| \le c(1+|s-u|)^{-\alpha}$.
-
-\item \textbf{Double integral bound:} For $\alpha > 1$, the double integral satisfies $\int_0^T\int_0^T (1+|s-u|)^{-\alpha}\, ds\, du \le C \cdot T$.
-
-\item \textbf{Variance vanishes:} Combining, the variance is $O(1/T) \to 0$ as $T \to \infty$.
-
-\item \textbf{Extension to linear combinations:} The single generating function result extends to finite linear combinations $\sum_j z_j e^{\langle\phi, f_j\rangle}$ via the Cauchy--Schwarz inequality for weighted sums.
-\end{enumerate}
-
-Key technical results proved along the way:
-\begin{itemize}
-\item $L^2$ membership of time-translated exponentials: Uses the Gaussian MGF formula to show $\mathbb{E}[|e^{\langle T_s\phi, f\rangle}|^2] < \infty$.
-\item Stationarity of product expectations: $\mathrm{Cov}(s,u)$ depends only on $s - u$, using time-translation invariance of the GFF covariance form.
-\item Continuity of the covariance function: Uses stationarity, MGF factorization, and continuity of the covariance form under time translation.
-\item Time average is in $L^2$: Uses the uniform $L^2$ bound (constant in $s$) and Fubini's theorem.
-\end{itemize}
+The implication chain uses variance bounds on time averages, polynomial decay of the covariance from clustering, and double integral estimates from Chapter~\ref{ch:general-mathematics} to show the variance is $O(1/T) \to 0$.
 
 \inputleanmodule{OSforGFF.OS4_Ergodicity}
 

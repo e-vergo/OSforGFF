@@ -127,9 +127,16 @@ namespace QFT
 abbrev timeReflection (x : SpaceTime) : SpaceTime :=
   (WithLp.equiv 2 _).symm (Function.update x.ofLp 0 (-x.ofLp 0))
 
+@[blueprint
+  (title := "Time Reflection Matrix")
+  (statement := /-- The diagonal matrix $\mathrm{diag}(-1, 1, 1, 1)$ representing time reflection. -/)]
 def timeReflectionMatrix : Matrix (Fin STDimension) (Fin STDimension) ℝ :=
   Matrix.diagonal (fun i => if i = 0 then -1 else 1)
 
+@[blueprint
+  (title := "Time Reflection Matrix is Orthogonal")
+  (statement := /-- The time reflection matrix belongs to the orthogonal group $O(4)$. -/)
+  (proof := /--  -/)]
 lemma timeReflectionMatrix_is_orthogonal :
    timeReflectionMatrix ∈ Matrix.orthogonalGroup (Fin STDimension) ℝ := by
       simp [Matrix.mem_orthogonalGroup_iff, timeReflectionMatrix, Matrix.diagonal_transpose, Matrix.diagonal_mul_diagonal]
@@ -137,11 +144,15 @@ lemma timeReflectionMatrix_is_orthogonal :
       ext i j
       simp [Matrix.one_apply]
       split_ifs <;> norm_num
-@[blueprint "def:time-reflection-isometry-2"]
+@[blueprint "def:time-reflection-isometry-2"
+  (title := "Time Reflection as Orthogonal Matrix")
+  (statement := /-- Time reflection as an element of the orthogonal group $O(4)$. -/)]
 
 def timeReflectionIsometry  : Matrix.orthogonalGroup (Fin STDimension) ℝ :=
   ⟨timeReflectionMatrix, timeReflectionMatrix_is_orthogonal⟩
-@[blueprint "def:time-reflection-linear"]
+@[blueprint "def:time-reflection-linear"
+  (title := "Time Reflection as Linear Map")
+  (statement := /-- Time reflection as a linear map $\mathbb{R}^4 \to \mathbb{R}^4$. -/)]
 
 def timeReflectionLinear : SpaceTime →ₗ[ℝ] SpaceTime :=
 { toFun := timeReflection
@@ -164,7 +175,9 @@ def timeReflectionLinear : SpaceTime →ₗ[ℝ] SpaceTime :=
     · subst h
       simp [Function.update_self]
     · simp [Function.update_of_ne h] }
-@[blueprint "def:time-reflection-clm"]
+@[blueprint "def:time-reflection-clm"
+  (title := "Time Reflection as Continuous Linear Map")
+  (statement := /-- Time reflection as a continuous linear map $\mathbb{R}^4 \to \mathbb{R}^4$. -/)]
 
 def timeReflectionCLM : SpaceTime →L[ℝ] SpaceTime :=
 timeReflectionLinear.toContinuousLinearMap (E := SpaceTime) (F' := SpaceTime)
@@ -172,7 +185,9 @@ timeReflectionLinear.toContinuousLinearMap (E := SpaceTime) (F' := SpaceTime)
 open InnerProductSpace
 
 /-- Time reflection preserves inner products -/
-@[blueprint "lem:time-reflection-inner-map"]
+@[blueprint "lem:time-reflection-inner-map"
+  (title := "Time Reflection Preserves Inner Products")
+  (statement := /-- Time reflection $\Theta$ preserves the Euclidean inner product: $\langle \Theta x, \Theta y \rangle = \langle x, y \rangle$. -/)]
 lemma timeReflection_inner_map (x y : SpaceTime) :
     ⟪timeReflection x, timeReflection y⟫_ℝ = ⟪x, y⟫_ℝ := by
   -- Direct proof using fintype inner product
@@ -230,7 +245,9 @@ def timeReflectionLE : SpaceTime ≃ₗᵢ[ℝ] SpaceTime :=
     rw [← h1, ← h2, h] }
 
 /-- Time reflection preserves Lebesgue measure. -/
-@[blueprint "lem:time-reflection-measure-preserving"]
+@[blueprint "lem:time-reflection-measure-preserving"
+  (title := "Time Reflection Preserves Lebesgue Measure")
+  (statement := /-- Time reflection $\Theta$ preserves the Lebesgue measure on $\mathbb{R}^4$. -/)]
 lemma timeReflection_measurePreserving :
     MeasurePreserving timeReflection volume volume := by
   -- Any linear isometry equivalence preserves the volume measure.
@@ -272,7 +289,9 @@ noncomputable def compTimeReflection : TestFunctionℂ →L[ℝ] TestFunctionℂ
     test functions. This version will be used when working with positive-time
     subspaces defined over ℝ, so that reflection positivity can be formulated
     without passing through complex scalars. -/
-@[blueprint "def:comp-time-reflection-real"]
+@[blueprint "def:comp-time-reflection-real"
+  (title := "Composition with Time Reflection on Real Test Functions")
+  (statement := /-- The pullback operator $\Theta^* : \mathcal{S}(\mathbb{R}^4, \mathbb{R}) \to \mathcal{S}(\mathbb{R}^4, \mathbb{R})$ for real test functions. -/)]
 noncomputable def compTimeReflectionReal : TestFunction →L[ℝ] TestFunction := by
   have hg_upper : ∃ (k : ℕ) (C : ℝ), ∀ (x : SpaceTime), ‖x‖ ≤ C * (1 + ‖timeReflectionCLM x‖) ^ k := by
     use 1; use 1; simp; intro x
@@ -288,7 +307,9 @@ noncomputable def compTimeReflectionReal : TestFunction →L[ℝ] TestFunction :
   exact SchwartzMap.compCLM (𝕜 := ℝ) (hg := timeReflectionCLM.hasTemperateGrowth) (hg_upper := hg_upper)
 
 /-- Time reflection is linear on real test functions. -/
-@[blueprint "lem:comp-time-reflection-real-linear-combination"]
+@[blueprint "lem:comp-time-reflection-real-linear-combination"
+  (title := "Linearity of Time Reflection on Real Test Functions")
+  (statement := /-- For real test functions, $\Theta^*(\sum_i c_i f_i) = \sum_i c_i \Theta^* f_i$. -/)]
 lemma compTimeReflectionReal_linear_combination {n : ℕ} (f : Fin n → TestFunction) (c : Fin n → ℝ) :
     compTimeReflectionReal (∑ i, c i • f i) = ∑ i, c i • compTimeReflectionReal (f i) := by
   -- This follows directly from the linearity of the continuous linear map compTimeReflectionReal

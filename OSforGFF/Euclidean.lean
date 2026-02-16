@@ -106,7 +106,9 @@ namespace QFT
 
 /-- Orthogonal linear isometries of ℝ⁴ (the group O(4)).
 LinearIsometry is an orthogonal linear map, ie an element of O(4)-/
-@[blueprint "def:o4"]
+@[blueprint "def:o4"
+  (title := "Orthogonal Group O(4)")
+  (statement := /-- The orthogonal group $O(4)$ of linear isometries of $\mathbb{R}^4$. -/)]
 abbrev O4 : Type :=
   LinearIsometry (RingHom.id ℝ) SpaceTime SpaceTime
 
@@ -115,6 +117,16 @@ abbrev O4 : Type :=
 @[blueprint "def:euclidean-group"
   (title := "Euclidean Group")
   (statement := /-- The Euclidean group $E(4) = \mathbb{R}^4 \rtimes O(4)$, consisting of a rotation/reflection $R \in O(4)$ and a translation $t \in \mathbb{R}^4$. -/)
+  (above := /--
+    The Euclidean group is formalized as a structure containing an orthogonal matrix $R \in O(4)$ and a translation vector $t \in \mathbb{R}^4$. The group operations are:
+    \begin{itemize}
+    \item \emph{Multiplication:} $(R_1, t_1) \cdot (R_2, t_2) = (R_1 R_2,\, R_1 t_2 + t_1)$
+    \item \emph{Identity:} $(I, 0)$
+    \item \emph{Inverse:} $(R, t)^{-1} = (R^{-1},\, -R^{-1} t)$
+    \item \emph{Action:} $g \cdot x = Rx + t$
+    \end{itemize}
+    The formalization proves that this forms a group and that the action preserves Lebesgue measure.
+  -/)
   (latexEnv := "definition")
   (latexLabel := "def:euclidean-group")
   (misc := "Glimm-Jaffe, Quantum Physics, Ch. 3")]
@@ -124,6 +136,9 @@ structure E where
 
 /-- Action of g : E on a spacetime point x.
 Impliments the pullback map x to Rx+ t -/
+@[blueprint
+  (title := "Euclidean Group Action on Spacetime")
+  (statement := /-- The action of $g \in E(4)$ on a spacetime point $x$: $g \cdot x = R(x) + t$. -/)]
 def act (g : E) (x : SpaceTime) : SpaceTime := g.R x + g.t
 
 /-act_one, act_mul and act_inv lemmas prove
@@ -132,11 +147,15 @@ form a group. This mirrors OS-2's S_j= S_{EJ} -/
 @[simp] lemma act_one   (x : SpaceTime) : act ⟨1,0⟩ x = x := by
   simp [act]
 
-@[simp] lemma act_mul   (g h : E) (x : SpaceTime) :
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma act_mul   (g h : E) (x : SpaceTime) :
     act ⟨g.R.comp h.R, g.R h.t + g.t⟩ x = g.R (h.R x + h.t) + g.t := by
   simp [act, add_comm, add_left_comm]
 
-@[simp] lemma act_inv (g : E) (x : SpaceTime) :
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma act_inv (g : E) (x : SpaceTime) :
     act ⟨g.R, -g.R g.t⟩ x = g.R (x - g.t) := by
   -- unfold the two sides and use linearity of g.R
   simp [act, sub_eq_add_neg, map_add, map_neg]
@@ -148,32 +167,46 @@ open LinearIsometryEquiv
 namespace LinearIsometry
 /-- Inverse of a linear isometry : we turn the canonical equivalence
     (available in finite dimension) back into a `LinearIsometry`. -/
-@[blueprint "def:inv"]
+@[blueprint "def:inv"
+  (title := "Inverse of Linear Isometry")
+  (statement := /-- The inverse $g^{-1}$ of a linear isometry $g \in O(4)$. -/)]
 noncomputable def inv (g : O4) : O4 :=
   ((g.toLinearIsometryEquiv rfl).symm).toLinearIsometry
 
 @[simp] lemma comp_apply (g h : O4) (x : SpaceTime) :
     (g.comp h) x = g (h x) := rfl
 
-@[simp] lemma inv_apply (g : O4) (x : SpaceTime) :
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma inv_apply (g : O4) (x : SpaceTime) :
     (LinearIsometry.inv g) (g x) = x := by
   -- unfold `inv`, then use the standard `symm_apply_apply` lemma
   dsimp [LinearIsometry.inv]
   simpa using
     (LinearIsometryEquiv.symm_apply_apply (g.toLinearIsometryEquiv rfl) x)
-@[simp] lemma one_apply (x : SpaceTime) : (1 : O4) x = x := rfl
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma one_apply (x : SpaceTime) : (1 : O4) x = x := rfl
 
-@[simp] lemma one_comp (R : O4) : (1 : O4).comp R = R := by
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma one_comp (R : O4) : (1 : O4).comp R = R := by
   ext x; simp [comp_apply, one_apply]
 
-@[simp] lemma comp_one (R : O4) : R.comp (1 : O4) = R := by
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma comp_one (R : O4) : R.comp (1 : O4) = R := by
   ext x; simp [comp_apply, one_apply]
 
-@[simp] lemma inv_comp (R : O4) :
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma inv_comp (R : O4) :
     (LinearIsometry.inv R).comp R = 1 := by
   ext x i
   simp [comp_apply, inv_apply, one_apply]
-@[simp] lemma comp_inv (R : O4) :
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma comp_inv (R : O4) :
     R.comp (LinearIsometry.inv R) = 1 := by
   -- equality of linear-isometries, proved coordinate-wise
   ext x i
@@ -185,7 +218,10 @@ end LinearIsometry
 
 /-(extentionality) Allows Lean to prove equality of Euclidean motions by checking the R and t
 components separately—hugely convenient for the group-law proofs. -/
-@[ext] lemma E.ext {g h : E} (hR : g.R = h.R) (ht : g.t = h.t) : g = h := by
+@[ext, blueprint
+  (title := "Extensionality for Euclidean Motions")
+  (statement := /-- Two Euclidean motions $g, h \in E(4)$ are equal if and only if $g_R = h_R$ and $g_t = h_t$. -/)
+  (proof := /--  -/)] lemma E.ext {g h : E} (hR : g.R = h.R) (ht : g.t = h.t) : g = h := by
   cases g; cases h; cases hR; cases ht; rfl
 
 /-!  ##  Group structure on `E`  ----------------------------------------- -/
@@ -193,23 +229,38 @@ components separately—hugely convenient for the group-law proofs. -/
 /- 1.  Primitive instances of group operations
 Implements the semidirect-product multiplication in OS-2:
 first rotate, then translate the second translation by the first rotation. -/
+@[blueprint
+  (title := "Euclidean Group Multiplication")
+  (statement := /-- Semidirect product multiplication: $gh = (g_R \circ h_R, g_R(h_t) + g_t)$. -/)]
 instance : Mul E where
   mul g h := ⟨g.R.comp h.R, g.R h.t + g.t⟩
 
+@[blueprint
+  (title := "Euclidean Group Identity")
+  (statement := /-- The identity element $1 \in E(4)$ is $(I_4, 0)$. -/)]
 instance : One E where
   one := ⟨1, 0⟩
 
+@[blueprint
+  (title := "Euclidean Group Inverse")
+  (statement := /-- The inverse element $g^{-1} = (R^{-1}, -R^{-1}(t))$. -/)]
 instance : Inv E where
   inv g := ⟨LinearIsometry.inv g.R, -(LinearIsometry.inv g.R) g.t⟩
 
 /-- We need a `Div` instance because `Group` extends `DivInvMonoid`. -/
+@[blueprint
+  (title := "Euclidean Group Division")
+  (statement := /-- Division defined as $g/h = g \cdot h^{-1}$. -/)]
 instance : Div E where
   div g h := g * h⁻¹
 
 /- helper lemmas mirroring (g. h)_R= g_R dot h_r, and
 (g.h)_t= g_R h_t+ g_t)-
 -/
-@[simp] lemma mul_R (g h : E) : (g * h).R = g.R.comp h.R := rfl
+@[simp, blueprint
+  (title := "Rotation Component of Product")
+  (statement := /-- The rotation component of the product: $(gh)_R = g_R \circ h_R$. -/)
+  (proof := /--  -/)] lemma mul_R (g h : E) : (g * h).R = g.R.comp h.R := rfl
 @[simp] lemma mul_t (g h : E) : (g * h).t = g.R h.t + g.t := rfl
 @[simp] lemma one_R : (1 : E).R = 1 := rfl
 @[simp] lemma one_t : (1 : E).t = 0 := rfl
@@ -218,6 +269,9 @@ instance : Div E where
 
 /-Provides the formal group demanded by OS-2's statement
 “Euclidean transformations define a group.”-/
+@[blueprint
+  (title := "Euclidean Group Structure")
+  (statement := /-- $E(4)$ with the semidirect product forms a group. -/)]
 instance : Group E where
   mul := (· * ·)
   one := (1 : E)
@@ -258,7 +312,10 @@ instance : Group E where
 /-for all Euclidean motions g and h and any point x ∈ ℝ⁴, pulling x forward by the product g*h equals pulling by h first and then by g.
 This is precisely the group-action law(𝑔ℎ)⁣⋅𝑥=𝑔.(ℎ. 𝑥)(gh)⋅x=g⋅(h⋅x).-/
 
-@[simp] lemma act_mul_general (g h : E) (x : SpaceTime) :
+@[simp, blueprint
+  (title := "Group Action Law for Euclidean Motions")
+  (statement := /-- For all $g, h \in E(4)$ and $x \in \mathbb{R}^4$: $(gh) \cdot x = g \cdot (h \cdot x)$. -/)
+  (proof := /--  -/)] lemma act_mul_general (g h : E) (x : SpaceTime) :
     act (g * h) x = act g (act h x) := by
   -- destructure g and h so Lean can see their components
 /-cases on g/h: expands each motion into its components
@@ -282,9 +339,12 @@ t into the desired form.
 
 /-Statement: applying g to x and then applying the inverse motion g⁻¹ returns you to x.
 This is the inverse law of a group action.-/
-/-Result: we’ve established that act : E → (ℝ⁴ → ℝ⁴) is a homomorphism into the function-composition monoid—exactly what OS-2 needs for its pull-back action on fields.-/
+/-Result: we've established that act : E → (ℝ⁴ → ℝ⁴) is a homomorphism into the function-composition monoid—exactly what OS-2 needs for its pull-back action on fields.-/
 
-@[simp] lemma act_inv_general (g : E) (x : SpaceTime) :
+@[simp, blueprint
+  (title := "Inverse Law for Euclidean Actions")
+  (statement := /-- For all $g \in E(4)$ and $x \in \mathbb{R}^4$: $g^{-1} \cdot (g \cdot x) = x$. -/)
+  (proof := /--  -/)] lemma act_inv_general (g : E) (x : SpaceTime) :
     act g⁻¹ (act g x) = x := by
   cases g with
   | mk gR gt =>
@@ -382,11 +442,15 @@ private def act_inv_poly_bound (g : E) :
 /-- The fundamental pullback map for Euclidean actions.
     This is the geometric transformation x ↦ g⁻¹ • x that underlies
     all Euclidean actions on function spaces. -/
-@[blueprint "def:euclidean-pullback"]
+@[blueprint "def:euclidean-pullback"
+  (title := "Euclidean Pullback Map")
+  (statement := /-- The fundamental geometric transformation $x \mapsto g^{-1} \cdot x$ underlying all Euclidean actions on function spaces. -/)]
 noncomputable def euclidean_pullback (g : E) : SpaceTime → SpaceTime := act g⁻¹
 
 /-- The Euclidean pullback map has temperate growth (needed for Schwartz space actions). -/
-@[blueprint "lem:euclidean-pullback-temperate-growth"]
+@[blueprint "lem:euclidean-pullback-temperate-growth"
+  (title := "Temperate Growth of Euclidean Pullback")
+  (statement := /-- The pullback map $x \mapsto g^{-1} \cdot x$ has temperate growth, enabling actions on Schwartz space. -/)]
 lemma euclidean_pullback_temperate_growth (g : E) :
     Function.HasTemperateGrowth (euclidean_pullback g) := by
   -- The map x ↦ g⁻¹.R x + g⁻¹.t is affine (linear isometry + translation)
@@ -399,7 +463,9 @@ lemma euclidean_pullback_temperate_growth (g : E) :
     hbound
 
 /-- The Euclidean pullback map satisfies polynomial growth bounds. -/
-@[blueprint "lem:euclidean-pullback-polynomial-bounds"]
+@[blueprint "lem:euclidean-pullback-polynomial-bounds"
+  (title := "Polynomial Growth Bounds for Euclidean Pullback")
+  (statement := /-- There exist $k \in \mathbb{N}$ and $C \in \mathbb{R}$ such that $\|x\| \leq C(1 + \|g^{-1} \cdot x\|)^k$ for all $x \in \mathbb{R}^4$. -/)]
 lemma euclidean_pullback_polynomial_bounds (g : E) :
     ∃ (k : ℕ) (C : ℝ), ∀ (x : SpaceTime), ‖x‖ ≤ C * (1 + ‖euclidean_pullback g x‖) ^ k := by
   -- Since euclidean_pullback g x = g⁻¹.R x + g⁻¹.t and g⁻¹.R is an isometry:
@@ -436,6 +502,9 @@ noncomputable def euclidean_action (g : E) (f : TestFunctionℂ) : TestFunction�
 /-- Action of Euclidean group on real test functions via pullback.
     For g ∈ E and f ∈ TestFunction, define (g • f)(x) = f(g⁻¹ • x).
     This is the real version of euclidean_action for TestFunction = SchwartzMap SpaceTime ℝ. -/
+@[blueprint
+  (title := "Euclidean Action on Real Test Functions")
+  (statement := /-- The pullback action $(g \cdot f)(x) = f(g^{-1} \cdot x)$ on real Schwartz functions. -/)]
 noncomputable def euclidean_action_real (g : E) (f : TestFunction) : TestFunction :=
   SchwartzMap.compCLM (𝕜 := ℝ)
     (hg := euclidean_pullback_temperate_growth g)
@@ -443,7 +512,9 @@ noncomputable def euclidean_action_real (g : E) (f : TestFunction) : TestFunctio
 
 /-- The measure preservation result enables both test function and L² actions.
     This is the key unifying lemma that works specifically for the spacetime measure μ. -/
-@[blueprint "lem:euclidean-action-unified-basis"]
+@[blueprint "lem:euclidean-action-unified-basis"
+  (title := "Measure Preservation Enables Unified Actions")
+  (statement := /-- The pullback map $x \mapsto g^{-1} \cdot x$ preserves the Lebesgue measure $\mu$ on $\mathbb{R}^4$. -/)]
 lemma euclidean_action_unified_basis (g : E) :
     MeasurePreserving (euclidean_pullback g) (μ : Measure SpaceTime) μ := by
   -- This is just measurePreserving_act applied to g⁻¹
@@ -455,7 +526,9 @@ lemma euclidean_action_unified_basis (g : E) :
     This uses the same fundamental pullback transformation as the test function action,
     but leverages measure preservation instead of temperate growth bounds.
     Specialized for SpaceTime with Lebesgue measure. -/
-@[blueprint "def:euclidean-action-l2"]
+@[blueprint "def:euclidean-action-l2"
+  (title := "Euclidean Action on L² Functions")
+  (statement := /-- For $g \in E(4)$ and $f \in L^2(\mathbb{R}^4, \mathbb{C})$, define $(g \cdot f)(x) = f(g^{-1} \cdot x)$ via pullback. -/)]
 noncomputable def euclidean_action_L2 (g : E)
     (f : Lp ℂ 2 (μ : Measure SpaceTime)) : Lp ℂ 2 μ :=
   -- Use Lp.compMeasurePreserving for measure-preserving transformations
@@ -465,14 +538,18 @@ noncomputable def euclidean_action_L2 (g : E)
 
 /-- The Euclidean action as a continuous linear map on test functions.
     This leverages the Schwartz space structure and temperate growth bounds. -/
-@[blueprint "def:euclidean-action-clm"]
+@[blueprint "def:euclidean-action-clm"
+  (title := "Euclidean Action as Continuous Linear Map")
+  (statement := /-- The Euclidean pullback action defines a continuous linear map $\mathcal{S}(\mathbb{R}^4, \mathbb{C}) \to \mathcal{S}(\mathbb{R}^4, \mathbb{C})$. -/)]
 noncomputable def euclidean_action_CLM (g : E) : TestFunctionℂ →L[ℂ] TestFunctionℂ :=
   SchwartzMap.compCLM (𝕜 := ℂ)
     (hg := euclidean_pullback_temperate_growth g)
     (hg_upper := euclidean_pullback_polynomial_bounds g)
 
 /-- Both actions are instances of the same abstract pattern. -/
-@[blueprint "lem:euclidean-actions-unified"]
+@[blueprint "lem:euclidean-actions-unified"
+  (title := "Unification of Euclidean Actions")
+  (statement := /-- Both test function and $L^2$ actions arise from continuous linear maps via the pullback construction. -/)]
 lemma euclidean_actions_unified (g : E) :
     (∃ (T_test : TestFunctionℂ →L[ℂ] TestFunctionℂ),
        ∀ f, euclidean_action g f = T_test f) ∧

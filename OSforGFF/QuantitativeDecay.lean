@@ -73,7 +73,10 @@ This follows from SchwartzMap.one_add_le_sup_seminorm_apply:
   (1 + ‖x‖)^k * ‖D^n f(x)‖ ≤ 2^k * seminorm_{k,n} f
 
 Taking n = 0 and rearranging gives ‖f(x)‖ ≤ C * (1 + ‖x‖)^{-k}. -/
-@[blueprint "def:schwartz-has-polynomial-decay"]
+@[blueprint "def:schwartz-has-polynomial-decay"
+  (statement := /-- Schwartz functions have polynomial decay at any natural number rate $k$, with constant from Mathlib seminorms. -/)
+  (skipCrossRef := true)
+]
 def schwartz_has_polynomial_decay (f : SchwartzMap E ℂ) (k : ℕ) :
     PolynomialDecayBound f (k : ℝ) := by
   -- Use SchwartzMap.one_add_le_sup_seminorm_apply with m = (k, 0)
@@ -107,7 +110,10 @@ def schwartz_has_polynomial_decay (f : SchwartzMap E ℂ) (k : ℕ) :
         linarith
 
 /-- Schwartz functions have polynomial decay at any real rate (via ceiling). -/
-@[blueprint "def:schwartz-has-polynomial-decay-real"]
+@[blueprint "def:schwartz-has-polynomial-decay-real"
+  (statement := /-- Schwartz functions have polynomial decay at any real rate $N > 0$, by rounding up to $\lceil N \rceil$. -/)
+  (skipCrossRef := true)
+]
 def schwartz_has_polynomial_decay_real (f : SchwartzMap E ℂ) (N : ℝ) (_hN : N > 0) :
     PolynomialDecayBound f N := by
   -- Use the natural number version with k = ⌈N⌉
@@ -127,7 +133,9 @@ def schwartz_has_polynomial_decay_real (f : SchwartzMap E ℂ) (N : ℝ) (_hN : 
     exp(-mx) ≤ C * (1 + x)^{-α} for all x ≥ 0.
 
 This uses the fact that x^α * exp(-mx) is bounded (it tends to 0 at infinity). -/
-@[blueprint "lem:exp-decay-implies-polynomial-decay"]
+@[blueprint "lem:exp-decay-implies-polynomial-decay"
+  (statement := /-- Exponential decay dominates polynomial decay: $e^{-mx} \leq C (1+x)^{-\alpha}$ for $x \geq 0$, any $\alpha > 0$. -/)
+]
 lemma exp_decay_implies_polynomial_decay (m α : ℝ) (hm : m > 0) (hα : α > 0) :
     ∃ C : ℝ, C > 0 ∧ ∀ x : ℝ, x ≥ 0 → Real.exp (-m * x) ≤ C * (1 + x)^(-α) := by
   -- We show (1+x)^α * exp(-mx) is bounded using u^p ≤ (p/|t|)^p * exp(|t|u)
@@ -170,7 +178,9 @@ lemma exp_decay_implies_polynomial_decay (m α : ℝ) (hm : m > 0) (hα : α > 0
           nlinarith
 
 /-- Exponential decay of norms implies polynomial decay bounds. -/
-@[blueprint "def:norm-exp-decay-implies-polynomial-decay"]
+@[blueprint "def:norm-exp-decay-implies-polynomial-decay"
+  (statement := /-- If $\|g(z)\| \leq C_{\exp} e^{-m\|z\|}$ for $\|z\| \geq R_0$ and $g$ is globally bounded, then $g$ has polynomial decay at any rate $\alpha > 0$. -/)
+]
 def norm_exp_decay_implies_polynomial_decay {F : Type*} [NormedAddCommGroup F]
     (g : E → F) (m C_exp R₀ : ℝ) (hm : m > 0) (hC_exp : C_exp > 0) (hR₀ : R₀ > 0)
     (hg_decay : ∀ z : E, ‖z‖ ≥ R₀ → ‖g z‖ ≤ C_exp * Real.exp (-m * ‖z‖))
@@ -246,7 +256,10 @@ def norm_exp_decay_implies_polynomial_decay {F : Type*} [NormedAddCommGroup F]
 /-- Helper: (1 + x/2)^{-N} ≤ 2^N * (1 + x)^{-N} for x ≥ 0 and N > 0.
 
 This follows from 1 + x ≤ 2 + x = 2(1 + x/2), so (1+x)^N ≤ 2^N(1+x/2)^N. -/
-@[blueprint "lem:one-add-half-pow-le"]
+@[blueprint "lem:one-add-half-pow-le"
+  (statement := /-- $(1 + x/2)^{-N} \leq 2^N (1 + x)^{-N}$ for $x \geq 0$ and $N > 0$. -/)
+  (skipCrossRef := true)
+]
 lemma one_add_half_pow_le (x : ℝ) (hx : x ≥ 0) (N : ℝ) (hN : N > 0) :
     (1 + x/2)^(-N) ≤ (2:ℝ)^N * (1 + x)^(-N) := by
   have h1 : 0 < 1 + x/2 := by linarith
@@ -284,7 +297,10 @@ lemma one_add_half_pow_le (x : ℝ) (hx : x ≥ 0) (N : ℝ) (hN : N > 0) :
     The proof splits the integral at |y| = |x|/2:
     - Region A (|y| ≥ |x|/2): u(y) is small, v integrable
     - Region B (|y| < |x|/2): v(x-y) is small (since |x-y| ≥ |x|/2), u integrable -/
-@[blueprint "def:convolution-polynomial-decay"]
+@[blueprint "def:convolution-polynomial-decay"
+  (title := "Convolution Polynomial Decay")
+  (statement := /-- The convolution of two functions with polynomial decay of order $N > \dim E$ also has polynomial decay. The key splitting lemma for clustering bounds. -/)
+]
 def convolution_polynomial_decay
     {u v : E → ℂ} {N : ℝ} (hN_dim : N > Module.finrank ℝ E)
     (hu_decay : PolynomialDecayBound u N)
@@ -449,7 +465,9 @@ def convolution_polynomial_decay
 
 /-- The convolution of a Schwartz function with the singular part of the kernel
     (compactly supported) has polynomial decay. -/
-@[blueprint "def:convolution-compact-support-decay"]
+@[blueprint "def:convolution-compact-support-decay"
+  (statement := /-- Convolution of a Schwartz function with a compactly supported kernel inherits polynomial decay from the Schwartz function. -/)
+]
 def convolution_compactSupport_decay (f : SchwartzMap E ℂ) (K : E → ℝ) (R₀ : ℝ)
     (hR₀ : R₀ > 0) (hK_loc : LocallyIntegrable K volume)
     (N : ℕ) (_hN : N > 0) :
@@ -627,7 +645,9 @@ def convolution_compactSupport_decay (f : SchwartzMap E ℂ) (K : E → ℝ) (R�
 
 /-- The convolution of a Schwartz function with the tail part of the kernel
     (exponentially decaying) has polynomial decay at any rate. -/
-@[blueprint "def:convolution-exp-decay-polynomial-decay"]
+@[blueprint "def:convolution-exp-decay-polynomial-decay"
+  (statement := /-- Convolution of a Schwartz function with an exponentially decaying kernel has polynomial decay at any rate. Combines compact-support and tail contributions. -/)
+]
 def convolution_expDecay_polynomial_decay (f : SchwartzMap E ℂ) (K : E → ℝ)
     (R₀ m C_K : ℝ) (hR₀ : R₀ > 0) (hm : m > 0) (hC_K : C_K > 0)
     (hK_loc : LocallyIntegrable K volume)  -- For measurability

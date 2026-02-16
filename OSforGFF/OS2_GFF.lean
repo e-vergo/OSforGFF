@@ -44,7 +44,10 @@ variable (m : ℝ) [Fact (0 < m)]
 /-! ## Euclidean action on test functions -/
 
 /-- The Euclidean action satisfies (g • f)(x) = f(g⁻¹ • x). -/
-@[blueprint "lem:euclidean-action-apply"]
+@[blueprint "lem:euclidean-action-apply"
+  (title := "Euclidean Action Pointwise")
+  (statement := /-- $(g \cdot f)(x) = f(g^{-1} \cdot x)$ for the Euclidean group action on test functions. -/)
+]
 lemma euclidean_action_apply (g : E) (f : TestFunctionℂ) (x : SpaceTime) :
     euclidean_action g f x = f (euclidean_pullback g x) := by
   unfold euclidean_action
@@ -52,18 +55,27 @@ lemma euclidean_action_apply (g : E) (f : TestFunctionℂ) (x : SpaceTime) :
   rfl
 
 /-- The Euclidean pullback satisfies euclidean_pullback g x = g⁻¹ • x = act g⁻¹ x. -/
-@[blueprint "lem:euclidean-pullback-eq-inv-act"]
+@[blueprint "lem:euclidean-pullback-eq-inv-act"
+  (title := "Pullback Equals Inverse Action")
+  (statement := /-- The Euclidean pullback satisfies $g^*(x) = g^{-1} \cdot x$. -/)
+]
 lemma euclidean_pullback_eq_inv_act (g : E) (x : SpaceTime) :
     euclidean_pullback g x = act g⁻¹ x := rfl
 
 /-- Composing pullbacks: euclidean_pullback g (act g y) = y. -/
-@[blueprint "lem:euclidean-pullback-act"]
+@[blueprint "lem:euclidean-pullback-act"
+  (title := "Pullback-Action Cancellation")
+  (statement := /-- $g^*(g \cdot y) = y$: pulling back after acting returns the original point. -/)
+]
 lemma euclidean_pullback_act (g : E) (y : SpaceTime) :
     euclidean_pullback g (act g y) = y := by
   simp only [euclidean_pullback_eq_inv_act, act_inv_general]
 
 /-- The forward composition: act g (euclidean_pullback g x) = x. -/
-@[blueprint "lem:act-euclidean-pullback"]
+@[blueprint "lem:act-euclidean-pullback"
+  (title := "Action-Pullback Cancellation")
+  (statement := /-- $g \cdot g^*(x) = x$: acting after pulling back returns the original point. -/)
+]
 lemma act_euclidean_pullback (g : E) (x : SpaceTime) :
     act g (euclidean_pullback g x) = x := by
   simp only [euclidean_pullback_eq_inv_act]
@@ -84,7 +96,10 @@ noncomputable def actEquiv (g : E) : SpaceTime ≃ᵐ SpaceTime where
   measurable_invFun := (measurePreserving_act g⁻¹).measurable
 
 /-- Measure-preserving property of actEquiv. -/
-@[blueprint "lem:measure-preserving-act-equiv"]
+@[blueprint "lem:measure-preserving-act-equiv"
+  (title := "Measure-Preserving Euclidean Action")
+  (statement := /-- The measurable equivalence $\mathrm{act}(g) : \mathbb{R}^4 \to \mathbb{R}^4$ preserves Lebesgue measure. -/)
+]
 lemma measurePreserving_actEquiv (g : E) :
     MeasurePreserving (actEquiv g) volume volume :=
   measurePreserving_act g
@@ -164,6 +179,35 @@ theorem freeCovarianceℂ_bilinear_euclidean_invariant (g : E) (f h : TestFuncti
   (title := "GFF Satisfies OS2")
   (keyDeclaration := true)
   (statement := /-- The free GFF covariance is invariant under Euclidean transformations: $S_2(g \cdot f, g \cdot h) = S_2(f, h)$ for all $g \in E(4)$. This implies OS2 for the GFF via `gaussian_satisfies_OS2`. -/)
+  (proof := /--
+    The proof factors into two parts:
+    1. \emph{General Gaussian result:} For any Gaussian measure whose covariance is
+       Euclidean-invariant, $Z[g \cdot f] = Z[f]$.
+    2. \emph{GFF-specific:} The free GFF covariance depends only on $\|x - y\|$, which is
+       preserved by Euclidean transformations.
+
+    The free covariance kernel is
+    $C(x, y) = \frac{m}{4\pi^2 \|x - y\|} K_1(m\|x - y\|)$.
+    Since Euclidean transformations preserve distances
+    ($\|g \cdot x - g \cdot y\| = \|R(x - y)\| = \|x - y\|$), we have
+    $C(g \cdot x, g \cdot y) = C(x, y)$.
+
+    Lebesgue measure on $\mathbb{R}^4$ is invariant under Euclidean transformations
+    (translation invariance plus $|\det R| = 1$ for $R \in O(4)$). The proof constructs
+    a measurable equivalence for each group element and proves it is measure-preserving,
+    enabling the change of variables in integration.
+
+    The bilinear form invariance $\langle g \cdot f, C(g \cdot h)\rangle = \langle f, Ch\rangle$
+    proceeds by substituting the pullback, rewriting the kernel using Euclidean invariance,
+    recognizing the integrand as a composition, and applying the measure-preserving change
+    of variables.
+
+    The general theorem then derives OS2 from Gaussianity and covariance invariance:
+    $Z[g \cdot f] = \exp\bigl(-\tfrac{1}{2}\langle g \cdot f, C(g \cdot f)\rangle\bigr)
+     = \exp\bigl(-\tfrac{1}{2}\langle f, Cf\rangle\bigr) = Z[f]$.
+
+    This is the cleanest OS axiom proof, requiring zero project-specific axioms.
+  -/)
   (uses := [CovarianceEuclideanInvariantℂ, gff_two_point_equals_covarianceℂ_free, freeCovarianceℂ_bilinear_euclidean_invariant])
   (latexEnv := "theorem")
   (latexLabel := "thm:gff-os2")]

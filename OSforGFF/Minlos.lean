@@ -61,6 +61,7 @@ The Gaussian RBF positive-definiteness is proved in `OSforGFF.GaussianRBF`.
 variable {E : Type*} [AddCommGroup E] [Module ℝ E] [TopologicalSpace E]
 
 -- We need a measurable space structure on the weak dual
+@[blueprint]
 instance : MeasurableSpace (WeakDual ℝ E) := borel _
 
 /-- **Minlos Theorem** (existence and uniqueness): On a nuclear locally convex space E,
@@ -209,6 +210,12 @@ lemma gaussian_positive_definite_via_embedding
   (title := "Minlos Gaussian Construction")
   (keyDeclaration := true)
   (statement := /-- If the covariance $C(f,f) = \|Tf\|^2$ for a linear embedding $T : E \to H$ into a Hilbert space, then Minlos yields a Gaussian probability measure $\mu$ on $E'$ with CF $\Phi(f) = e^{-\frac{1}{2}C(f,f)}$. -/)
+  (above := /--
+The Minlos theorem requires three inputs:
+1. \textbf{Positive definiteness of $e^{-\frac{1}{2}C(f,f)}$:} This follows from the Hilbert space embedding $C(f,f) = \|Tf\|^2$, combined with the abstract result that $e^{-\frac{1}{2}\|h\|^2}$ is positive-definite on any inner product space (proved via the Schur product theorem and Hadamard exponential).
+2. \textbf{Nuclearity of Schwartz space:} Assumed as an axiom. This is a standard result whose proof requires the Hilbert--Schmidt theory of Schwartz seminorms.
+3. \textbf{Continuity of $f \mapsto C(f,f)$:} Proved via the continuity of the embedding map $T$ and the fact that the $L^2$ norm is continuous.
+  -/)
   (uses := [minlos_theorem, gaussian_positive_definite_via_embedding, gaussian_characteristic_functional])
   (latexEnv := "theorem")
   (latexLabel := "thm:minlos-gaussian")]

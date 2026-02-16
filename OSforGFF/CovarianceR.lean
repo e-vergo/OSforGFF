@@ -54,6 +54,11 @@ namespace QFT
 noncomputable def freeCovarianceFormR (m : ℝ) (f g : TestFunction) : ℝ :=
   ∫ x, ∫ y, (f x) * (freeCovariance m x y) * (g y) ∂volume ∂volume
 
+@[blueprint
+  (title := "Complex Bilinear Agrees on Reals")
+  (statement := /-- $C_{\mathbb{C}}(\iota f, \iota g) = C_{\mathbb{R}}(f,g)$ where $\iota$ is the real-to-complex embedding. -/)
+  (proof := /--  -/)
+]
 theorem freeCovarianceℂ_bilinear_agrees_on_reals
   (m : ℝ) (f g : TestFunction) :
     freeCovarianceℂ_bilinear m (toComplex f) (toComplex g)
@@ -76,18 +81,27 @@ theorem freeCovarianceℂ_bilinear_agrees_on_reals
 /-! ## Weighted L² Space Construction -/
 
 /-- The weighted measure on momentum space with density (‖k‖² + m²)⁻¹. -/
-@[blueprint "def:momentum-weight-measure"]
+@[blueprint "def:momentum-weight-measure"
+  (title := "Momentum Weight Measure")
+  (statement := /-- The weighted measure $d\mu_w = w(k)\, dk$ on momentum space with density $(\|k\|^2 + m^2)^{-1}$. -/)
+]
 noncomputable def momentumWeightMeasure (m : ℝ) : Measure SpaceTime :=
   volume.withDensity (fun k => ENNReal.ofReal (momentumWeight m k))
 
 /-- ℝ-linear view of the complex Fourier transform on Schwartz space. -/
-@[blueprint "def:fourier-transform-clm-real"]
+@[blueprint "def:fourier-transform-clm-real"
+  (title := "Real-Linear Fourier Transform CLM")
+  (statement := /-- The Fourier transform on Schwartz space viewed as an $\mathbb{R}$-linear continuous map. -/)
+]
 noncomputable def fourierTransformCLM_real :
     TestFunctionℂ →L[ℝ] TestFunctionℂ :=
   (SchwartzMap.fourierTransformCLM ℂ).restrictScalars ℝ
 
 /-- ℝ-linear view of the Schwartz-to-`L²` embedding. -/
-@[blueprint "def:schwartz-to-l2-clm-real"]
+@[blueprint "def:schwartz-to-l2-clm-real"
+  (title := "Real-Linear Schwartz-to-L2 CLM")
+  (statement := /-- The Schwartz-to-$L^2$ embedding viewed as an $\mathbb{R}$-linear continuous map. -/)
+]
 noncomputable def schwartzToL2CLM_real (_m : ℝ) :
     TestFunctionℂ →L[ℝ] Lp ℂ 2 (volume : Measure SpaceTime) :=
   ((SchwartzMap.toLpCLM ℂ ℂ 2 (volume : Measure SpaceTime))).restrictScalars ℝ
@@ -97,14 +111,19 @@ noncomputable def schwartzToL2CLM_real (_m : ℝ) :
 /-- The embedding T maps a test function to a weighted function in momentum space.
     Conceptually: T f = FourierTransform(f) * (‖k‖² + m²)^(-1/2). -/
 @[blueprint "def:sqrt-propagator-map"
-  (title := "Square Root Propagator Map")]
+  (title := "Square Root Propagator Map")
+  (statement := /-- $T f(k) = \hat{f}(k) \cdot w^{1/2}(k)$: the Fourier transform weighted by the square root of the propagator. -/)
+]
 noncomputable def sqrtPropagatorMap (m : ℝ) (f : TestFunction) : SpaceTime → ℂ :=
   fun k =>
     (SchwartzMap.fourierTransformCLM ℂ (toComplex f)) k
       * momentumWeightSqrt_mathlib m k
 
 /-- The sqrtPropagatorMap is square-integrable. -/
-@[blueprint "lem:sqrt-propagator-map-sq-integrable"]
+@[blueprint "lem:sqrt-propagator-map-sq-integrable"
+  (title := "Square Integrability of Propagator Map")
+  (statement := /-- $\|Tf(k)\|^2$ is integrable, since $\|Tf\| \leq (1/m)\|\hat{f}\|$. -/)
+]
 lemma sqrtPropagatorMap_sq_integrable (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
     Integrable (fun k => ‖sqrtPropagatorMap m f k‖ ^ 2) volume := by
   classical
@@ -159,7 +178,10 @@ lemma sqrtPropagatorMap_sq_integrable (m : ℝ) [Fact (0 < m)] (f : TestFunction
   exact h_dom_integrable.mono h_sq_meas h_dom_pointwise
 
 /-- The weighted Fourier representative lies in L². -/
-@[blueprint "lem:sqrt-propagator-map-mem-lp"]
+@[blueprint "lem:sqrt-propagator-map-mem-lp"
+  (title := "Propagator Map Membership in L2")
+  (statement := /-- $Tf \in L^2(\mathbb{R}^4)$ for every real test function $f$. -/)
+]
 lemma sqrtPropagatorMap_memLp (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
     MemLp (sqrtPropagatorMap m f) 2 volume := by
   classical
@@ -179,12 +201,18 @@ lemma sqrtPropagatorMap_memLp (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
   exact (memLp_two_iff_integrable_sq_norm h_meas).2 h_sq
 
 /-- The squared L² norm of the mapped function. -/
-@[blueprint "def:sqrt-propagator-map-norm-sq"]
+@[blueprint "def:sqrt-propagator-map-norm-sq"
+  (title := "Squared L2 Norm of Propagator Map")
+  (statement := /-- $\|Tf\|_{L^2}^2 = \int \|Tf(k)\|^2\, dk$. -/)
+]
 noncomputable def sqrtPropagatorMap_norm_sq (m : ℝ) (f : TestFunction) : ℝ :=
   ∫ k, ‖sqrtPropagatorMap m f k‖ ^ 2 ∂volume
 
 /-- The map is linear in f (additive). -/
-@[blueprint "lem:sqrt-propagator-map-linear-add"]
+@[blueprint "lem:sqrt-propagator-map-linear-add"
+  (title := "Propagator Map Additivity")
+  (statement := /-- $T(f+g) = Tf + Tg$. -/)
+]
 lemma sqrtPropagatorMap_linear_add (m : ℝ) [Fact (0 < m)] (f g : TestFunction) :
     sqrtPropagatorMap m (f + g) = sqrtPropagatorMap m f + sqrtPropagatorMap m g := by
   ext k
@@ -193,7 +221,10 @@ lemma sqrtPropagatorMap_linear_add (m : ℝ) [Fact (0 < m)] (f g : TestFunction)
   simp [add_mul]
 
 /-- The map is ℝ-linear (scalar multiplication). -/
-@[blueprint "lem:sqrt-propagator-map-linear-smul"]
+@[blueprint "lem:sqrt-propagator-map-linear-smul"
+  (title := "Propagator Map Scalar Multiplication")
+  (statement := /-- $T(c \cdot f) = c \cdot Tf$ for $c \in \mathbb{R}$. -/)
+]
 lemma sqrtPropagatorMap_linear_smul (m : ℝ) [Fact (0 < m)] (c : ℝ) (f : TestFunction) :
     sqrtPropagatorMap m (c • f) = c • sqrtPropagatorMap m f := by
   ext k
@@ -204,13 +235,19 @@ lemma sqrtPropagatorMap_linear_smul (m : ℝ) [Fact (0 < m)] (c : ℝ) (f : Test
 /-! ## Connection to Covariance -/
 
 /-- For real test functions, the star (conjugation) of toComplex is the identity. -/
-@[blueprint "lem:to-complex-star"]
+@[blueprint "lem:to-complex-star"
+  (title := "Real Embedding Star Invariance")
+  (statement := /-- $\overline{\iota f(x)} = \iota f(x)$: the complexification of a real function is self-conjugate. -/)
+]
 lemma toComplex_star (f : TestFunction) (x : SpaceTime) :
     starRingEnd ℂ (toComplex f x) = toComplex f x := by
   simp [toComplex_apply]
 
 /-- For real test functions, freeCovarianceℂ agrees with freeCovarianceℂ_bilinear. -/
-@[blueprint "lem:free-covariance-3"]
+@[blueprint "lem:free-covariance-3"
+  (title := "Free Covariance Agrees with Bilinear on Reals")
+  (statement := /-- For real test functions, $C(\iota f, \iota g) = C_{\text{bilinear}}(\iota f, \iota g)$ since the star operation is trivial. -/)
+]
 lemma freeCovarianceℂ_eq_bilinear_on_reals (m : ℝ) (f g : TestFunction) :
     freeCovarianceℂ m (toComplex f) (toComplex g)
       = freeCovarianceℂ_bilinear m (toComplex f) (toComplex g) := by
@@ -221,7 +258,10 @@ lemma freeCovarianceℂ_eq_bilinear_on_reals (m : ℝ) (f g : TestFunction) :
 
 /-- Key lemma: The squared norm equals the covariance form. -/
 @[blueprint "lem:sqrt-propagator-map-norm-eq-covariance"
-  (title := "Covariance Equals Squared Norm of Propagator Map")]
+  (title := "Covariance Equals Squared Norm of Propagator Map")
+  (keyDeclaration := true)
+  (statement := /-- $\|Tf\|_{L^2}^2 = C(f,f)$: the squared $L^2$ norm of the propagator map equals the real covariance quadratic form, via Parseval. -/)
+]
 lemma sqrtPropagatorMap_norm_eq_covariance (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
     sqrtPropagatorMap_norm_sq m f = freeCovarianceFormR m f f := by
   classical
@@ -285,13 +325,17 @@ lemma sqrtPropagatorMap_norm_eq_covariance (m : ℝ) [Fact (0 < m)] (f : TestFun
 
 /-- The target Hilbert space: L²(SpaceTime, Lebesgue) with complex values. -/
 @[blueprint "def:target-hilbert-space"
-  (title := "Target Hilbert Space")]
+  (title := "Target Hilbert Space")
+  (statement := /-- $\mathcal{H} = L^2(\mathbb{R}^4, \mathbb{C})$: the target Hilbert space for the embedding. -/)
+]
 abbrev TargetHilbertSpace (_m : ℝ) : Type :=
   Lp (E := ℂ) 2 (volume : Measure SpaceTime)
 
 /-- The linear map T: TestFunction → L². -/
 @[blueprint "def:embedding-map"
-  (title := "Hilbert Space Embedding Map")]
+  (title := "Hilbert Space Embedding Map")
+  (statement := /-- $T : \mathcal{S}(\mathbb{R}^4) \to L^2$: the $\mathbb{R}$-linear map sending $f$ to $\hat{f} \cdot w^{1/2} \in L^2$. -/)
+]
 noncomputable def embeddingMap (m : ℝ) [Fact (0 < m)] :
     TestFunction →ₗ[ℝ] TargetHilbertSpace m :=
   { toFun := fun f =>
@@ -319,13 +363,18 @@ noncomputable def embeddingMap (m : ℝ) [Fact (0 < m)] :
       exact MeasureTheory.MemLp.toLp_const_smul c hf }
 
 /-- Continuous linear map obtained by composing the axiomatized building blocks. -/
-@[blueprint "def:embedding-map-clm"]
+@[blueprint "def:embedding-map-clm"
+  (title := "Embedding Map as CLM")
+  (statement := /-- The embedding map $T$ realized as a continuous linear map by composing Fourier transform, $L^2$ embedding, and weight multiplication. -/)
+]
 noncomputable def embeddingMapCLM (m : ℝ) [Fact (0 < m)] :
     TestFunction →L[ℝ] Lp ℂ 2 (volume : Measure SpaceTime) :=
   (((momentumWeightSqrt_mathlib_mul_CLM m).restrictScalars ℝ).comp (schwartzToL2CLM_real m)).comp
     ((fourierTransformCLM_real).comp toComplexCLM)
-@[blueprint "lem:embedding-map-clm-apply"]
-
+@[blueprint "lem:embedding-map-clm-apply"
+  (title := "Embedding Map CLM Agrees with Linear Map")
+  (statement := /-- The continuous linear map and the linear map agree: $T_{\text{CLM}} f = T f$ in $L^2$. -/)
+]
 lemma embeddingMapCLM_apply (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
     embeddingMapCLM m f = embeddingMap m f := by
   classical
@@ -367,7 +416,10 @@ lemma embeddingMapCLM_apply (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
     The target space H is an inner product space (L² is a Hilbert space).
     Note: InnerProductSpace ℝ H implies NormedSpace ℝ H via InnerProductSpace.toNormedSpace. -/
 @[blueprint "thm:sqrt-propagator-embedding"
-  (title := "Square Root Propagator Embedding Theorem")]
+  (title := "Square Root Propagator Embedding Theorem")
+  (keyDeclaration := true)
+  (statement := /-- There exists a Hilbert space $\mathcal{H}$ and a linear map $T : \mathcal{S} \to \mathcal{H}$ such that $C(f,f) = \|Tf\|^2$ for all real test functions $f$. -/)
+]
 theorem sqrtPropagatorEmbedding (m : ℝ) [Fact (0 < m)] :
   ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℝ H)
     (T : TestFunction →ₗ[ℝ] H),
@@ -415,7 +467,10 @@ theorem sqrtPropagatorEmbedding (m : ℝ) [Fact (0 < m)] :
 /-! ## Auxiliary Lemmas for Continuity -/
 
 /-- Squared L² norm of the embedded function in terms of the pointwise integral. -/
-@[blueprint "lem:embedding-map-norm-sq"]
+@[blueprint "lem:embedding-map-norm-sq"
+  (title := "Embedding Map Squared Norm")
+  (statement := /-- $\|Tf\|^2 = \int \|Tf(k)\|^2\, dk$. -/)
+]
 lemma embeddingMap_norm_sq (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
     ‖embeddingMap m f‖ ^ 2 = ∫ (k : SpaceTime), ‖sqrtPropagatorMap m f k‖ ^ 2 ∂volume := by
   have h_memLp := sqrtPropagatorMap_memLp (m := m) (f := f)
@@ -459,7 +514,10 @@ lemma embeddingMap_norm_sq (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
             conv_rhs => arg 1; rw [← coe_nnnorm, ENNReal.ofReal_coe_nnreal]
             conv_rhs => arg 2; rw [← coe_nnnorm, ENNReal.ofReal_coe_nnreal]
 
-@[blueprint "lem:free-covariance-form-r-eq-norm-sq"]
+@[blueprint "lem:free-covariance-form-r-eq-norm-sq"
+  (title := "Covariance Form Equals Squared Norm")
+  (statement := /-- $C(f,f) = \|Tf\|^2$: the covariance quadratic form equals the squared norm of the embedding. -/)
+]
 lemma freeCovarianceFormR_eq_normSq (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
     freeCovarianceFormR m f f = ‖embeddingMap m f‖ ^ 2 := by
   have h_cov := sqrtPropagatorMap_norm_eq_covariance (m := m) (f := f)
@@ -467,7 +525,10 @@ lemma freeCovarianceFormR_eq_normSq (m : ℝ) [Fact (0 < m)] (f : TestFunction) 
   simpa [sqrtPropagatorMap_norm_sq, h_norm] using h_cov.symm
 
 /-- The embedding map TestFunction → L² is continuous. -/
-@[blueprint "lem:embedding-map-continuous"]
+@[blueprint "lem:embedding-map-continuous"
+  (title := "Embedding Map Continuity")
+  (statement := /-- $T : \mathcal{S} \to L^2$ is continuous, inheriting continuity from the CLM realization. -/)
+]
 lemma embeddingMap_continuous (m : ℝ) [Fact (0 < m)] :
     Continuous (embeddingMap m) := by
   classical
@@ -481,7 +542,9 @@ lemma embeddingMap_continuous (m : ℝ) [Fact (0 < m)] :
 
 /-- Continuity of the real covariance quadratic form f ↦ C(f,f). -/
 @[blueprint "thm:free-covariance-form-r-continuous"
-  (title := "Continuity of Real Covariance Quadratic Form")]
+  (title := "Continuity of Real Covariance Quadratic Form")
+  (statement := /-- $f \mapsto C(f,f)$ is continuous on Schwartz space, since $C(f,f) = \|Tf\|^2$ and $T$ is continuous. -/)
+]
 theorem freeCovarianceFormR_continuous (m : ℝ) [Fact (0 < m)] :
     Continuous (fun f : TestFunction => freeCovarianceFormR m f f) := by
   have h_eq : (fun f => freeCovarianceFormR m f f) = (fun f => ‖embeddingMap m f‖ ^ 2) := by
@@ -516,7 +579,9 @@ theorem freeCovarianceFormR_pos (m : ℝ) [Fact (0 < m)] :
 
 /-- Symmetry of the real covariance bilinear form. -/
 @[blueprint "thm:free-covariance-form-r-symm"
-  (title := "Symmetry of Real Covariance Form")]
+  (title := "Symmetry of Real Covariance Form")
+  (statement := /-- $C(f,g) = C(g,f)$: the real covariance bilinear form is symmetric. -/)
+]
 theorem freeCovarianceFormR_symm (m : ℝ) [Fact (0 < m)] (f g : TestFunction) :
     freeCovarianceFormR m f g = freeCovarianceFormR m g f := by
   apply Complex.ofReal_injective
@@ -529,7 +594,10 @@ theorem freeCovarianceFormR_symm (m : ℝ) [Fact (0 < m)] (f g : TestFunction) :
           rw [freeCovarianceℂ_bilinear_agrees_on_reals m g f]
 
 /-- Linearity in the first argument of the real covariance bilinear form. -/
-@[blueprint "lem:free-covariance-form-r-add-left"]
+@[blueprint "lem:free-covariance-form-r-add-left"
+  (title := "Left Additivity of Covariance Form")
+  (statement := /-- $C(f_1 + f_2, g) = C(f_1, g) + C(f_2, g)$. -/)
+]
 lemma freeCovarianceFormR_add_left (m : ℝ) [Fact (0 < m)] (f₁ f₂ g : TestFunction) :
     freeCovarianceFormR m (f₁ + f₂) g = freeCovarianceFormR m f₁ g + freeCovarianceFormR m f₂ g := by
   apply Complex.ofReal_injective
@@ -554,7 +622,10 @@ lemma freeCovarianceFormR_add_left (m : ℝ) [Fact (0 < m)] (f₁ f₂ g : TestF
   simpa [Complex.ofReal_add] using h'
 
 /-- Scalar multiplication in the first argument of the real covariance bilinear form. -/
-@[blueprint "lem:free-covariance-form-r-smul-left"]
+@[blueprint "lem:free-covariance-form-r-smul-left"
+  (title := "Left Scalar Multiplication of Covariance Form")
+  (statement := /-- $C(c \cdot f, g) = c \cdot C(f, g)$ for $c \in \mathbb{R}$. -/)
+]
 lemma freeCovarianceFormR_smul_left (m : ℝ) [Fact (0 < m)] (c : ℝ) (f g : TestFunction) :
     freeCovarianceFormR m (c • f) g = c * freeCovarianceFormR m f g := by
   apply Complex.ofReal_injective
@@ -581,7 +652,10 @@ lemma freeCovarianceFormR_smul_left (m : ℝ) [Fact (0 < m)] (c : ℝ) (f g : Te
   simpa [Complex.ofReal_mul] using h'
 
 /-- Addition in the second argument of the real covariance bilinear form. -/
-@[blueprint "lem:free-covariance-form-r-add-right"]
+@[blueprint "lem:free-covariance-form-r-add-right"
+  (title := "Right Additivity of Covariance Form")
+  (statement := /-- $C(f, g_1 + g_2) = C(f, g_1) + C(f, g_2)$. -/)
+]
 lemma freeCovarianceFormR_add_right (m : ℝ) [Fact (0 < m)] (f g₁ g₂ : TestFunction) :
     freeCovarianceFormR m f (g₁ + g₂) = freeCovarianceFormR m f g₁ + freeCovarianceFormR m f g₂ := by
   apply Complex.ofReal_injective
@@ -606,7 +680,10 @@ lemma freeCovarianceFormR_add_right (m : ℝ) [Fact (0 < m)] (f g₁ g₂ : Test
   simpa [Complex.ofReal_add] using h'
 
 /-- Scalar multiplication in the second argument of the real covariance bilinear form. -/
-@[blueprint "lem:free-covariance-form-r-smul-right"]
+@[blueprint "lem:free-covariance-form-r-smul-right"
+  (title := "Right Scalar Multiplication of Covariance Form")
+  (statement := /-- $C(f, c \cdot g) = c \cdot C(f, g)$ for $c \in \mathbb{R}$. -/)
+]
 lemma freeCovarianceFormR_smul_right (m : ℝ) [Fact (0 < m)] (c : ℝ) (f g : TestFunction) :
     freeCovarianceFormR m f (c • g) = c * freeCovarianceFormR m f g := by
   apply Complex.ofReal_injective
@@ -633,7 +710,10 @@ lemma freeCovarianceFormR_smul_right (m : ℝ) [Fact (0 < m)] (c : ℝ) (f g : T
   simpa [Complex.ofReal_mul] using h'
 
 /-- Zero in the first argument gives zero. -/
-@[blueprint "lem:free-covariance-form-r-zero-left"]
+@[blueprint "lem:free-covariance-form-r-zero-left"
+  (title := "Covariance Form Zero Left")
+  (statement := /-- $C(0, g) = 0$. -/)
+]
 lemma freeCovarianceFormR_zero_left (m : ℝ) [Fact (0 < m)] (g : TestFunction) :
     freeCovarianceFormR m 0 g = 0 := by
   have h := freeCovarianceFormR_smul_left m (0 : ℝ) 0 g
@@ -642,14 +722,27 @@ lemma freeCovarianceFormR_zero_left (m : ℝ) [Fact (0 < m)] (g : TestFunction) 
   simp only [zero_mul]
 
 /-- Zero in the second argument gives zero. -/
-@[blueprint "lem:free-covariance-form-r-zero-right"]
+@[blueprint "lem:free-covariance-form-r-zero-right"
+  (title := "Covariance Form Zero Right")
+  (statement := /-- $C(f, 0) = 0$. -/)
+]
 lemma freeCovarianceFormR_zero_right (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
     freeCovarianceFormR m f 0 = 0 := by
   rw [freeCovarianceFormR_symm]
   exact freeCovarianceFormR_zero_left m f
 
 @[blueprint "lem:free-covariance-form-r-reflection-invariant"
-  (title := "Reflection Invariance of Real Covariance")]
+  (title := "Reflection Invariance of Real Covariance")
+  (statement := /-- $C(\Theta f, \Theta g) = C(f, g)$: the real covariance form is invariant under time reflection. -/)
+  (above := /--
+For reflection positivity, the covariance restricted to real test functions has additional properties:
+\begin{itemize}
+\item $C(\Theta f, \Theta g) = C(f, g)$ (reflection invariance).
+\item $C(\Theta f, g) = C(\Theta g, f)$ (reflection cross-symmetry).
+\item Linearity of $\sum_i c_i\, C(\Theta f_i, g)$ in the coefficients $c_i$.
+\end{itemize}
+  -/)
+]
 lemma freeCovarianceFormR_reflection_invariant
     (m : ℝ) [Fact (0 < m)] (f g : TestFunction) :
     freeCovarianceFormR m (QFT.compTimeReflectionReal f)
@@ -733,7 +826,9 @@ lemma freeCovarianceFormR_reflection_invariant
 
 /-- Mixed-time-reflection identity for the real free covariance. -/
 @[blueprint "lem:free-covariance-form-r-reflection-cross"
-  (title := "Cross-Reflection Identity for Real Covariance")]
+  (title := "Cross-Reflection Identity for Real Covariance")
+  (statement := /-- $C(\Theta f, g) = C(\Theta g, f)$: cross-reflection identity for the real covariance. -/)
+]
 lemma freeCovarianceFormR_reflection_cross
     (m : ℝ) [Fact (0 < m)] (f g : TestFunction) :
     freeCovarianceFormR m (QFT.compTimeReflectionReal f) g
@@ -776,7 +871,10 @@ lemma freeCovarianceFormR_reflection_cross
         simpa using (freeCovarianceFormR_symm m f (QFT.compTimeReflectionReal g))
 
 /-- Left linearity of freeCovarianceFormR for any fixed right argument. -/
-@[blueprint "lem:free-covariance-form-r-left-linear-any-right"]
+@[blueprint "lem:free-covariance-form-r-left-linear-any-right"
+  (title := "Left Linearity for Reflected Sum")
+  (statement := /-- $\sum_i c_i C(\Theta f_i, g) = C(\sum_i c_i \Theta f_i, g)$: linearity of the covariance in the first argument for reflected sums. -/)
+]
 lemma freeCovarianceFormR_left_linear_any_right
     (m : ℝ) [Fact (0 < m)] {n : ℕ} (f : Fin n → PositiveTimeTestFunction) (c : Fin n → ℝ)
     (s : Finset (Fin n)) (g : TestFunction) :

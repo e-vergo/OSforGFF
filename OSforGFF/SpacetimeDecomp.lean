@@ -60,6 +60,9 @@ def spacetimeDecomp : SpaceTime ≃ᵐ ℝ × SpatialCoords :=
     (piLpMeasurableEquiv (STDimension - 1)).symm))
 
 /-- Measure preservation for piLpMeasurableEquiv. -/
+@[blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)]
 lemma piLpMeasurableEquiv_measurePreserving (n : ℕ) :
     MeasurePreserving (piLpMeasurableEquiv n)
       (volume : Measure (PiLp 2 (fun _ : Fin n => ℝ))) volume := by

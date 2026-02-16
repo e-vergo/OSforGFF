@@ -139,6 +139,7 @@ def SchwingerFunction (dμ_config : ProbabilityMeasure FieldConfiguration) (n : 
   ∫ ω, (∏ i, distributionPairing ω (f i)) ∂dμ_config.toMeasure
 
 /-- The 1-point Schwinger function: the mean field -/
+@[blueprint]
 def SchwingerFunction₁ (dμ_config : ProbabilityMeasure FieldConfiguration)
   (f : TestFunction) : ℝ :=
   SchwingerFunction dμ_config 1 ![f]
@@ -190,7 +191,9 @@ def SchwingerFunctionℂ (dμ_config : ProbabilityMeasure FieldConfiguration) (n
 
 /-- The complex 2-point Schwinger function for complex test functions.
     This is the natural extension of SchwingerFunction₂ to complex test functions. -/
-@[blueprint "def:schwinger-function-4"]
+@[blueprint "def:schwinger-function-4"
+  (title := "Complex 2-Point Schwinger Function")
+  (statement := /-- The 2-point Schwinger function $S_2(\varphi, \psi) = \langle \Phi(\varphi) \Phi(\psi) \rangle_\mu$ for complex test functions. -/)]
 def SchwingerFunctionℂ₂ (dμ_config : ProbabilityMeasure FieldConfiguration)
   (φ ψ : TestFunctionℂ) : ℂ :=
   SchwingerFunctionℂ dμ_config 2 ![φ, ψ]

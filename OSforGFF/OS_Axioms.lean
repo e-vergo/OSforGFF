@@ -83,6 +83,12 @@ def OS0_Analyticity (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop 
       GJGeneratingFunctionalℂ dμ_config (∑ i, z i • J i)) Set.univ
 
 /-- Two-point function local integrability condition for p = 2 -/
+@[blueprint
+  (title := "Two-Point Function Local Integrability")
+  (statement := /--
+The two-point Schwinger function $S_2(x)$ is locally integrable with respect to Lebesgue measure.
+This condition is required by OS1 when $p = 2$.
+-/)]
 def TwoPointIntegrable (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   LocallyIntegrable (fun x => SchwingerTwoPointFunction dμ_config x) volume
 
@@ -165,7 +171,14 @@ def OS4_Clustering (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :
 
     This is the standard ergodicity formulation from Glimm-Jaffe.
 -/
-@[blueprint "def:os4-ergodicity"]
+@[blueprint "def:os4-ergodicity"
+  (title := "OS4: Ergodicity")
+  (keyDeclaration := true)
+  (statement := /--
+Time averages of generating functions converge to expectations in $L^2(\mu)$:
+$\lim_{T\to\infty} \frac{1}{T}\int_0^T A(T_s\varphi)\,ds = \mathbb{E}_\mu[A(\varphi)]$
+for $A(\varphi) = \sum_j z_j e^{\langle\varphi, f_j\rangle}$.
+-/)]
 def OS4_Ergodicity (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
   ∀ (n : ℕ) (z : Fin n → ℂ) (f : Fin n → TestFunctionℂ),
     let μ := dμ_config.toMeasure
@@ -188,7 +201,12 @@ def OS4_Ergodicity (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :
     polynomial decay rate. For the GFF in 4D spacetime (d=3 spatial dimensions),
     the natural rate is α = 2d = 6 from the mass gap.
 -/
-@[blueprint "def:os4-polynomial-clustering"]
+@[blueprint "def:os4-polynomial-clustering"
+  (title := "OS4: Polynomial Clustering")
+  (statement := /--
+For test functions $f, g$ and exponent $\alpha > 0$, correlations decay polynomially:
+$\|E[e^{\langle\omega,f\rangle + \langle T_s\omega,g\rangle}] - E[e^{\langle\omega,f\rangle}]\cdot E[e^{\langle\omega,g\rangle}]\| \le c\,(1+s)^{-\alpha}$.
+-/)]
 def OS4_PolynomialClustering (dμ_config : ProbabilityMeasure FieldConfiguration)
     (α : ℝ) (_hα : α > 0) : Prop :=
   ∀ (f g : TestFunctionℂ), ∃ (c : ℝ), c ≥ 0 ∧

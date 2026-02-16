@@ -34,7 +34,10 @@ universe u
 variable {ι : Type u} [Fintype ι] [DecidableEq ι]
 
 /-- Helper: Frobenius inner product equals `trace (Gᵀ * B)` (real case). -/
-@[blueprint "lem:frobenius-eq-trace-transpose-mul"]
+@[blueprint "lem:frobenius-eq-trace-transpose-mul"
+  (title := "Frobenius Inner Product as Trace")
+  (statement := /-- $\sum_{j,l} G_{jl} B_{jl} = \mathrm{tr}(G^T B)$ for real matrices. -/)
+]
 lemma frobenius_eq_trace_transpose_mul
   (G B : Matrix ι ι ℝ) :
   (∑ j, ∑ l, G j l * B j l) = Matrix.trace (G.transpose * B) := by
@@ -56,7 +59,10 @@ lemma frobenius_eq_trace_transpose_mul
 
 /-- Congruence by an orthogonal/invertible matrix preserves nonzeroness (real case).
 If `U * Uᵀ = 1`, then `Uᵀ G U ≠ 0` whenever `G ≠ 0`. -/
-@[blueprint "lem:congr-transpose-mul-mul-ne-zero"]
+@[blueprint "lem:congr-transpose-mul-mul-ne-zero"
+  (title := "Congruence Preserves Nonzeroness")
+  (statement := /-- If $U U^T = I$ and $G \neq 0$, then $U^T G U \neq 0$. Orthogonal congruence preserves nonzeroness. -/)
+]
 lemma congr_transpose_mul_mul_ne_zero
   (U G : Matrix ι ι ℝ) (hU_right : U * U.transpose = 1) (hG_ne_zero : G ≠ 0) :
   U.transpose * G * U ≠ 0 := by
@@ -73,7 +79,10 @@ lemma congr_transpose_mul_mul_ne_zero
 set_option linter.deprecated false in
 /-- Cauchy–Schwarz for the semi-inner product induced by a PSD real matrix.
 For all vectors x,y: (xᵀ H y)^2 ≤ (xᵀ H x) (yᵀ H y). -/
-@[blueprint "lem:psd-cauchy-schwarz"]
+@[blueprint "lem:psd-cauchy-schwarz"
+  (title := "PSD Cauchy--Schwarz Inequality")
+  (statement := /-- For a positive semidefinite matrix $H$, $(x^T H y)^2 \leq (x^T H x)(y^T H y)$ for all vectors $x, y$. -/)
+]
 lemma psd_cauchy_schwarz
   (H : Matrix ι ι ℝ) (hH_psd : H.PosSemidef) (x y : ι → ℝ) :
   ((x ⬝ᵥ H.mulVec y)^2) ≤ (x ⬝ᵥ H.mulVec x) * (y ⬝ᵥ H.mulVec y) := by
@@ -130,7 +139,10 @@ lemma psd_cauchy_schwarz
   simpa [hxy, hxx, hyy] using hCS
 
 /-- If H is PSD over ℝ and H ii = H jj = 0 then H ij = 0. -/
-@[blueprint "lem:psd-offdiag-zero-of-diag-zero"]
+@[blueprint "lem:psd-offdiag-zero-of-diag-zero"
+  (title := "PSD Off-Diagonal Vanishing")
+  (statement := /-- If $H$ is PSD and $H_{ii} = H_{jj} = 0$, then $H_{ij} = 0$. Zero diagonal entries force zero off-diagonals. -/)
+]
 lemma psd_offdiag_zero_of_diag_zero
   (H : Matrix ι ι ℝ) (hH_psd : H.PosSemidef) {i j : ι}
   (hii : H i i = 0) (hjj : H j j = 0) : H i j = 0 := by
@@ -151,7 +163,10 @@ lemma psd_offdiag_zero_of_diag_zero
   exact sq_eq_zero_iff.mp this
 
 /-- For a real PSD matrix, if it is nonzero then some diagonal entry is strictly positive. -/
-@[blueprint "lem:pos-semidef-diag-pos-exists-of-ne-zero"]
+@[blueprint "lem:pos-semidef-diag-pos-exists-of-ne-zero"
+  (title := "Nonzero PSD Matrix Has Positive Diagonal Entry")
+  (statement := /-- If $H$ is PSD and $H \neq 0$, then $\exists\, i$ such that $H_{ii} > 0$. -/)
+]
 lemma posSemidef_diag_pos_exists_of_ne_zero
   (H : Matrix ι ι ℝ) (hH_psd : H.PosSemidef) (hH_ne_zero : H ≠ 0) :
   ∃ i, 0 < H i i := by

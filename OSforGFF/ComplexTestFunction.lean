@@ -63,6 +63,9 @@ private lemma im_of_complex_combination (a b : ℂ) (u v : ℂ) :
 /-- ω-linearity of the real component of the complex test-function decomposition under
     complex linear combinations. This follows from ℝ-linearity of ω and pointwise
     behavior of complex operations on Schwartz functions. -/
+@[blueprint "lem:omega-re-decompose-linear"
+  (statement := /-- The real part of the decomposed pairing is linear: $\omega(\operatorname{Re}(tf + sg)) = \ldots$ in terms of $\omega(\operatorname{Re} f)$, $\omega(\operatorname{Im} f)$, etc. -/)
+]
 lemma ω_re_decompose_linear
   (ω : FieldConfiguration) (f g : TestFunctionℂ) (t s : ℂ) :
   ω ((complex_testfunction_decompose (t • f + s • g)).1)
@@ -97,6 +100,9 @@ lemma ω_re_decompose_linear
 
 /-- ω-linearity of the imaginary component of the complex test-function decomposition under
     complex linear combinations. -/
+@[blueprint "lem:omega-im-decompose-linear"
+  (statement := /-- The imaginary part of the decomposed pairing is linear: $\omega(\operatorname{Im}(tf + sg)) = \ldots$ in terms of $\omega(\operatorname{Re} f)$, $\omega(\operatorname{Im} f)$, etc. -/)
+]
 lemma ω_im_decompose_linear
   (ω : FieldConfiguration) (f g : TestFunctionℂ) (t s : ℂ) :
   ω ((complex_testfunction_decompose (t • f + s • g)).2)
@@ -130,7 +136,10 @@ lemma ω_im_decompose_linear
     using this
 
 /-- Linearity of the complex pairing in the test-function argument. -/
-@[blueprint "lem:pairing-linear-combo"]
+@[blueprint "lem:pairing-linear-combo"
+  (title := "Complex Pairing Linearity")
+  (statement := /-- The distribution pairing is $\mathbb{C}$-linear: $\langle \omega, tf + sg \rangle = t \langle \omega, f \rangle + s \langle \omega, g \rangle$. -/)
+]
 lemma pairing_linear_combo
   (ω : FieldConfiguration) (f g : TestFunctionℂ) (t s : ℂ) :
   distributionPairingℂ_real ω (t • f + s • g)
@@ -178,7 +187,9 @@ lemma pairing_linear_combo
 /-! ## Helper lemmas for real→complex Schwartz embedding -/
 
 /-- The norm of the ℝ-linear embedding ℝ → ℂ is exactly 1. -/
-@[blueprint "lem:norm-of-real-clm"]
+@[blueprint "lem:norm-of-real-clm"
+  (statement := /-- $\|\operatorname{ofReal}_{\mathrm{CLM}}\| = 1$. The canonical $\mathbb{R} \to \mathbb{C}$ embedding is an isometry. -/)
+]
 lemma Complex.norm_ofRealCLM : ‖Complex.ofRealCLM‖ = 1 := by
   apply ContinuousLinearMap.opNorm_eq_of_bounds
   · norm_num
@@ -190,7 +201,9 @@ lemma Complex.norm_ofRealCLM : ‖Complex.ofRealCLM‖ = 1 := by
 
 /-- Composing a continuous multilinear map (to ℝ) with the real→complex embedding
     preserves the operator norm, since the embedding is an isometry. -/
-@[blueprint "lem:norm-comp-continuous-multilinear-map-of-real"]
+@[blueprint "lem:norm-comp-continuous-multilinear-map-of-real"
+  (statement := /-- Composing a real multilinear map with $\operatorname{ofReal}$ preserves operator norm. -/)
+]
 lemma norm_compContinuousMultilinearMap_ofReal {n : ℕ} {E : Fin n → Type*}
     [∀ i, NormedAddCommGroup (E i)] [∀ i, NormedSpace ℝ (E i)]
     (m : ContinuousMultilinearMap ℝ E ℝ) :
@@ -214,7 +227,9 @@ lemma norm_compContinuousMultilinearMap_ofReal {n : ℕ} {E : Fin n → Type*}
     real→complex embedding equals the norm of the n-th iterated derivative of the
     original Schwartz function. This follows from the chain rule and the fact that
     the embedding is an isometry. -/
-@[blueprint "lem:iterated-f-deriv-of-real-norm-eq"]
+@[blueprint "lem:iterated-f-deriv-of-real-norm-eq"
+  (statement := /-- Iterated derivative norms are preserved under the $\mathbb{R} \to \mathbb{C}$ embedding: $\|D^n(\operatorname{ofReal} \circ f)\| = \|D^n f\|$. -/)
+]
 lemma iteratedFDeriv_ofReal_norm_eq (f : TestFunction) (n : ℕ) (x : SpaceTime) :
     ‖iteratedFDeriv ℝ n (fun x ↦ (f x : ℂ)) x‖ = ‖iteratedFDeriv ℝ n f.toFun x‖ := by
   have h_comp : (fun x => (f x : ℂ)) = Complex.ofRealCLM ∘ f.toFun := rfl
@@ -246,27 +261,37 @@ def toComplex (f : TestFunction) : TestFunctionℂ :=
     exact hC x
   )
 
-@[simp] lemma toComplex_apply (f : TestFunction) (x : SpaceTime) :
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma toComplex_apply (f : TestFunction) (x : SpaceTime) :
   toComplex f x = (f x : ℂ) := by
   -- Follows from definition of toComplex
   rfl
 
-@[simp] lemma complex_testfunction_decompose_toComplex_fst (f : TestFunction) :
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma complex_testfunction_decompose_toComplex_fst (f : TestFunction) :
   (complex_testfunction_decompose (toComplex f)).1 = f := by
   ext x
   simp [complex_testfunction_decompose, toComplex_apply]
 
-@[simp] lemma complex_testfunction_decompose_toComplex_snd (f : TestFunction) :
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma complex_testfunction_decompose_toComplex_snd (f : TestFunction) :
   (complex_testfunction_decompose (toComplex f)).2 = 0 := by
   ext x
   simp [complex_testfunction_decompose, toComplex_apply]
 
-@[simp] lemma toComplex_add (f g : TestFunction) :
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma toComplex_add (f g : TestFunction) :
   toComplex (f + g) = toComplex f + toComplex g := by
   ext x
   simp [toComplex_apply]
 
-@[simp] lemma toComplex_smul (c : ℝ) (f : TestFunction) :
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma toComplex_smul (c : ℝ) (f : TestFunction) :
   toComplex (c • f) = (c : ℂ) • toComplex f := by
   ext x
   simp [toComplex_apply]
@@ -277,7 +302,10 @@ def toComplex (f : TestFunction) : TestFunctionℂ :=
     2. The composition with ofRealCLM is smooth
     3. Derivative norms are preserved (iteratedFDeriv_ofReal_norm_eq)
     so the Schwartz seminorm bounds are satisfied. -/
-@[blueprint "def:to-complex-clm"]
+@[blueprint "def:to-complex-clm"
+  (title := "Real-to-Complex CLM")
+  (statement := /-- The continuous $\mathbb{R}$-linear map embedding real Schwartz functions into complex Schwartz functions, $f \mapsto f + 0i$. -/)
+]
 noncomputable def toComplexCLM : TestFunction →L[ℝ] TestFunctionℂ :=
   SchwartzMap.mkCLM (𝕜 := ℝ) (𝕜' := ℝ) (σ := RingHom.id ℝ) (fun f x => (f x : ℂ))
     (fun f g x => by simp only [SchwartzMap.add_apply]; exact Complex.ofReal_add _ _)
@@ -293,19 +321,25 @@ noncomputable def toComplexCLM : TestFunction →L[ℝ] TestFunctionℂ :=
       rw [iteratedFDeriv_ofReal_norm_eq]
       exact SchwartzMap.le_seminorm ℝ k n f x)
 
-@[simp] lemma toComplexCLM_apply (f : TestFunction) :
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma toComplexCLM_apply (f : TestFunction) :
     toComplexCLM f = toComplex f := by
   ext x
   rfl
 
-@[simp] lemma distributionPairingℂ_real_toComplex
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma distributionPairingℂ_real_toComplex
   (ω : FieldConfiguration) (f : TestFunction) :
   distributionPairingℂ_real ω (toComplex f) = distributionPairing ω f := by
   simp [distributionPairingℂ_real, distributionPairing]
 
 variable (dμ_config : ProbabilityMeasure FieldConfiguration)
 
-@[simp] lemma GJGeneratingFunctionalℂ_toComplex
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma GJGeneratingFunctionalℂ_toComplex
   (f : TestFunction) :
   GJGeneratingFunctionalℂ dμ_config (toComplex f) = GJGeneratingFunctional dμ_config f := by
   unfold GJGeneratingFunctionalℂ GJGeneratingFunctional
@@ -358,12 +392,16 @@ noncomputable def conjSchwartz {E : Type*} [NormedAddCommGroup E] [NormedSpace �
       _ ≤ C := hC x
 }
 
-@[simp] lemma conjSchwartz_apply {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma conjSchwartz_apply {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     (f : SchwartzMap E ℂ) (x : E) :
     conjSchwartz f x = starRingEnd ℂ (f x) := rfl
 
 /-- Conjugation is involutive: conj(conj(f)) = f -/
-@[simp] lemma conjSchwartz_conjSchwartz {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+@[simp, blueprint
+  (statement := /--  -/)
+  (proof := /--  -/)] lemma conjSchwartz_conjSchwartz {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     (f : SchwartzMap E ℂ) : conjSchwartz (conjSchwartz f) = f := by
   ext x
   simp [conjSchwartz_apply]
@@ -378,7 +416,10 @@ noncomputable def conjSchwartz {E : Type*} [NormedAddCommGroup E] [NormedSpace �
     - conj(⟨ω, f⟩) = ⟨ω, f_re⟩ - i⟨ω, f_im⟩
     - ⟨ω, conj(f)⟩ = ⟨ω, conj(f)_re⟩ + i⟨ω, conj(f)_im⟩
     - conj(f)_re = f_re and conj(f)_im = -f_im -/
-@[blueprint "lem:distribution-pairing"]
+@[blueprint "lem:distribution-pairing"
+  (title := "Distribution Pairing Conjugation")
+  (statement := /-- $\overline{\langle \omega, f \rangle} = \langle \omega, \bar{f} \rangle$. The pairing intertwines complex conjugation with Schwartz conjugation. -/)
+]
 lemma distributionPairingℂ_real_conj (ω : FieldConfiguration) (f : TestFunctionℂ) :
     starRingEnd ℂ (distributionPairingℂ_real ω f) = distributionPairingℂ_real ω (conjSchwartz f) := by
   -- Expand distributionPairingℂ_real in terms of real and imaginary parts

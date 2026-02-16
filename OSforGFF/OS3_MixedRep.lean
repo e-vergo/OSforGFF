@@ -89,7 +89,9 @@ variable {m : ℝ} [Fact (0 < m)]
 
     This follows from Mathlib's `fourierIntegral_gaussian`. -/
 @[blueprint "lem:gaussian-fourier-1d"
-  (title := "1D Gaussian Fourier Transform")]
+  (title := "1D Gaussian Fourier Transform")
+  (statement := /-- $\int e^{-ik_0 t}\,e^{-s k_0^2}\,dk_0 = \sqrt{\pi/s}\,e^{-t^2/(4s)}$. -/)
+]
 lemma gaussian_fourier_1d (s : ℝ) (hs : 0 < s) (t : ℝ) :
     ∫ k₀ : ℝ, Complex.exp (-Complex.I * k₀ * t) * Complex.exp (-(s : ℂ) * k₀^2) =
     Real.sqrt (π / s) * Complex.exp (-(t^2 / (4 * s) : ℝ)) := by
@@ -127,7 +129,10 @@ lemma gaussian_fourier_1d (s : ℝ) (hs : 0 < s) (t : ℝ) :
     ring
 
 /-- Gaussian exponential factorizes: exp(-s‖k‖²) = exp(-sk₀²) × exp(-s‖k_sp‖²) -/
-@[blueprint "lem:gaussian-exp-factorize"]
+@[blueprint "lem:gaussian-exp-factorize"
+  (title := "Gaussian Exponential Factorization")
+  (statement := /-- $e^{-s\|k\|^2} = e^{-s k_0^2} \cdot e^{-s\|\mathbf{k}\|^2}$ via spacetime norm decomposition. -/)
+]
 lemma gaussian_exp_factorize (s : ℂ) (k : SpaceTime) :
     Complex.exp (-s * ‖k‖^2) =
     Complex.exp (-s * (k 0)^2) * Complex.exp (-s * ‖spatialPart k‖^2) := by
@@ -148,7 +153,9 @@ lemma gaussian_exp_factorize (s : ℂ) (k : SpaceTime) :
     ∫_k exp(-ik·z) exp(-s|k|²) = (∫_{k₀} exp(-ik₀z₀) exp(-sk₀²)) × (∫_{k_sp} exp(-ik_sp·z_sp) exp(-s|k_sp|²))
                                 = √(π/s) exp(-z₀²/(4s)) × ∫_{k_sp} exp(-ik_sp·z_sp) exp(-s|k_sp|²) -/
 @[blueprint "lem:k-integral-after-k0-eval"
-  (title := "Momentum Integral after k0 Evaluation")]
+  (title := "Momentum Integral after k0 Evaluation")
+  (statement := /-- After evaluating the $k_0$ integral via the 1D Gaussian FT, the full momentum integral factorizes into $\sqrt{\pi/s}\,e^{-z_0^2/(4s)}$ times the spatial momentum integral. -/)
+]
 lemma k_integral_after_k0_eval (s : ℝ) (hs : 0 < s) (z : SpaceTime) :
     ∫ k : SpaceTime, Complex.exp (-Complex.I * ⟪k, z⟫_ℝ) * Complex.exp (-(s : ℂ) * ‖k‖^2) =
     (Real.sqrt (π / s) : ℂ) * Complex.exp (-(((z 0)^2 / (4 * s)) : ℝ)) *
@@ -236,12 +243,18 @@ lemma k_integral_after_k0_eval (s : ℝ) (hs : 0 < s) (z : SpaceTime) :
   rw [h_k0]
 
 /-- The time component of (timeReflection x - y). -/
-@[blueprint "lem:time-reflection-sub-zero"]
+@[blueprint "lem:time-reflection-sub-zero"
+  (title := "Time Reflection Subtraction (Time Component)")
+  (statement := /-- $(\Theta x - y)_0 = -x_0 - y_0$. -/)
+]
 lemma timeReflection_sub_zero (x y : SpaceTime) :
     (timeReflection x - y) 0 = -(x 0) - y 0 := rfl
 
 /-- The spatial part of (timeReflection x - y) equals spatialPart x - spatialPart y. -/
-@[blueprint "lem:spatial-part-time-reflection-sub"]
+@[blueprint "lem:spatial-part-time-reflection-sub"
+  (title := "Time Reflection Subtraction (Spatial Part)")
+  (statement := /-- $\mathrm{sp}(\Theta x - y) = \mathrm{sp}(x) - \mathrm{sp}(y)$. Time reflection preserves spatial components. -/)
+]
 lemma spatialPart_timeReflection_sub (x y : SpaceTime) :
     spatialPart (timeReflection x - y) = spatialPart x - spatialPart y := rfl
 
@@ -264,7 +277,17 @@ lemma spatialPart_timeReflection_sub (x y : SpaceTime) :
 
     The exp(-sm²) factor combines with exp(-s|p̄|²) to give exp(-s(|p̄|² + m²)). -/
 @[blueprint "thm:heat-kernel-bilinear-fourier-form"
-  (title := "Heat Kernel Bilinear Fourier Form")]
+  (title := "Heat Kernel Bilinear Fourier Form")
+  (statement := /-- After substituting the Fourier representation of the heat kernel and evaluating the $k_0$ integral, the Schwinger bilinear form becomes $(2\pi)^{-d} \int_0^\infty \int_{\bar{p}} \int\!\!\int \bar{f}(x) f(y) \sqrt{\pi/s}\, e^{-t^2/(4s)}\, e^{-s(|\bar{p}|^2 + m^2)}\, e^{-i\bar{p}\cdot\bar{r}} \, dx\,dy\,d^3\bar{p}\,ds$. -/)
+  (keyDeclaration := true)
+  (proof := /--
+    Write the heat kernel as a Fourier integral and decompose $k = (k_0, \vec{k})$ to separate
+    the time and spatial contributions. Three Fubini interchanges are proved with explicit
+    integrability bounds. The $k_0$ integral evaluates via the 1D Gaussian Fourier transform,
+    and the $e^{-sm^2}$ factor combines with $e^{-s|\vec{p}|^2}$ to give
+    $e^{-s(|\vec{p}|^2 + m^2)}$.
+  -/)
+]
 theorem heatKernel_bilinear_fourier_form (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     ∫ s in Set.Ioi 0, (Real.exp (-s * m^2) : ℂ) *
       ∫ x : SpaceTime, ∫ y : SpaceTime,
@@ -492,7 +515,10 @@ theorem heatKernel_bilinear_fourier_form (m : ℝ) [Fact (0 < m)] (f : TestFunct
 /-! ### Helper lemmas for Laplace s-integral evaluation -/
 
 /-- ω = √(‖k_sp‖² + m²) is positive for m > 0. -/
-@[blueprint "lem:omega-pos"]
+@[blueprint "lem:omega-pos"
+  (title := "On-Shell Energy Positivity")
+  (statement := /-- $\omega(\mathbf{k}) = \sqrt{\|\mathbf{k}\|^2 + m^2} > 0$ for $m > 0$. -/)
+]
 lemma omega_pos (k_sp : SpatialCoords) (m : ℝ) (hm : 0 < m) :
     0 < Real.sqrt (‖k_sp‖^2 + m^2) := by positivity
 
@@ -500,7 +526,10 @@ lemma omega_pos (k_sp : SpatialCoords) (m : ℝ) (hm : 0 < m) :
     (1/(2π)⁴) × π = 1/(2(2π)³)
 
     Proof: (2π)⁴ = 2 × (2π)³ × π, so π/(2π)⁴ = 1/(2(2π)³) -/
-@[blueprint "lem:normalization-constant-laplace"]
+@[blueprint "lem:normalization-constant-laplace"
+  (title := "Normalization Constant Identity")
+  (statement := /-- $(2\pi)^{-4} \cdot \pi = \bigl(2(2\pi)^3\bigr)^{-1}$. -/)
+]
 lemma normalization_constant_laplace :
     (1 / (2 * π) ^ 4 : ℝ) * π = 1 / (2 * (2 * π) ^ 3) := by field_simp
 
@@ -518,7 +547,9 @@ lemma normalization_constant_laplace :
     3. Apply laplace_integral_half_power_nonneg with a = t²/4, b = ω²
     4. Result: √π * √(π/ω²) * exp(-2√((t²/4)*ω²)) = (π/ω) * exp(-ω|t|) -/
 @[blueprint "lem:s-integral-eval"
-  (title := "Laplace Transform Evaluation")]
+  (title := "Laplace Transform Evaluation")
+  (statement := /-- $\int_0^\infty \sqrt{\pi/s}\, e^{-t^2/(4s)}\, e^{-s\omega^2}\,ds = (\pi/\omega)\, e^{-\omega|t|}$. -/)
+]
 lemma s_integral_eval (t : ℝ) (ω : ℝ) (hω : 0 < ω) :
     ∫ s in Set.Ioi 0, Real.sqrt (π / s) * Real.exp (-(t^2 / (4 * s))) *
       Real.exp (-s * ω^2) = (π / ω) * Real.exp (-ω * |t|) := by
@@ -592,7 +623,10 @@ lemma s_integral_eval (t : ℝ) (ω : ℝ) (hω : 0 < ω) :
 
     ∫_s (↑√(π/s)) * cexp(-↑(t²/(4s))) * cexp(-↑(sω²)) ds = ↑((π/ω) * exp(-ω|t|))
 -/
-@[blueprint "lem:s-integral-eval-complex"]
+@[blueprint "lem:s-integral-eval-complex"
+  (title := "Laplace Transform (Complex Form)")
+  (statement := /-- Complex lift of the Laplace transform evaluation: $\int_0^\infty \sqrt{\pi/s}\, e^{-t^2/(4s)}\, e^{-s\omega^2}\,ds = (\pi/\omega)\, e^{-\omega|t|}$ as a $\mathbb{C}$-valued integral. -/)
+]
 lemma s_integral_eval_complex (t : ℝ) (ω : ℝ) (hω : 0 < ω) :
     ∫ s in Set.Ioi 0, (Real.sqrt (π / s) : ℂ) *
       Complex.exp (-(t^2 / (4 * s) : ℝ)) *
@@ -636,7 +670,10 @@ lemma s_integral_eval_complex (t : ℝ) (ω : ℝ) (hω : 0 < ω) :
     f̄ * f * √(π/s) * cexp(-t²/(4s)) * cexp(-sω²) * cexp(-I*phase)
 
     where all exponentials have real arguments (cast to ℂ). -/
-@[blueprint "lem:s-integral-complex-eval"]
+@[blueprint "lem:s-integral-complex-eval"
+  (title := "s-Integral with Test Functions")
+  (statement := /-- For fixed $(\mathbf{k}, x, y)$, the proper-time integral evaluates to $\bar{f}(x) f(y) \cdot (\pi/\omega) \cdot e^{-\omega|t|} \cdot e^{-i\mathbf{k}\cdot(\mathbf{x}-\mathbf{y})}$ where $\omega = \sqrt{\|\mathbf{k}\|^2 + m^2}$. -/)
+]
 lemma s_integral_complex_eval (k_sp : SpatialCoords) (x y : SpaceTime) (m : ℝ) (hm : 0 < m)
     (f : TestFunctionℂ) :
     ∫ s in Set.Ioi 0, (starRingEnd ℂ (f x)) * f y *
@@ -736,7 +773,16 @@ lemma s_integral_complex_eval (k_sp : SpatialCoords) (x y : SpaceTime) (m : ℝ)
     **Proof:** Uses `fubini_s_xy_swap` to move s inside, then
     `s_integral_eval` to evaluate the Laplace transform. -/
 @[blueprint "thm:laplace-s-integral-with-norm"
-  (title := "Laplace Proper-Time Integral")]
+  (title := "Laplace Proper-Time Integral")
+  (statement := /-- After evaluating the proper-time integral, the heat-kernel bilinear form reduces to the mixed representation with on-shell energy $\omega = \sqrt{\|\mathbf{k}\|^2 + m^2}$ and exponential decay $e^{-\omega|t|}$. -/)
+  (proof := /--
+    After separating momentum components, the $s$-integral evaluates analytically:
+    $\int_0^\infty \sqrt{\pi/s}\, e^{-t^2/(4s)}\, e^{-s\omega^2}\,ds = (\pi/\omega)\, e^{-\omega|t|}$
+    where $\omega = \sqrt{\|\vec{k}\|^2 + m^2}$. Uses Fubini to swap the $s$ and $(x,y)$
+    integrals, then evaluates the Laplace transform. The normalization constant simplifies:
+    $(2\pi)^{-4} \cdot \pi = (2(2\pi)^3)^{-1}$.
+  -/)
+]
 theorem laplace_s_integral_with_norm (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     (1 / (2 * π) ^ STDimension : ℝ) *
     ∫ k_sp : SpatialCoords, ∫ s in Set.Ioi 0, ∫ x : SpaceTime, ∫ y : SpaceTime,
@@ -898,7 +944,14 @@ theorem laplace_s_integral_with_norm (m : ℝ) [Fact (0 < m)] (f : TestFunction�
     The pointwise bound |integrand| ≤ bound is verified for s > 0,
     and the set s ≤ 0 has measure zero under the restricted measure. -/
 @[blueprint "thm:schwinger-bilinear-integrable"
-  (title := "Schwinger Bilinear Integrability")]
+  (title := "Schwinger Bilinear Integrability")
+  (statement := /-- The Schwinger bilinear integrand $\bar{f}(x) f(y) \, e^{-sm^2} H(s, \|\Theta x - y\|)$ is integrable on $(0,\infty) \times \mathbb{R}^4 \times \mathbb{R}^4$. -/)
+  (proof := /--
+    The Schwartz decay of $f$ provides the spatial integrability, while the heat kernel
+    Gaussian decay and $e^{-sm^2}$ factor ensure integrability in the proper-time variable $s$.
+    The explicit bound uses $\|f\|_\infty$ and Gaussian integral estimates.
+  -/)
+]
 theorem schwinger_bilinear_integrable (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     Integrable (fun (p : ℝ × SpaceTime × SpaceTime) =>
       (starRingEnd ℂ (f p.2.1)) * f p.2.2 *
@@ -1119,7 +1172,14 @@ private lemma measurePreserving_schwinger_tripleReorder :
     The proof uses `integral_prod` to convert iterated integrals to product integrals,
     and the measure-preserving map `schwinger_tripleReorder` to connect them. -/
 @[blueprint "thm:schwinger-fubini-core"
-  (title := "Schwinger Fubini Core Swap")]
+  (title := "Schwinger Fubini Core Swap")
+  (statement := /-- Core Fubini swap: $\int_x \int_y \int_s = \int_s \int_x \int_y$ for the Schwinger bilinear integrand. -/)
+  (proof := /--
+    Both sides equal $\iiint F$ over $(0,\infty) \times \mathbb{R}^4 \times \mathbb{R}^4$ by
+    Fubini--Tonelli. The proof uses `integral_prod` to convert iterated integrals to product
+    integrals and a measure-preserving reordering map to connect them.
+  -/)
+]
 theorem schwinger_fubini_core (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     ∫ x : SpaceTime, ∫ y : SpaceTime, ∫ s in Set.Ioi 0,
       (starRingEnd ℂ (f x)) * f y *
@@ -1201,7 +1261,9 @@ theorem schwinger_fubini_core (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     2. Apply Fubini to swap the order of integration
     3. Use the integrability hypothesis to justify the swap -/
 @[blueprint "thm:schwinger-fubini-swap"
-  (title := "Schwinger Fubini Integration Order Swap")]
+  (title := "Schwinger Fubini Integration Order Swap")
+  (statement := /-- Fubini swap with factored integrand: the $s$-integral can be pulled outside the spacetime integrals, with test-function factors absorbed into the outer integral. -/)
+]
 theorem schwinger_fubini_swap (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     ∫ x : SpaceTime, ∫ y : SpaceTime,
       (starRingEnd ℂ (f x)) * f y *
@@ -1300,7 +1362,9 @@ theorem schwinger_fubini_swap (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
 /-- The kernel-level Schwinger representation holds for Θx ≠ y.
     This follows from `covarianceSchwingerRep_eq_freeCovarianceBessel`. -/
 @[blueprint "lem:free-covariance-eq-schwinger-rep"
-  (title := "Free Covariance Equals Schwinger Representation")]
+  (title := "Free Covariance Equals Schwinger Representation")
+  (statement := /-- $C(\Theta x, y) = \int_0^\infty e^{-sm^2} H(s, \|\Theta x - y\|) \, ds$ for $\Theta x \neq y$. The Bessel covariance equals its Schwinger proper-time integral. -/)
+]
 lemma freeCovariance_eq_schwingerRep (m : ℝ) (hm : 0 < m) (x y : SpaceTime)
     (hxy : timeReflection x ≠ y) :
     (freeCovariance m (timeReflection x) y : ℂ) =
@@ -1344,7 +1408,17 @@ lemma freeCovariance_eq_schwingerRep (m : ℝ) (hm : 0 < m) (x y : SpaceTime)
     ∫∫ conj(f(x)) C(Θx,y) f(y) dx dy = ∫₀^∞ e^{-sm²} [∫∫ conj(f) f H(s,|Θx-y|) dx dy] ds
 -/
 @[blueprint "thm:bilinear-schwinger-eq-heat-kernel"
-  (title := "Bilinear Schwinger-Heat Kernel Equivalence")]
+  (title := "Bilinear Schwinger-Heat Kernel Equivalence")
+  (keyDeclaration := true)
+  (statement := /-- $\int\!\!\int \bar{f}(x) \, C(\Theta x, y) \, f(y) = \int_0^\infty e^{-sm^2} \int\!\!\int \bar{f}(x) \, f(y) \, H(s, \|\Theta x - y\|)$: the covariance bilinear form equals the Schwinger heat-kernel representation. -/)
+  (proof := /--
+    Replace $C(\Theta x, y)$ by its proper-time (Schwinger) representation:
+    $C(\Theta x, y) = \int_0^\infty e^{-sm^2} H(s, \|\Theta x - y\|)\,ds$
+    where $H(s, r) = (4\pi s)^{-d/2} e^{-r^2/(4s)}$ is the heat kernel.
+    Then use Fubini's theorem (justified by Schwartz decay and absolute integrability
+    of the Schwinger bilinear integrand) to interchange the $s$ and $(x,y)$ integrations.
+  -/)
+]
 theorem bilinear_schwinger_eq_heatKernel (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     ∫ x : SpaceTime, ∫ y : SpaceTime,
       (starRingEnd ℂ (f x)) * (freeCovariance m (timeReflection x) y : ℂ) * f y =
@@ -1456,7 +1530,17 @@ theorem bilinear_schwinger_eq_heatKernel (m : ℝ) [Fact (0 < m)] (f : TestFunct
     - Fubini applications (require integrability - uses Schwartz decay)
 -/
 @[blueprint "thm:heat-kernel-bilinear-to-mixed-rep"
-  (title := "Heat Kernel to Mixed Representation")]
+  (title := "Heat Kernel to Mixed Representation")
+  (keyDeclaration := true)
+  (statement := /-- The Schwinger heat-kernel form reduces to the mixed representation: $\int_0^\infty e^{-sm^2} \int\!\!\int \bar{f} f H(s,\|\cdot\|) = \frac{1}{2(2\pi)^{d-1}} \int_{\mathbf{k}} \int\!\!\int \bar{f} f \frac{e^{-\omega|t|}}{\omega} e^{-i\mathbf{k}\cdot\Delta\mathbf{x}}$ for positive-time $f$. -/)
+  (proof := /--
+    Chains the Fourier representation of the heat kernel with the proper-time integral
+    evaluation. The heat kernel is written as a Fourier integral, the $k_0$ integral
+    evaluates via the 1D Gaussian Fourier transform, and the $s$-integral evaluates as a
+    Laplace transform. The positive-time support condition on $f$ ensures $|-x_0 - y_0| = x_0 + y_0$,
+    which is needed for the exponential factorization in the downstream Step 4.
+  -/)
+]
 theorem heatKernel_bilinear_to_mixed_rep (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ)
     (hf_supp : ∀ x, x 0 ≤ 0 → f x = 0) :
     ∫ s in Set.Ioi 0, (Real.exp (-s * m^2) : ℂ) *
@@ -1738,7 +1822,23 @@ theorem heatKernel_bilinear_to_mixed_rep (m : ℝ) [Fact (0 < m)] (f : TestFunct
     **Note**: Working directly at bilinear level ensures absolute convergence
     (Schwartz test functions provide decay even when t = 0). -/
 @[blueprint "thm:bessel-bilinear-eq-mixed-representation"
-  (title := "Bessel Bilinear Equals Mixed Representation")]
+  (title := "Bessel Bilinear Equals Mixed Representation")
+  (keyDeclaration := true)
+  (statement := /-- The Bessel covariance bilinear form equals the mixed position-momentum representation for positive-time $f$: $\int\!\!\int \bar{f}(x) C(\Theta x, y) f(y) = \frac{1}{2(2\pi)^{d-1}} \int_{\mathbf{k}} \int\!\!\int \bar{f} f \frac{e^{-\omega|t|}}{\omega} e^{-i\mathbf{k}\cdot\Delta\mathbf{x}}$. Combines Schwinger and heat-kernel steps. -/)
+  (proof := /--
+    This combines Steps 1--3 of the covariance reflection positivity proof:
+    1. Replace the Bessel covariance kernel by its Schwinger proper-time integral
+       (heat kernel representation).
+    2. Substitute the Fourier representation of the heat kernel, decompose $k = (k_0, \vec{k})$,
+       and evaluate the $k_0$ integral via the 1D Gaussian Fourier transform.
+    3. Evaluate the proper-time $s$-integral analytically to obtain the mixed representation
+       with on-shell energy $\omega = \sqrt{\|\vec{k}\|^2 + m^2}$ and exponential decay
+       $e^{-\omega|t|}$.
+
+    The positive-time support condition on $f$ is required for the factorization in Step 4
+    (which follows in the downstream theorem).
+  -/)
+]
 theorem bessel_bilinear_eq_mixed_representation (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ)
     (hf_supp : ∀ x, x 0 ≤ 0 → f x = 0) :
   ∫ x : SpaceTime, ∫ y : SpaceTime,
@@ -1764,7 +1864,10 @@ theorem bessel_bilinear_eq_mixed_representation (m : ℝ) [Fact (0 < m)] (f : Te
     (π/ω) exp(-ω|t|) = ∫_{k₀} exp(-ik₀t)/(k₀²+ω²) dk₀
 
     So: (1/ω) exp(-ω|t|) = (1/π) ∫_{k₀} exp(-ik₀t)/(k₀²+ω²) dk₀ -/
-@[blueprint "lem:mixed-rep-to-k0-inside-integrand"]
+@[blueprint "lem:mixed-rep-to-k0-inside-integrand"
+  (title := "Mixed Representation to k0-Inside Integrand")
+  (statement := /-- $(1/\omega)\,e^{-\omega|t|} = (1/\pi) \int_{k_0} e^{-ik_0 t}/(k_0^2 + \omega^2)\,dk_0$ via the Fourier transform of the Lorentzian. -/)
+]
 lemma mixed_rep_to_k0_inside_integrand (k_spatial : SpatialCoords) (m : ℝ) [Fact (0 < m)]
     (t : ℝ) :
     let ω := Real.sqrt (‖k_spatial‖^2 + m^2)
@@ -1803,7 +1906,8 @@ lemma mixed_rep_to_k0_inside_integrand (k_spatial : SpatialCoords) (m : ℝ) [Fa
     3. Factor the spatial phase into the k₀ integral
     4. Combine normalizations: 1/(2(2π)^{d-1}) × (1/π) = 1/(2π)^d -/
 @[blueprint "thm:bilinear-to-k0-inside"
-  (title := "Bilinear Form with Explicit k0 Integral")]
+  (title := "Bilinear Form with Explicit k0 Integral")
+  (statement := /-- The covariance bilinear form for positive-time $f$ equals $(2\pi)^{-d} \int \bar{f}(x) f(y) \int_{\mathbf{k}} \int_{k_0} \frac{e^{-ik\cdot(\Theta x - y)}}{k_0^2 + \omega^2} \, dk_0 \, d\mathbf{k}$, making the $k_0$ integration explicit. -/)]
 theorem bilinear_to_k0_inside (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ)
     (hf_supp : ∀ x, x 0 ≤ 0 → f x = 0) :
   ∫ x : SpaceTime, ∫ y : SpaceTime,

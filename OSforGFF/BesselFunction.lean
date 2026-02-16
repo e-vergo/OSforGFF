@@ -56,6 +56,10 @@ noncomputable def besselK1 (z : ℝ) : ℝ :=
   ∫ t : ℝ in Ici 0, exp (-z * cosh t) * cosh t
 
 /-- K₁(z) is positive for z > 0. -/
+@[blueprint "lem:bessel-k1-pos"
+  (title := "Bessel K1 Positivity")
+  (statement := /-- $K_1(z) > 0$ for all $z > 0$. The integrand $e^{-z \cosh t} \cosh t$ is strictly positive. -/)
+]
 lemma besselK1_pos (z : ℝ) (hz : 0 < z) : 0 < besselK1 z := by
   unfold besselK1
   -- The integrand f(t) = exp(-z cosh(t)) * cosh(t) is strictly positive for all t
@@ -216,7 +220,10 @@ lemma besselK1_pos (z : ℝ) (hz : 0 < z) : 0 < besselK1 z := by
 
     The formal proof uses MeasureTheory.continuousOn_of_dominated_of_compact:
     for z in compact K ⊆ (0, ∞), bound by exp(-min(K) * cosh(t)) * cosh(t). -/
-@[blueprint "lem:bessel-k1-continuous-on"]
+@[blueprint "lem:bessel-k1-continuous-on"
+  (title := "Bessel K1 Continuity")
+  (statement := /-- The function besselK1 is continuousOn $(0, \infty)$. Dominated convergence with bound $e^{-\varepsilon \cosh t} \cosh t$ for $z \geq \varepsilon$. -/)
+]
 lemma besselK1_continuousOn : ContinuousOn besselK1 (Ioi 0) := by
   -- Show ContinuousAt at each z₀ > 0 using dominated convergence
   rw [isOpen_Ioi.continuousOn_iff]
@@ -316,7 +323,11 @@ lemma besselK1_continuousOn : ContinuousOn besselK1 (Ioi 0) := by
 /-- K₁ has exponential decay: K₁(z) ≤ (sinh(1) + 2) · exp(-z) for z ≥ 1.
     This bound is sufficient for proving integrability of the free covariance kernel.
     The proof uses the same technique as besselK1_mul_self_le but for z ≥ 1. -/
-@[blueprint "lem:bessel-k1-asymptotic"]
+@[blueprint "lem:bessel-k1-asymptotic"
+  (title := "Bessel K1 Exponential Decay")
+  (statement := /-- Asymptotic bound on besselK1: $K_1(z) \leq (\sinh 1 + 2) e^{-z}$ for $z \geq 1$. Sufficient for $L^1$ integrability of the free covariance kernel. -/)
+  (keyDeclaration := true)
+]
 lemma besselK1_asymptotic (z : ℝ) (hz : 1 ≤ z) :
     besselK1 z ≤ (sinh 1 + 2) * exp (-z) := by
   unfold besselK1
@@ -400,7 +411,7 @@ lemma besselK1_asymptotic (z : ℝ) (hz : 1 ≤ z) :
             simpa using hasDerivAt_sinh x |>.const_mul (exp (-z))
           exact hd.hasDerivWithinAt)
         ((continuous_const.mul continuous_cosh).intervalIntegrable 0 1)
-      simp only [sinh_zero, mul_zero, sub_zero] at h
+      simp only [Pi.mul_apply, sinh_zero, mul_zero, sub_zero] at h
       rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le (by norm_num : (0:ℝ) ≤ 1)]
       exact h
     linarith
@@ -496,7 +507,9 @@ lemma besselK1_asymptotic (z : ℝ) (hz : 1 ≤ z) :
     This follows from splitting the integral at t = 1:
     - On [0,1]: z · ∫₀¹ exp(-z cosh t) cosh t dt ≤ z · cosh(1) ≤ cosh(1)
     - On [1,∞): z · ∫₁^∞ exp(-z cosh t) cosh t dt ≤ 2 (via exponential bound) -/
-@[blueprint "lem:bessel-k1-mul-self-le"]
+@[blueprint "lem:bessel-k1-mul-self-le"
+  (title := "Bessel K1 Near-Origin Product Bound")
+  (statement := /-- Self-bounding product for besselK1: $z \cdot K_1(z) \leq \cosh 1 + 2$ for $z \in (0, 1]$. Splitting at $t = 1$: compact part bounded by $\cosh 1$, tail by exponential decay. -/)]
 lemma besselK1_mul_self_le (z : ℝ) (hz : 0 < z) (hz_le : z ≤ 1) :
     z * besselK1 z ≤ cosh 1 + 2 := by
   unfold besselK1
@@ -713,7 +726,8 @@ lemma besselK1_mul_self_le (z : ℝ) (hz : 0 < z) (hz_le : z ≤ 1) :
 
 /-- Near-origin bound for K₁: K₁(z) ≤ (cosh(1) + 2)/z for z ∈ (0, 1].
     This follows from z · K₁(z) ≤ cosh(1) + 2 (proved in besselK1_mul_self_le). -/
-@[blueprint "lem:bessel-k1-near-origin-bound"]
+@[blueprint "lem:bessel-k1-near-origin-bound"
+  (statement := /-- Near-origin bound for besselK1: $K_1(z) \leq (\cosh 1 + 2)/z$ for $z \in (0, 1]$. Immediate from $z K_1(z) \leq \cosh 1 + 2$. -/)]
 lemma besselK1_near_origin_bound (z : ℝ) (hz : 0 < z) (hz_small : z ≤ 1) :
     besselK1 z ≤ (cosh 1 + 2) / z := by
   have h_bound := besselK1_mul_self_le z hz hz_small
@@ -729,7 +743,11 @@ lemma besselK1_near_origin_bound (z : ℝ) (hz : 0 < z) (hz_small : z ≤ 1) :
     - At ∞: K₁(mr) ~ e^{-mr}/√(mr), so r² K₁(mr) decays exponentially
 
     This is a key ingredient for showing the free covariance kernel is L¹ in 4D. -/
-@[blueprint "lem:radial-bessel-k1-integrable"]
+@[blueprint "lem:radial-bessel-k1-integrable"
+  (title := "Radial Bessel K1 Integrability")
+  (statement := /-- $r^2 K_1(mr)$ is integrable on $(0, \infty)$ for $m > 0$. Near $0$: $K_1(mr) \sim 1/(mr)$; at $\infty$: exponential decay. Key for $L^1$ free covariance in 4D. -/)
+  (keyDeclaration := true)
+]
 lemma radial_besselK1_integrable (m : ℝ) (hm : 0 < m) :
     IntegrableOn (fun r => r ^ 2 * besselK1 (m * r)) (Set.Ioi 0) volume := by
   -- Split (0, ∞) = (0, 1/m] ∪ (1/m, ∞)
@@ -879,7 +897,9 @@ lemma radial_besselK1_integrable (m : ℝ) (hm : 0 < m) :
     ∫_{-∞}^∞ exp(-u) * exp(-z cosh u) du = 2 ∫_0^∞ cosh(u) * exp(-z cosh u) du
 
     This follows from splitting at 0 and using cosh(-u) = cosh(u). -/
-@[blueprint "lem:bessel-symmetry-integral"]
+@[blueprint "lem:bessel-symmetry-integral"
+  (title := "Bessel Symmetry Integral")
+  (statement := /-- Bessel symmetry integral identity: $\int_{-\infty}^{\infty} e^{-u} e^{-z \cosh u} \, du = 2 K_1(z)$. Split at $0$ and use $\cosh(-u) = \cosh(u)$. -/)]
 lemma bessel_symmetry_integral (z : ℝ) (hz : 0 < z) :
     ∫ u : ℝ, exp (-u) * exp (-z * cosh u) = 2 * besselK1 z := by
   -- Integrability conditions (both decay super-exponentially as u → ∞)
@@ -1050,7 +1070,7 @@ lemma bessel_symmetry_integral (z : ℝ) (hz : 0 < z) :
     which transforms the integral to the cosh representation of K₁. -/
 @[blueprint "lem:schwinger-eq-bessel"
   (title := "Schwinger Integral Equals Bessel K1")
-  (statement := /-- The Schwinger proper-time integral equals $(m/r) K_1(mr)$, connecting the heat kernel representation to the Bessel function. -/)
+  (statement := /-- The schwingerIntegral equals besselK1 scaled by $(4m/r)$: proper-time representation connects the heat kernel to the Bessel function $K_1$. -/)
   (uses := [besselK1])
   (latexEnv := "lemma")
   (latexLabel := "lem:schwinger-eq-bessel")]

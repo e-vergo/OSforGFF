@@ -48,6 +48,9 @@ noncomputable def entrywiseExp (R : Matrix ι ι ℝ) : Matrix ι ι ℝ :=
   entrywiseExp R i j = Real.exp (R i j) := rfl
 
 /-- Continuity of the entrywise exponential map `R ↦ exp ∘ R` on matrices. -/
+@[blueprint "lem:continuous-entrywise-exp"
+  (statement := /-- The entrywise exponential $R \mapsto (e^{R_{ij}})$ is continuous on matrices. Follows from continuity of $\exp$ applied entrywise. -/)
+]
 lemma continuous_entrywiseExp (ι : Type u) [Fintype ι] [DecidableEq ι] :
   Continuous (fun R : Matrix ι ι ℝ => entrywiseExp R) := by
   classical
@@ -60,20 +63,26 @@ lemma continuous_entrywiseExp (ι : Type u) [Fintype ι] [DecidableEq ι] :
   simpa [entrywiseExp] using (Real.continuous_exp.comp hcoord)
 
 /-- Hadamard identity element: the all-ones matrix for entrywise multiplication. -/
-@[simp] def hadamardOne (ι : Type u) [Fintype ι] : Matrix ι ι ℝ := fun _ _ => 1
+@[simp, blueprint] def hadamardOne (ι : Type u) [Fintype ι] : Matrix ι ι ℝ := fun _ _ => 1
 
 /-- n-fold Hadamard power of a matrix: `hadamardPow R n = R ∘ₕ ⋯ ∘ₕ R` (n times),
     with `hadamardPow R 0 = hadamardOne`. -/
-@[simp] def hadamardPow (R : Matrix ι ι ℝ) : ℕ → Matrix ι ι ℝ
+@[simp, blueprint] def hadamardPow (R : Matrix ι ι ℝ) : ℕ → Matrix ι ι ℝ
   | 0     => hadamardOne (ι := ι)
   | n+1   => hadamardPow R n ∘ₕ R
 
-@[simp] lemma hadamardPow_zero (R : Matrix ι ι ℝ) : hadamardPow R 0 = hadamardOne (ι := ι) := rfl
+@[simp, blueprint "lem:hadamard-pow-zero"
+  (statement := /-- The zeroth Hadamard power $\texttt{hadamardPow}\; R\; 0$ equals the all-ones matrix. -/)
+  (skipCrossRef := true)
+] lemma hadamardPow_zero (R : Matrix ι ι ℝ) : hadamardPow R 0 = hadamardOne (ι := ι) := rfl
 @[simp] lemma hadamardPow_succ (R : Matrix ι ι ℝ) (n : ℕ) :
   hadamardPow R (n+1) = hadamardPow R n ∘ₕ R := rfl
 
 /-- Hadamard powers act entrywise as usual scalar powers. -/
-@[blueprint "lem:hadamard-pow-apply"]
+@[blueprint "lem:hadamard-pow-apply"
+  (statement := /-- Hadamard powers act entrywise: $(\texttt{hadamardPow}\; R\; n)_{ij} = (R_{ij})^n$. -/)
+  (skipCrossRef := true)
+]
 lemma hadamardPow_apply (R : Matrix ι ι ℝ) (n : ℕ) (i j : ι) :
   hadamardPow R n i j = (R i j) ^ n := by
   induction n with
@@ -81,18 +90,29 @@ lemma hadamardPow_apply (R : Matrix ι ι ℝ) (n : ℕ) (i j : ι) :
   | succ n ih => simp [Matrix.hadamard, ih, pow_succ]
 
 /-- One term of the Hadamard-series for the entrywise exponential. -/
-@[blueprint "def:entrywise-exp-series-term"]
+@[blueprint "def:entrywise-exp-series-term"
+  (statement := /-- The $n$-th term of the Hadamard series for the entrywise exponential: $(1/n!) R^{\circ n}$. -/)
+  (skipCrossRef := true)
+]
 noncomputable def entrywiseExpSeriesTerm (R : Matrix ι ι ℝ) (n : ℕ) : Matrix ι ι ℝ :=
   (1 / (Nat.factorial n : ℝ)) • hadamardPow R n
 
 /-- Series definition of the entrywise exponential using Hadamard powers (entrywise `tsum`). -/
-@[blueprint "def:entrywise-exp-hadamard-series"]
+@[blueprint "def:entrywise-exp-hadamard-series"
+  (title := "Entrywise Exponential via Hadamard Series")
+  (statement := /-- The entrywise exponential defined as the Hadamard series $\sum_{n=0}^{\infty} (1/n!) R^{\circ n}$, computed entrywise via \texttt{tsum}. -/)
+  (skipCrossRef := true)
+]
 noncomputable def entrywiseExp_hadamardSeries (R : Matrix ι ι ℝ) : Matrix ι ι ℝ :=
   fun i j => tsum (fun n : ℕ => (1 / (Nat.factorial n : ℝ)) * (hadamardPow R n i j))
 
 /-- The entrywise exponential agrees with its Hadamard series expansion.
     Uses the Taylor series for Complex.exp and converts to the real case. -/
-@[blueprint "lem:entrywise-exp-eq-hadamard-series"]
+@[blueprint "lem:entrywise-exp-eq-hadamard-series"
+  (title := "Entrywise Exponential Equals Hadamard Series")
+  (statement := /-- The entrywise exponential $e^R$ agrees with the Hadamard series $\sum_{n=0}^{\infty} (1/n!) R^{\circ n}$. Uses the Taylor series for $\exp$. -/)
+  (skipCrossRef := true)
+]
 lemma entrywiseExp_eq_hadamardSeries (R : Matrix ι ι ℝ) :
   entrywiseExp R = entrywiseExp_hadamardSeries R := by
   classical
@@ -143,7 +163,10 @@ lemma entrywiseExp_eq_hadamardSeries (R : Matrix ι ι ℝ) :
   simpa [x, hadamardPow_apply, one_div, div_eq_mul_inv, mul_comm] using hx_sum'
 
 /-- Ones is the identity for the Hadamard product. -/
-@[blueprint "lem:hadamard-one-h-mul-left"]
+@[blueprint "lem:hadamard-one-h-mul-left"
+  (statement := /-- Left identity for Hadamard product: $J \circ R = R$ where $J$ is the all-ones matrix. -/)
+  (skipCrossRef := true)
+]
 lemma hadamardOne_hMul_left (R : Matrix ι ι ℝ) : Matrix.hadamard (hadamardOne ι) R = R := by
   ext i j; simp [hadamardOne, Matrix.hadamard]
 
@@ -177,7 +200,10 @@ lemma hadamardPow_posDef_of_posDef
 
 /-- The quadratic form of the Hadamard series equals the sum of quadratic forms of individual terms.
     This lemma handles the complex interchange of summation and quadratic form evaluation. -/
-@[blueprint "lem:quadratic-form-entrywise-exp-hadamard-series"]
+@[blueprint "lem:quadratic-form-entrywise-exp-hadamard-series"
+  (statement := /-- The quadratic form of the Hadamard series decomposes: $x^T (\sum (1/n!) R^{\circ n}) x = \sum (1/n!) x^T R^{\circ n} x$. -/)
+  (skipCrossRef := true)
+]
 lemma quadratic_form_entrywiseExp_hadamardSeries
   (R : Matrix ι ι ℝ) (x : ι → ℝ) :
   x ⬝ᵥ (entrywiseExp_hadamardSeries R).mulVec x =
@@ -255,7 +281,10 @@ lemma quadratic_form_entrywiseExp_hadamardSeries
 
 /-- Summability of the scalar quadratic-form coefficients appearing in the
     Hadamard exponential series. -/
-@[blueprint "lem:summable-hadamard-quad-series"]
+@[blueprint "lem:summable-hadamard-quad-series"
+  (statement := /-- The Hadamard quadratic series $\sum (1/n!) x^T R^{\circ n} x$ is summable. Bounded by the entrywise exponential series which converges absolutely. -/)
+  (skipCrossRef := true)
+]
 lemma summable_hadamardQuadSeries
     (R : Matrix ι ι ℝ) (x : ι → ℝ) :
     Summable (fun n : ℕ =>
@@ -330,6 +359,9 @@ lemma summable_hadamardQuadSeries
   (title := "Entrywise Exponential Preserves Positive Definiteness")
   (keyDeclaration := true)
   (statement := /-- If $R$ is positive definite, then $e^R$ (entrywise) is positive definite. Each Hadamard power is PD by Schur; the $n=1$ term gives $x^T R x > 0$; interchange follows from absolute convergence. -/)
+  (proof := /--
+    The Schur product theorem shows the Hadamard product of two PSD matrices can be expressed as a principal submatrix of the Kronecker product, which inherits positive semidefiniteness. The Hadamard exponential result then follows by observing that each term $R^{\circ k}/k!$ in the series expansion is PSD (by iterated application of the Schur product theorem), and a convergent sum of PSD matrices is PSD.
+  -/)
   (uses := [hadamardPow_posDef_of_posDef, entrywiseExp_eq_hadamardSeries, quadratic_form_entrywiseExp_hadamardSeries])
   (latexEnv := "theorem")
   (latexLabel := "thm:entrywise-exp-posdef")]

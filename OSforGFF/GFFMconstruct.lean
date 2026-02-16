@@ -153,6 +153,9 @@ def isGaussianGJ (dμ_config : ProbabilityMeasure FieldConfiguration) : Prop :=
 /-- Nuclear space structure for real test functions.
     This is derived from the general `schwartz_nuclear` axiom in Minlos.lean
     applied to `TestFunction = SchwartzMap SpaceTime ℝ`. -/
+@[blueprint "inst:nuclear-test-function"
+  (title := "Schwartz Space is Nuclear")
+  (statement := /-- The Schwartz space $\mathcal{S}(\mathbb{R}^d)$ of real test functions is a nuclear space, derived from the general `schwartz\_nuclear` axiom. Required for the Minlos theorem. -/)]
 instance instNuclear_TestFunction : NuclearSpace TestFunction := schwartz_nuclear
 
 /-- Specialized Minlos construction for the free field using the square-root propagator embedding. -/
@@ -500,7 +503,10 @@ theorem gaussianFreeField_pairing_expSq_integrable
 /-- For real test functions, the square of the Gaussian pairing is integrable under the
     free Gaussian Free Field measure. This is the diagonal (f = g) case needed for
     establishing two-point integrability. -/
-@[blueprint "lem:gaussian-pairing-square-integrable-real"]
+@[blueprint "lem:gaussian-pairing-square-integrable-real"
+  (title := "Real Pairing Square Integrability")
+  (statement := /-- For real test functions $\varphi$, $\langle\omega, \varphi\rangle^2$ is integrable under the free GFF measure. Follows from the Fernique-type $L^p$ result via `gaussianFreeField\_pairing\_memLp`. -/)
+]
 lemma gaussian_pairing_square_integrable_real
     (m : ℝ) [Fact (0 < m)] (φ : TestFunction) :
   Integrable (fun ω => (distributionPairing ω φ) ^ 2)

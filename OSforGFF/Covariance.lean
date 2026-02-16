@@ -68,25 +68,33 @@ Each axiom represents a significant theorem that would need to be proven.
 
 /-- The heat kernel in momentum space. This is the result of integrating the full propagator over the time-component of momentum. -/
 @[blueprint "def:heat-kernel-momentum"
-  (title := "Heat Kernel in Momentum Space")]
+  (title := "Heat Kernel in Momentum Space")
+  (statement := /-- $\hat{H}(t, \mathbf{k}) = e^{-t\sqrt{|\mathbf{k}|^2 + m^2}} / \sqrt{|\mathbf{k}|^2 + m^2}$, the momentum-space heat kernel obtained by integrating the full propagator over the time component. -/)
+]
 noncomputable def heatKernelMomentum (m : ℝ) (t : ℝ) (k_spatial : SpatialCoords) : ℝ :=
   Real.exp (-t * Real.sqrt (‖k_spatial‖^2 + m^2)) / Real.sqrt (‖k_spatial‖^2 + m^2)
 
 /-- The inverse Fourier transform for a spatial function. -/
-@[blueprint "def:inverse-fourier-transform"]
+@[blueprint "def:inverse-fourier-transform"
+  (title := "Inverse Fourier Transform")
+  (statement := /-- Inverse Fourier transform for a spatial function, returning an $L^2$ function on $\mathbb{R}^3$. -/)]
 noncomputable def inverseFourierTransform (_f : SpatialCoords → ℂ) : SpatialL2 :=
   Classical.choose exists_spatialL2_function
   where exists_spatialL2_function : ∃ _h : SpatialL2, True := ⟨0, trivial⟩
 
 /-- Spatial convolution of two functions. -/
-@[blueprint "def:spatial-convolution"]
+@[blueprint "def:spatial-convolution"
+  (title := "Spatial Convolution")
+  (statement := /-- Convolution of two $L^2$ functions on spatial coordinates $\mathbb{R}^3$. -/)]
 noncomputable def spatial_convolution (_f : SpatialL2) (_g : SpatialL2) : SpatialL2 :=
   Classical.choose exists_spatialL2_function
   where exists_spatialL2_function : ∃ _h : SpatialL2, True := ⟨0, trivial⟩
 
 /-- Fourier transform on spatial coordinates only.
     Note: This has type issues that need to be resolved for spatial coordinates -/
-@[blueprint "def:fourier-transform-spatial-draft"]
+@[blueprint "def:fourier-transform-spatial-draft"
+  (title := "Spatial Fourier Transform (Draft)")
+  (statement := /-- Draft spatial Fourier transform $\hat{h}(\mathbf{k}) = \int_{\mathbb{R}^3} h(\mathbf{x}) \, e^{-i\mathbf{k}\cdot\mathbf{x}} \, d\mathbf{x}$. Placeholder pending coordinate system unification. -/)]
 noncomputable def fourierTransform_spatial_draft (h : SpatialL2) (k : SpatialCoords) : ℂ :=
   -- The proper spatial Fourier transform: ∫ x, h(x) * exp(-i k·x) dx
   -- For the GFF, this is essential for momentum space methods and reflection positivity
@@ -114,7 +122,9 @@ noncomputable def fourierTransform_spatial_draft (h : SpatialL2) (k : SpatialCoo
     we can implement this by extending the spatial function to be independent of time.
 
     This is much cleaner than the position space approach! -/
-@[blueprint "def:spatial-to-momentum-draft"]
+@[blueprint "def:spatial-to-momentum-draft"
+  (title := "Spatial to Momentum Embedding (Draft)")
+  (statement := /-- Embed a spatial $L^2$ function into spacetime momentum space: $(\hat{f}(\mathbf{k}), \delta(k_0))$. -/)]
 noncomputable def SpatialToMomentum_draft (f : SpatialL2) : SpaceTime → ℂ :=
   fun k =>
     -- Extract the spatial part of the momentum vector k
@@ -131,7 +141,9 @@ noncomputable def SpatialToMomentum_draft (f : SpatialL2) : SpaceTime → ℂ :=
     Uses `freePropagatorMomentum_mathlib` which accounts for the 2π factor in Mathlib's Fourier convention.
     Defined in FourierTransforms.lean as `parseval_covariance_schwartz_regulated`. -/
 @[blueprint "thm:parseval-covariance-schwartz-regulated"
-  (title := "Parseval Identity for Regulated Covariance")]
+  (title := "Parseval Identity for Regulated Covariance")
+  (statement := /-- The Parseval identity relating the regulated covariance bilinear form to the momentum-space propagator: $\operatorname{Re}\int\!\!\int f(x) \, C_\alpha(x,y) \, \overline{f(y)} = \int e^{-\alpha(2\pi)^2\|k\|^2} |\hat{f}(k)|^2 \hat{C}(k) \, dk$. -/)
+]
 theorem parseval_covariance_schwartz_regulated' (α : ℝ) (hα : 0 < α) (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
   (∫ x, ∫ y, f x * (freeCovariance_regulated α m x y : ℂ) * (starRingEnd ℂ (f y)) ∂volume ∂volume).re
   = ∫ k, Real.exp (-α * (2 * Real.pi)^2 * ‖k‖^2) * ‖(SchwartzMap.fourierTransformCLM ℂ f) k‖^2 * freePropagatorMomentum_mathlib m k ∂volume :=
@@ -142,7 +154,9 @@ theorem parseval_covariance_schwartz_regulated' (α : ℝ) (hα : 0 < α) (m : �
     geometric time reflection.  This packages the measure-preserving property of time reflection
     together with Fubini's theorem for later use in reflection-positivity arguments. -/
 @[blueprint "lem:double-integral-time-reflection"
-  (title := "Time Reflection Change of Variables")]
+  (title := "Time Reflection Change of Variables")
+  (statement := /-- Integrating over spacetime is invariant under time reflection in both variables: $\int\!\!\int G(\Theta x, \Theta y) = \int\!\!\int G(x,y)$. -/)
+]
 lemma double_integral_timeReflection
   (G : SpaceTime → SpaceTime → ℂ)
   (_hG : Integrable (fun p : SpaceTime × SpaceTime => G p.1 p.2) (volume.prod volume)) :
@@ -162,7 +176,10 @@ lemma double_integral_timeReflection
     observation that `compTimeReflection` is just composition with
     `timeReflection`, so we can reuse the general measure-preserving axiom
     without re-establishing integrability each time. -/
-@[blueprint "lem:double-integral-time-reflection-covariance"]
+@[blueprint "lem:double-integral-time-reflection-covariance"
+  (title := "Time Reflection for Covariance Kernels")
+  (statement := /-- For the covariance kernel with time-reflected test functions: $\int\!\!\int (\Theta f)(x) \, C(x,y) \, g(y) = \int\!\!\int f(x) \, C(\Theta x, \Theta y) \, (\Theta g)(y)$. -/)
+]
 lemma double_integral_timeReflection_covariance
   (m : ℝ) (f g : TestFunctionℂ)
   (hf : Integrable (fun p : SpaceTime × SpaceTime =>
@@ -215,7 +232,9 @@ All results assume m > 0 (positive mass) which is required for integrability. -/
 /-- The position-space integrand for the complex covariance bilinear form is integrable
     for Schwartz test functions, using translation-invariant L¹ kernel integrability. -/
 @[blueprint "thm:free-covariance"
-  (title := "Complex Covariance Bilinear Integrability")]
+  (title := "Complex Covariance Bilinear Integrability")
+  (statement := /-- The position-space integrand $f(x) \, C(x,y) \, g(y)$ is integrable on $\mathbb{R}^4 \times \mathbb{R}^4$ for Schwartz test functions, using translation-invariant $L^1$ kernel integrability. -/)
+]
 theorem freeCovarianceℂ_bilinear_integrable
     (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) :
     Integrable (fun p : SpaceTime × SpaceTime =>
@@ -244,7 +263,10 @@ theorem freeCovarianceℂ_bilinear_integrable
 /-- Integrability of the covariance kernel evaluated on a time-reflected test function.
     This follows directly from `freeCovarianceℂ_bilinear_integrable` since `compTimeReflection`
     maps test functions to test functions. -/
-@[blueprint "lem:integrable-comp-time-reflection-covariance"]
+@[blueprint "lem:integrable-comp-time-reflection-covariance"
+  (title := "Integrability of Time-Reflected Covariance")
+  (statement := /-- The integrand $(\Theta f)(x) \, C(x,y) \, f(y)$ is integrable on the product space for Schwartz $f$. -/)
+]
 lemma integrable_compTimeReflection_covariance
   (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
   Integrable (fun p : SpaceTime × SpaceTime =>
@@ -256,7 +278,10 @@ lemma integrable_compTimeReflection_covariance
 
 /-- Relationship between compTimeReflection of toComplex and compTimeReflectionReal:
     they agree pointwise as complex values. -/
-@[blueprint "lem:comp-time-reflection-to-complex-eq-of-real"]
+@[blueprint "lem:comp-time-reflection-to-complex-eq-of-real"
+  (title := "Time Reflection Complexification Agreement")
+  (statement := /-- For a real test function $f$, time-reflecting the complexification agrees with complexifying the real time reflection: $(\Theta(\iota f))(x) = (\Theta_{\mathbb{R}} f)(x)$ in $\mathbb{C}$. -/)
+]
 lemma compTimeReflection_toComplex_eq_ofReal
   (f : TestFunction) (x : SpaceTime) :
   (QFT.compTimeReflection (toComplex f)) x = ((QFT.compTimeReflectionReal f) x : ℂ) := by
@@ -265,7 +290,10 @@ lemma compTimeReflection_toComplex_eq_ofReal
 
 /-- The real part of a complex integral of a real-valued function equals the real integral.
     This uses `integral_ofReal_eq` and `Complex.ofReal_re`. -/
-@[blueprint "lem:re-integral-of-real"]
+@[blueprint "lem:re-integral-of-real"
+  (title := "Real Part of Complexified Integral")
+  (statement := /-- The real part of a complex integral of a real-valued function equals the real integral: $\operatorname{Re}\int (h(x) : \mathbb{C}) \, d\mu = \int h(x) \, d\mu$. -/)
+]
 lemma re_integral_ofReal {α : Type*} [MeasurableSpace α] (μ : Measure α) (h : α → ℝ)
     (hf : Integrable h μ) :
     (∫ x, (h x : ℂ) ∂μ).re = ∫ x, h x ∂μ := by
@@ -273,7 +301,10 @@ lemma re_integral_ofReal {α : Type*} [MeasurableSpace α] (μ : Measure α) (h 
   exact Complex.ofReal_re _
 
 /-- Integrability of the real covariance kernel obtained from a real test function. -/
-@[blueprint "lem:integrable-real-covariance-kernel"]
+@[blueprint "lem:integrable-real-covariance-kernel"
+  (title := "Integrability of Real Covariance Kernel")
+  (statement := /-- The real-valued integrand $(\Theta_{\mathbb{R}} f)(x) \, C(x,y) \, f(y)$ is integrable on the product space. -/)
+]
 lemma integrable_real_covariance_kernel
   (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
   Integrable (fun p : SpaceTime × SpaceTime =>
@@ -318,7 +349,10 @@ lemma integrable_real_covariance_kernel
     rw [← h_norm_eq p]
 
 /-- Fubini helper: rewrite the real kernel double integral over the product measure. -/
-@[blueprint "lem:integral-prod-real-covariance-kernel"]
+@[blueprint "lem:integral-prod-real-covariance-kernel"
+  (title := "Fubini for Real Covariance Kernel")
+  (statement := /-- The product-measure integral of the real covariance kernel equals the iterated integral (Fubini). -/)
+]
 lemma integral_prod_real_covariance_kernel
   (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
   ∫ p : SpaceTime × SpaceTime,
@@ -330,7 +364,10 @@ lemma integral_prod_real_covariance_kernel
   exact integrable_real_covariance_kernel m f
 
 /-- Complex Fubini helper mirroring `integral_prod_real_covariance_kernel`. -/
-@[blueprint "lem:integral-prod-complex-covariance-kernel"]
+@[blueprint "lem:integral-prod-complex-covariance-kernel"
+  (title := "Fubini for Complex Covariance Kernel")
+  (statement := /-- The product-measure integral of the complex covariance kernel equals the iterated integral (Fubini). -/)
+]
 lemma integral_prod_complex_covariance_kernel
   (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
   ∫ p : SpaceTime × SpaceTime,
@@ -351,7 +388,10 @@ lemma integral_prod_complex_covariance_kernel
   (using `compTimeReflection_toComplex_eq_ofReal` and `toComplex_apply`).
   For real-valued integrands, the `.re` of the complex integral equals the real integral
   via `integral_ofReal_eq` applied twice. -/
-@[blueprint "lem:real-integral-eq-complex-re"]
+@[blueprint "lem:real-integral-eq-complex-re"
+  (title := "Real-Complex Integral Correspondence")
+  (statement := /-- The real integral with $\Theta_{\mathbb{R}} f$ equals the real part of the corresponding complex integral after complexification. -/)
+]
 lemma real_integral_eq_complex_re
   (m : ℝ) [Fact (0 < m)] (f : TestFunction) :
   ∫ x, ∫ y, (QFT.compTimeReflectionReal f) x * freeCovariance m x y * f y ∂volume ∂volume
@@ -390,7 +430,10 @@ lemma real_integral_eq_complex_re
 /-- ** (Complex Conjugate Identity for Real Functions):**
   For real-valued test functions lifted to complex, the complex conjugate equals the original.
   This allows us to match the Parseval identity which uses starRingEnd. -/
-@[blueprint "lem:to-complex-star-eq"]
+@[blueprint "lem:to-complex-star-eq"
+  (title := "Complex Conjugate of Real Lift")
+  (statement := /-- For real-valued test functions lifted to $\mathbb{C}$, complex conjugation is the identity: $\overline{(\iota f)(x)} = (\iota f)(x)$. -/)
+]
 lemma toComplex_star_eq
   (f : TestFunction) (x : SpaceTime) :
   starRingEnd ℂ ((toComplex f) x) = (toComplex f) x := by
@@ -400,7 +443,10 @@ lemma toComplex_star_eq
   exact Complex.conj_ofReal (f x)
 
 /-- The time-reflected complexification of a real test function remains real-valued. -/
-@[blueprint "lem:comp-time-reflection-to-complex-star-eq"]
+@[blueprint "lem:comp-time-reflection-to-complex-star-eq"
+  (title := "Time-Reflected Real Lift is Self-Conjugate")
+  (statement := /-- The time-reflected complexification of a real test function remains real-valued: $\overline{(\Theta(\iota f))(x)} = (\Theta(\iota f))(x)$. -/)
+]
 lemma compTimeReflection_toComplex_star_eq
   (f : TestFunction) (x : SpaceTime) :
   starRingEnd ℂ ((QFT.compTimeReflection (toComplex f)) x)
@@ -424,7 +470,10 @@ lemma compTimeReflection_toComplex_star_eq
     Since freeCovariance only depends on ‖x - y‖ (via the Bessel form), and Euclidean
     transformations preserve distances, this follows immediately. -/
 @[blueprint "thm:free-covariance-euclidean-invariant"
-  (title := "Euclidean Invariance of Free Covariance")]
+  (title := "Euclidean Invariance of Free Covariance")
+  (keyDeclaration := true)
+  (statement := /-- The free covariance is Euclidean-invariant: $C(g \cdot x, g \cdot y) = C(x, y)$ for all $g \in E(4)$, since the Bessel form depends only on $\|x - y\|$. -/)
+]
 theorem freeCovariance_euclidean_invariant (m : ℝ)
   (g : QFT.E) (x y : SpaceTime) :
   freeCovariance m (QFT.act g x) (QFT.act g y) = freeCovariance m x y := by
@@ -436,11 +485,17 @@ theorem freeCovariance_euclidean_invariant (m : ℝ)
   simp only [h_diff, g.R.norm_map]
 
 /-- Time reflection as an element of the Euclidean group (rotation with no translation). -/
-@[blueprint "def:time-reflection-e"]
+@[blueprint "def:time-reflection-e"
+  (title := "Time Reflection as Euclidean Element")
+  (statement := /-- Time reflection $\Theta$ as an element of the Euclidean group $E(4)$ (rotation with no translation). -/)
+]
 def timeReflectionE : QFT.E := ⟨QFT.timeReflectionLE.toLinearIsometry, 0⟩
 
 /-- The Euclidean action of timeReflectionE equals timeReflection. -/
-@[blueprint "lem:act-time-reflection-e"]
+@[blueprint "lem:act-time-reflection-e"
+  (title := "Action of Time Reflection Element")
+  (statement := /-- The Euclidean action of the time reflection element equals the time reflection map. -/)
+]
 lemma act_timeReflectionE (x : SpaceTime) : QFT.act timeReflectionE x = QFT.timeReflection x := by
   simp only [timeReflectionE, QFT.act, add_zero, LinearIsometryEquiv.coe_toLinearIsometry]
   rfl
@@ -449,7 +504,9 @@ lemma act_timeReflectionE (x : SpaceTime) : QFT.act timeReflectionE x = QFT.time
   The position-space covariance kernel is invariant under geometric time reflection.
   This follows from general Euclidean invariance since time reflection is in O(4). -/
 @[blueprint "lem:covariance-time-reflection-invariant"
-  (title := "Time Reflection Invariance of Covariance")]
+  (title := "Time Reflection Invariance of Covariance")
+  (statement := /-- The position-space covariance is invariant under time reflection: $C(\Theta x, \Theta y) = C(x, y)$. Follows from Euclidean invariance since $\Theta \in O(4)$. -/)
+]
 lemma covariance_timeReflection_invariant (m : ℝ) :
     ∀ x y, freeCovariance m (QFT.timeReflection x) (QFT.timeReflection y) = freeCovariance m x y := by
   intro x y
@@ -463,7 +520,10 @@ The following lemmas prove properties of this bilinear form. -/
 
 /-- For each fixed `x`, the inner integral in the complex bilinear form is absolutely integrable.
     This follows from product integrability (`freeCovarianceℂ_bilinear_integrable`) plus Fubini. -/
-@[blueprint "lem:free-covariance"]
+@[blueprint "lem:free-covariance"
+  (title := "Inner Integral Integrability")
+  (statement := /-- For each fixed $x$, the inner integral $\int f(x) C(x,y) g(y) \, dy$ is integrable in $x$. -/)
+]
 lemma freeCovarianceℂ_bilinear_inner_integrable
   (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) :
   Integrable (fun x => ∫ y, (f x) * (freeCovariance m x y) * (g y) ∂volume) volume := by
@@ -474,7 +534,10 @@ lemma freeCovarianceℂ_bilinear_inner_integrable
 /-- For each fixed `x`, the inner integral defining the bilinear form is integrable in `y`.
     Together with the previous lemma, this allows iterated integration.
     Follows from product integrability via Fubini (`Integrable.prod_right_ae`). -/
-@[blueprint "lem:free-covariance-2"]
+@[blueprint "lem:free-covariance-2"
+  (title := "Slice Integrability")
+  (statement := /-- For a.e. $x$, the inner integrand $f(x) C(x,y) g(y)$ is integrable in $y$. -/)
+]
 lemma freeCovarianceℂ_bilinear_slice_integrable
   (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) :
   ∀ᵐ x ∂volume, Integrable (fun y => (f x) * (freeCovariance m x y) * (g y)) volume := by
@@ -483,7 +546,10 @@ lemma freeCovarianceℂ_bilinear_slice_integrable
   exact h.prod_right_ae
 
 /-- Generalized bilinearity in the first argument: scalar multiplication and addition combined. -/
-@[blueprint "thm:free-covariance-2"]
+@[blueprint "thm:free-covariance-2"
+  (title := "Left Linearity of Bilinear Form")
+  (statement := /-- The covariance bilinear form is linear in the first argument: $\langle c f_1 + f_2, C g \rangle = c \langle f_1, C g \rangle + \langle f_2, C g \rangle$. -/)
+]
 theorem freeCovarianceℂ_bilinear_add_smul_left
   (m : ℝ) [Fact (0 < m)] (c : ℂ) (f₁ f₂ g : TestFunctionℂ) :
     freeCovarianceℂ_bilinear m (c • f₁ + f₂) g
@@ -553,7 +619,10 @@ theorem freeCovarianceℂ_bilinear_add_smul_left
     _ = (∫ x, c * F₁ x ∂volume) + (∫ x, F₂ x ∂volume) := h_sum
     _ = c * (∫ x, F₁ x ∂volume) + (∫ x, F₂ x ∂volume) := by rw [MeasureTheory.integral_const_mul]
 
-@[blueprint "thm:free-covariance-3"]
+@[blueprint "thm:free-covariance-3"
+  (title := "Left Additivity of Bilinear Form")
+  (statement := /-- $\langle f_1 + f_2, C g \rangle = \langle f_1, C g \rangle + \langle f_2, C g \rangle$. -/)
+]
 theorem freeCovarianceℂ_bilinear_add_left
   (m : ℝ) [Fact (0 < m)] (f₁ f₂ g : TestFunctionℂ) :
     freeCovarianceℂ_bilinear m (f₁ + f₂) g
@@ -564,7 +633,10 @@ theorem freeCovarianceℂ_bilinear_add_left
   simp only [one_smul, one_mul] at h
   exact h
 
-@[blueprint "thm:free-covariance-4"]
+@[blueprint "thm:free-covariance-4"
+  (title := "Left Scalar Multiplication")
+  (statement := /-- $\langle c \cdot f, C g \rangle = c \cdot \langle f, C g \rangle$. -/)
+]
 theorem freeCovarianceℂ_bilinear_smul_left
   (m : ℝ) [Fact (0 < m)] (c : ℂ) (f g : TestFunctionℂ) :
     freeCovarianceℂ_bilinear m (c • f) g = c * freeCovarianceℂ_bilinear m f g := by
@@ -589,7 +661,9 @@ theorem freeCovarianceℂ_bilinear_smul_left
 
 /-- Symmetry of the complex bilinear form: swapping arguments gives the same result. -/
 @[blueprint "thm:free-covariance-5"
-  (title := "Symmetry of Complex Covariance Bilinear Form")]
+  (title := "Symmetry of Complex Covariance Bilinear Form")
+  (statement := /-- The covariance bilinear form is symmetric: $\langle f, C g \rangle = \langle g, C f \rangle$, following from $C(x,y) = C(y,x)$. -/)
+]
 theorem freeCovarianceℂ_bilinear_symm
   (m : ℝ) [Fact (0 < m)] (f g : TestFunctionℂ) :
     freeCovarianceℂ_bilinear m f g = freeCovarianceℂ_bilinear m g f := by
@@ -618,7 +692,10 @@ theorem freeCovarianceℂ_bilinear_symm
   -- Rearrange: g x * freeCovariance m x y * f y = g x * freeCovariance m x y * f y
   ring
 
-@[blueprint "thm:free-covariance-6"]
+@[blueprint "thm:free-covariance-6"
+  (title := "Right Scalar Multiplication")
+  (statement := /-- $\langle f, C(c \cdot g) \rangle = c \cdot \langle f, C g \rangle$. -/)
+]
 theorem freeCovarianceℂ_bilinear_smul_right
   (m : ℝ) [Fact (0 < m)] (c : ℂ) (f g : TestFunctionℂ) :
     freeCovarianceℂ_bilinear m f (c • g) = c * freeCovarianceℂ_bilinear m f g := by
@@ -630,7 +707,10 @@ theorem freeCovarianceℂ_bilinear_smul_right
   -- Use symmetry again: c * freeCovarianceℂ_bilinear m g f = c * freeCovarianceℂ_bilinear m f g
   rw [freeCovarianceℂ_bilinear_symm m g f]
 
-@[blueprint "thm:free-covariance-7"]
+@[blueprint "thm:free-covariance-7"
+  (title := "Right Additivity of Bilinear Form")
+  (statement := /-- $\langle f, C(g_1 + g_2) \rangle = \langle f, C g_1 \rangle + \langle f, C g_2 \rangle$. -/)
+]
 theorem freeCovarianceℂ_bilinear_add_right
   (m : ℝ) [Fact (0 < m)] (f g₁ g₂ : TestFunctionℂ) :
     freeCovarianceℂ_bilinear m f (g₁ + g₂)
@@ -645,13 +725,17 @@ theorem freeCovarianceℂ_bilinear_add_right
 
 /-- Complex extension of the covariance for complex test functions (using regulated Fourier form). -/
 @[blueprint "def:free-covariance"
-  (title := "Regulated Complex Covariance Form")]
+  (title := "Regulated Complex Covariance Form")
+  (statement := /-- The UV-regulated complex covariance form: $\langle f, C_\alpha g \rangle = \int\!\!\int f(x) \, C_\alpha(x,y) \, \overline{g(y)} \, dx \, dy$. -/)
+]
 def freeCovarianceℂ_regulated (α : ℝ) (m : ℝ) (f g : TestFunctionℂ) : ℂ :=
   ∫ x, ∫ y, (f x) * (freeCovariance_regulated α m x y) * (starRingEnd ℂ (g y)) ∂volume ∂volume
 
 /-- The regulated complex covariance is positive definite for any α > 0. -/
 @[blueprint "thm:free-covariance-8"
-  (title := "Positivity of Regulated Covariance")]
+  (title := "Positivity of Regulated Covariance")
+  (statement := /-- The regulated complex covariance is positive semi-definite: $\operatorname{Re}\langle f, C_\alpha f \rangle \geq 0$ for any $\alpha > 0$. Proved via the Parseval identity and non-negativity of the momentum-space propagator. -/)
+]
 theorem freeCovarianceℂ_regulated_positive (α : ℝ) (hα : 0 < α) (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
   0 ≤ (freeCovarianceℂ_regulated α m f f).re := by
   unfold freeCovarianceℂ_regulated
@@ -710,7 +794,17 @@ theorem freeCovarianceℂ_positive (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ
     well-defined pointwise. The equality holds because the Bessel form equals the limit
     of the regulated forms. -/
 @[blueprint "thm:parseval-covariance-schwartz-bessel"
-  (title := "Parseval Identity for Bessel Covariance")]
+  (title := "Parseval Identity for Bessel Covariance")
+  (keyDeclaration := true)
+  (statement := /-- The Parseval identity for the Bessel covariance: $\operatorname{Re}\langle f, C f \rangle = \int |\hat{f}(k)|^2 \hat{C}(k) \, dk$. Proved by uniqueness of limits from the regulated identity. -/)
+  (proof := /--
+The Parseval identity is proved in four stages:
+1. \emph{Regulated Fubini factorization.} For the regulated integral $\langle f, C_\alpha f\rangle$, the Gaussian regulator $e^{-\alpha\|k\|^2}$ makes the triple integral $(x, y, k)$ absolutely convergent. Apply Fubini to reorder integration.
+2. \emph{Change of variables.} Rescale from physics Fourier conventions ($\int e^{ikx}$) to Mathlib conventions ($\int e^{-2\pi i k \cdot x}$), absorbing factors of $(2\pi)^d$.
+3. \emph{Monotone convergence.} As $\alpha \to 0^+$, the regulated integrand increases monotonically to the unregulated integrand. The dominated convergence theorem (with dominator $|\hat{f}|^2/m^2$) gives convergence.
+4. \emph{Bilinear extension.} Extend from $\langle f, Cf\rangle$ to $\langle f, Cg\rangle$ via the polarization identity.
+  -/)
+]
 theorem parseval_covariance_schwartz_bessel (m : ℝ) [Fact (0 < m)] (f : TestFunctionℂ) :
     (freeCovarianceℂ m f f).re
     = ∫ k, ‖(SchwartzMap.fourierTransformCLM ℂ f) k‖^2 * freePropagatorMomentum_mathlib m k ∂volume := by
