@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: e-vergo/dress-blueprint-action@main
         with:
-          docgen4-mode: docs-static
+          docgen4-mode: skip
 
   deploy:
     needs: build
