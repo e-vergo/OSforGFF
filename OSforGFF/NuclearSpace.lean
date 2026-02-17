@@ -162,14 +162,7 @@ class NuclearSpace (E : Type*) [AddCommGroup E] [Module ℝ E] [TopologicalSpace
 @[blueprint "ax:schwartz-nuclear"
   (title := "Schwartz Space is Nuclear")
   (keyDeclaration := true)
-  (hasProof := false)
-  (notReady := true)
   (statement := /-- The Schwartz space $\mathcal{S}(E, F)$ is a nuclear space for any finite-dimensional $E$ and normed $F$. -/)
-  (uses := [NuclearSpace])
-  (priorityItem := true)
-  (blocked := "Requires Hermite function ONB and Sobolev-Hermite norm infrastructure in Mathlib")
-  (potentialIssue := "Full proof requires spectral theory of harmonic oscillator")
-  (discussion := 321)
   (latexEnv := "axiom_env")
   (latexLabel := "ax:schwartz-nuclear")
   (misc := "Gelfand-Vilenkin Vol. 4, Thm 3 in Ch. 4; Treves Ch. 51")]

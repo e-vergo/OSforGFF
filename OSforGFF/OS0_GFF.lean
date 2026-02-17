@@ -86,11 +86,9 @@ so analyticity is equivalent to being everywhere ℂ-differentiable. -/
     (Goursat's theorem in n dimensions). -/
 @[blueprint "axiom:goursat-hartogs"
   (title := "Goursat-Hartogs Theorem (Finite Dimensions)")
-  (notReady := true)
   (statement := /-- A $\mathbb{C}$-differentiable function $f : \mathbb{C}^n \to \mathbb{C}$ is analytic at every point. This is Goursat's theorem generalized to $n$ complex variables (Hartogs' theorem). -/)
   (latexEnv := "axiom")
   (latexLabel := "axiom:goursat-hartogs")
-  (blocked := "Requires Hartogs' theorem formalization not in Mathlib; classical complex analysis result")
   (below := /-- Used as key ingredient in OS0 analyticity proof. -/)]
 axiom differentiable_analyticAt_finDim
     {n : ℕ}
